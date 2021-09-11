@@ -98,17 +98,64 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="description_es">Descripción de tu rol en la empresa en español</label>
-                <textarea type="text" class="form-control" id="description_es" name="description_es" aria-describedby="description_es-help" cols="6">{{$experience->description_es}}</textarea>
+                <input type="hidden" class="form-control" id="description_es" name="description_es" value="{{$experience->description_es}}" aria-describedby="description_es-help">
+                <trix-editor input="description_es"></trix-editor>
                 <small id="description_es-help" class="form-text text-muted">¿Qué hiciste en la empresa, con que trabajaste, describelo(Puedes utilizar codigo html) en español</small>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="description_en">Descripción de tu rol en la empresa en español</label>
-                <textarea type="text" class="form-control" id="description_en" name="description_en" aria-describedby="description_en-help" cols="6">{{$experience->description_en}}</textarea>
+                <label for="description_en">Descripción de tu rol en la empresa en Inglés</label>
+                <input type="hidden" class="form-control"  value="{{$experience->description_en}}" id="description_en" name="description_en" aria-describedby="description_en-help">
+                <trix-editor input="description_en"></trix-editor>
                 <small id="description_en-help" class="form-text text-muted">¿Qué hiciste en la empresa, con que trabajaste, describelo(Puedes utilizar codigo html) en inglés</small>
+            </div>
+        </div>
+        <div class="col-md-12 mb-3">
+            <div class="form-group">
+                <label for="description_en">Descripción de tu rol en la empresa en español</label>
+                <select class="js-example-basic-multiple-limit form-control" id="portfolio" name="portfolio[]" multiple>
+                        @foreach($experience->portfolio as $port)
+                        <option value="{{$port['id']}}" selected>
+                            {{$port['title_es']}}
+                        </option>
+                        @endforeach
+                </select>
             </div>
         </div>
         <button type="submit" class="btn btn-secondary btn-lg btn-block">Guardar todos los cambios</button>
     </form>
+    <script>
+        $('.js-example-basic-multiple-limit').select2({
+            ajax: {
+                url: '/api/list/portfolios',
+                data: function (params) {
+                    var query = {
+                        search: params.term,
+                        type: 'query'
+                    }
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    console.log(data)
+                    return {
+                        results: data
+                    };
+                },
+            },
+            templateResult: formatState,
+            placeholder: 'Selecciona una opción',
+        });
+        function formatState (state) {
+            if (!state.id) {
+                return state.text;
+            }
+            var baseUrl = state.url_img;
+            var $state = $(
+                '<span><img width="40" src="' + baseUrl + '" class="img-flag" /> ' + state.text + '</span>'
+            );
+            return $state;
+        };
+    </script>
 @endsection

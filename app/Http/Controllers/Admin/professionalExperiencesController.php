@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Portfolio;
 use App\Models\professionalExperience;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +22,7 @@ class professionalExperiencesController extends Controller
     public function edit($id){
         try{
             $experience = professionalExperience::find($id);
+            //$experience->portfolio = $experience->portfolio;
             return view('admin.professional_experiences.edit',compact('experience'));
         }catch (\Exception $e){
             return redirect()->route('experience.professional.view')->with('success',$e->getMessage());
@@ -35,6 +37,11 @@ class professionalExperiencesController extends Controller
     }
     public function store(Request $request){
         try{
+            //PORTFOLIO ARRAY
+            $porfolio  = [];
+            if($request->portfolio){
+                $porfolio = Portfolio::find($request->portfolio);
+            }
             //agregar imagen del icono
             $image_path = "";
             if(isset($request->image_path)&&!empty($request->image_path)){
@@ -52,6 +59,7 @@ class professionalExperiencesController extends Controller
                 'country_es'=>$request->country_es,
                 'country_en'=>$request->country_en,
                 'image_path'=>$image_path,
+                'portfolio' =>$porfolio,
                 'user_id'=>Auth::id()
             ]);
             if($experience){
@@ -65,6 +73,11 @@ class professionalExperiencesController extends Controller
     }
     public function update(Request $request,$id){
         try{
+            //PORTFOLIO ARRAY
+            $porfolio  = [];
+            if($request->portfolio){
+                $porfolio = Portfolio::find($request->portfolio);
+            }
             //agregar foto para el header de la pagina
             $myexperience = professionalExperience::find($id);
             $image_path = $myexperience->image_path;
@@ -87,6 +100,7 @@ class professionalExperiencesController extends Controller
                 'country_es'=>$request->country_es,
                 'country_en'=>$request->country_en,
                 'image_path'=>$image_path,
+                'portfolio' =>$porfolio,
                 'user_id'=>Auth::id()
             ]);
             if($experience){

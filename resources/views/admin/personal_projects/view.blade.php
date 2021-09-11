@@ -15,11 +15,11 @@
                             <p class="card-text text-muted mb-2">{{$proyect->name_en}}</p>
                             <h5>Descripción</h5>
                             <div class="card-text  mb-2">
-                                {!! strip_tags(BBCode::convertToHtml($proyect->description_es),'<li><ul><b><i><u><p><h1><h5><h4><h2>') !!}
+                                {!! strip_tags(BBCode::convertToHtml($proyect->description_es ?? ''),'<li><ul><b><i><u><p><h1><h5><h4><h2>') !!}
                             </div>
                             <h5>Description</h5>
                             <div class="card-text text-muted mb-2">
-                                {!! strip_tags(BBCode::convertToHtml($proyect->description_en),'<li><ul><b><i><u><p><h1><h5><h4><h2>') !!}
+                                {!! strip_tags(BBCode::convertToHtml($proyect->description_en ?? ''),'<li><ul><b><i><u><p><h1><h5><h4><h2>') !!}
                             </div>
                             <p class="card-text  mb-2">{{$proyect->date_upload}}</p>
                             <a class="card-text  mb-2" href="{{$proyect->link}}">{{$proyect->link}}</a>

@@ -23,13 +23,13 @@
     @endif
     <form class="row" method="post" action="{{route('contacts.update',$myContact->id)}}" enctype="multipart/form-data">
         @csrf
-        <div class="col-md-12">
+        <!--<div class="col-md-12">
             <div class="form-group">
                 <h4 for="image_path">Imagen icono</h4>
                 <input type="file" class="form-control-file" id="icon_path" name="icon_path">
                 <small id="icon_path-help" class="form-text text-muted">Foto o imagen se mostrará de portada</small>
             </div>
-        </div>
+        </div>-->
         <div class="col-md-6">
             <div class="form-group">
                 <label for="name_es">Nombre del contacto en español</label>
@@ -42,6 +42,13 @@
                 <label for="name_en">Nombre del contacto en inglés</label>
                 <input type="text" value="{{$myContact->name_en}}" class="form-control" id="name_en" name="name_en" aria-describedby="name_en-help">
                 <small id="name_en-help" class="form-text text-muted">Nombre del contacto, puede ser facebook, whatsapp etc.</small>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="icon_path">Icono</label>
+                <input type="text" value="{{$myContact->icon_path}}"  class="form-control" id="icon_path" name="icon_path" aria-describedby="icon_path-help">
+                <small id="icon_path-help" class="form-text text-muted">Clase del icono, de awesome fonts versión 5. Ejemplo: fa-whatsapp</small>
             </div>
         </div>
         <div class="col-md-6">

@@ -40,7 +40,8 @@
                     <th scope="row">{{$myContact->id}}</th>
                     <td>{{$myContact->name_es}}</td>
                     <td>{{$myContact->name_en}}</td>
-                    <td><i> <img src="{{$myContact->icon_path}}" style="margin-left: auto;margin-right: auto; display: block; width: 1rem; height: 1rem;"></i></td>
+                    <td><i class=" {{$myContact->icon_path}} fa-3x text-center"></i></td>
+                    <!--<td><i> <img src="{{$myContact->icon_path}}" style="margin-left: auto;margin-right: auto; display: block; width: 1rem; height: 1rem;"></i></td>-->
                     <td><a href="https://www.facebook.com/joseangel.alvarado.735507/">{{$myContact->url_path}}</a></td>
                     <td>{{$myContact->updated_at}}</td>
                     <td>

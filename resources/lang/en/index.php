@@ -22,4 +22,17 @@ return [
     'Mi Portafolio'=>'My portfolio',
     'Inicio'=>'Home',
     'Acerca de'=>'About',
+    'Conocimiento y destrezas en la tecnologías de la información' => 'Knowledge and skills in information technology.',
+    'Age'=>'Age',
+    'nationality' => 'Nationality',
+    'country' => 'Country',
+    'email'=>'Email',
+    'VER MI PORTAFOLIO' => 'VIEW MY PORTFOLIO',
+    'Buen manejo y conocimiento en las siguientes Tecnológias'=>'Good management and knowledge in the following Technologies',
+    'Experiencia a nivel profesional en los siguientes proyectos' => 'Professional level experience in the following projects',
+    'experiencia profesional' => 'Professional experience',
+    'mis habilidades' => 'My abilities',
+    'Puedes contactarme enviandome un mensaje' => 'You can contact me by sending me a message',
+    'Envíar mensaje' =>'Send Message'
+
 ];

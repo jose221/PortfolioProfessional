@@ -105,6 +105,7 @@
       <path value="$PROJECT_DIR$/vendor/genert/bbcode" />
       <path value="$PROJECT_DIR$/vendor/eloquent/composer-npm-bridge" />
       <path value="$PROJECT_DIR$/vendor/xpersonas/laravel-styleguide" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php81" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />

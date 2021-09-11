@@ -35,18 +35,19 @@ class myContactsController extends Controller
     }
     public function store(Request $request){
         //agregar imagen del icono
-        $icon_path = "";
+        /**$icon_path = "";
         if(isset($request->icon_path)&&!empty($request->icon_path)){
             $image = $request->file('icon_path')->store('public');
             $icon_path = Storage::url($image);
-        }
+        }**/
         //Agr
         try {
             $myContact = MyContact::create([
                 'name_es'=>$request->name_es,
                 'name_en'=>$request->name_en,
                 'url_path'=>$request->url_path,
-                'icon_path'=>$icon_path,
+                //'icon_path'=>$icon_path,
+                'icon_path'=>$request->icon_path,
                 'user_id'=>Auth::id()
             ]);
             if($myContact){
@@ -62,7 +63,7 @@ class myContactsController extends Controller
     public function update(Request $request,$id){
         //agregar foto para el header de la pagina
         $myContact = MyContact::find($id);
-        $icon_path = $myContact->icon_path;
+        /**$icon_path = $myContact->icon_path;
         if(isset($request->icon_path)&&!empty($request->icon_path)){
             if(!empty($myContact->icon_path)) {
                 $path = explode("/", $myContact->icon_path);
@@ -70,14 +71,15 @@ class myContactsController extends Controller
             }
             $image = $request->file('icon_path')->store('public');
             $icon_path = Storage::url($image);
-        }
+        }**/
         //Agr
         try {
             $myContact_update = MyContact::where('id',$id)->update([
                 'name_es'=>$request->name_es,
                 'name_en'=>$request->name_en,
                 'url_path'=>$request->url_path,
-                'icon_path'=>$icon_path,
+                //'icon_path'=>$icon_path,
+                'icon_path'=>$request->icon_path,
                 'user_id'=>Auth::id()
             ]);
             if($myContact_update){

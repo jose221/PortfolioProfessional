@@ -1,121 +1,180 @@
+@charset "UTF-8";
 
 ::-webkit-scrollbar {
-    width: 8px;     /* Tamaño del scroll en vertical */
-    height: 8px;    /* Tamaño del scroll en horizontal */
-    display: none;  /* Ocultar scroll */
+  width: 8px;
+  /* Tamaño del scroll en vertical */
+  height: 8px;
+  /* Tamaño del scroll en horizontal */
+  display: none;
+  /* Ocultar scroll */
 }
+
 /* Ponemos un color de fondo y redondeamos las esquinas del thumb */
+
 ::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 4px;
+  background: #ccc;
+  border-radius: 4px;
 }
+
 /* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
+
 ::-webkit-scrollbar-thumb:hover {
-    background: #b3b3b3;
-    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+  background: #b3b3b3;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
 }
+
 /* Cambiamos el fondo cuando esté en active */
+
 ::-webkit-scrollbar-thumb:active {
-    background-color: #999999;
+  background-color: #999999;
 }
+
 /* Ponemos un color de fondo y redondeamos las esquinas del track */
+
 ::-webkit-scrollbar-track {
-    background: #e1e1e1;
-    border-radius: 4px;
+  background: #e1e1e1;
+  border-radius: 4px;
 }
+
 /* Cambiamos el fondo cuando esté en active o hover */
+
 ::-webkit-scrollbar-track:hover,
 ::-webkit-scrollbar-track:active {
-    background: #d4d4d4;
+  background: #d4d4d4;
 }
 
-.modal .modal-dialog-aside{
-    width: 350px;
-    max-width:80%; height: 100%; margin:0;
-    transform: translate(0); transition: transform .2s;
+.modal .modal-dialog-aside {
+  width: 350px;
+  max-width: 80%;
+  height: 100%;
+  margin: 0;
+  transform: translate(0);
+  transition: transform 0.2s;
 }
 
+.modal .modal-dialog-aside .modal-content {
+  overflow: hidden;
+  height: inherit;
+  border: 0;
+  border-radius: 0;
+}
 
-.modal .modal-dialog-aside .modal-content{ overflow: hidden; height: inherit; border:0; border-radius: 0;}
-.modal .modal-dialog-aside .modal-content .modal-body{ overflow-y: auto }
-.modal.fixed-left .modal-dialog-aside{ margin-left:auto;  transform: translateX(100%); }
-.modal.fixed-right .modal-dialog-aside{ margin-right:auto; transform: translateX(-100%); }
+.modal .modal-dialog-aside .modal-content .modal-body {
+  overflow-y: auto;
+}
 
-.modal.show .modal-dialog-aside{ transform: translateX(0);  }
+.modal.fixed-left .modal-dialog-aside {
+  margin-left: auto;
+  transform: translateX(100%);
+}
+
+.modal.fixed-right .modal-dialog-aside {
+  margin-right: auto;
+  transform: translateX(-100%);
+}
+
+.modal.show .modal-dialog-aside {
+  transform: translateX(0);
+}
+
 .card-img-top {
+  left: 50%;
+  width: 80px !important;
+  height: 80px;
+  color: white;
+}
 
-    left: 50%;
+.card {
+  margin-top: 30px;
+  padding-top: 30px;
+}
 
-    width: 80px !important;
-    height: 80px;
-    background-color: white;
-  }
+.text-black {
+  color: black;
+}
 
+ul.text-muted {
+  margin-left: -30px;
+  text-align: center;
+  list-style: none;
+  line-height: 1rem;
+}
 
-  .card {
-    margin-top: 30px;
-    padding-top: 30px;
-  }
-  .text-black{
-    color: black;
-  }
-  ul.text-muted{
-      margin-left: -30px;
-      text-align: center;
-      list-style: none;
-      line-height:1rem;
+#conocimientos .card-group {
+  height: 100% !important;
+}
 
-  }
-  #conocimientos .card-group{
-    height: 100% !important;
-  }
-  #conocimientos .card{
-    -webkit-box-shadow: 10px 10px 61px -25px rgba(0,0,0,0.75);
--moz-box-shadow: 10px 10px 61px -25px rgba(0,0,0,0.75);
-box-shadow: 10px 10px 61px -25px rgba(0,0,0,0.75);
-    border-radius: 20px 20px 20px 20px;
--moz-border-radius: 20px 20px 20px 20px;
--webkit-border-radius: 20px 20px 20px 20px;
-border: 0px solid #000000;
-    height: 100% !important;
-  }
-   .projects, .projects-created{
-    height: 100%;
-  }
- .projects .portfolio-item{
-    height: 100%;
-    width: 350px;
-  }
-.projects-created .portfolio-item{
+#conocimientos .card {
+  box-shadow: 10px 10px 61px -25px rgba(0, 0, 0, 0.75);
+  border-radius: 20px 20px 20px 20px;
+  -moz-border-radius: 20px 20px 20px 20px;
+  -webkit-border-radius: 20px 20px 20px 20px;
+  border: 0px solid #000000;
+  height: 100% !important;
+}
+
+.projects,
+.projects-created {
+  height: 100%;
+}
+
+.projects .portfolio-item {
+  height: 100%;
+  width: 350px;
+}
+
+.projects-created .portfolio-item {
   height: 100%;
   width: 300px;
 }
-.my-perfil-image{
-    display: none;
+
+.my-perfil-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: block;
 }
-.my-perfil-content{
-    width: 100%;
+
+.my-perfil-image img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.my-perfil-content img {
+  vertical-align: middle;
+}
+
+.my-perfil-content {
+  margin-top: 3rem;
 }
 
 @media only screen and (min-width: 768px) {
-    .my-perfil-image{
-        display: block;
-    }
+  .my-perfil-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .my-perfil-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: block;
+  }
 }
 
-
-
-
-
-.content-section-footer{
+.content-section-footer {
   text-align: center;
-
-  margin-top:2rem;
+  margin-top: 2rem;
 }
-.content-section-heading{
+
+.content-section-heading {
   margin-bottom: 1rem;
 }
-.contact-me{
+
+.contact-me {
   background-color: #f2f6fc;
 }
 
@@ -127,17 +186,18 @@ border: 0px solid #000000;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #495057;
   background-color: #fff;
   background-clip: padding-box;
   border: 0.125rem solid #ced4da;
   border-radius: 0.5rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+
 .floating-label-form-group {
   position: relative;
   border-bottom: 1px solid #e9ecef;
 }
+
 .floating-label-form-group input,
 .floating-label-form-group textarea {
   font-size: 1.5em;
@@ -151,6 +211,7 @@ border: 0px solid #000000;
   background: none;
   box-shadow: none !important;
 }
+
 .floating-label-form-group label {
   font-size: 0.85em;
   line-height: 1.764705882em;
@@ -162,6 +223,7 @@ border: 0px solid #000000;
   transition: top 0.3s ease, opacity 0.3s ease;
   opacity: 0;
 }
+
 .floating-label-form-group:not(:first-child) {
   padding-left: 14px;
   border-left: 1px solid #e9ecef;
@@ -179,3 +241,10 @@ border: 0px solid #000000;
 form .row:first-child .floating-label-form-group {
   border-top: 1px solid #e9ecef;
 }
+
+.content-middle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+

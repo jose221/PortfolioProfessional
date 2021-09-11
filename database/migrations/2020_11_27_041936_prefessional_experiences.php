@@ -25,6 +25,7 @@ class PrefessionalExperiences extends Migration
             $table->longText('country_es')->nullable();
             $table->string('country_en')->nullable();
             $table->string('image_path')->nullable();
+            $table->longText('portfolio')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

@@ -79,6 +79,89 @@
             <input type="password" class="form-control" id="password" value="{{$user->password}}" name="password" aria-describedby="password-help">
             <small id="password-help" class="form-text text-muted">Contraseña</small>
         </div>
+        <div class="form-group col-md-6">
+            <label for="header_text_es">Texto o descripción del header en Español</label>
+            <textarea type="text" class="form-control" id="header_text_es" name="header_text_es" aria-describedby="header_text_es-help" rows="5">{{$user->header_text_es}}</textarea>
+            <small id="header_text_es-help" class="form-text text-muted">Texto o descripción del header en Español</small>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="header_text_en">Texto o descripción del header en Inglés</label>
+            <textarea type="text" class="form-control" id="header_text_en" name="header_text_en" aria-describedby="header_text_en-help" rows="5">{{$user->header_text_en}}</textarea>
+            <small id="header_text_en-help" class="form-text text-muted">Texto o descripción del header en Inglés</small>
+        </div>
+        <hr>
+        <div class=" col-md-6">
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="{{$user->logo}}" class="rounded float-left img-thumbnail" alt="test">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <h4 for="logo">Imagen del logo</h4>
+                                <input type="file" class="form-control-file" id="logo" name="logo">
+                                <small id="logo-help" class="form-text text-muted">Imagen o logo que se mostrará en la nevegación</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" col-md-6">
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="{{$user->avatar}}" class="rounded float-left img-thumbnail" alt="test">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <h4 for="avatar">Imagen del avatar</h4>
+                                <input type="file" class="form-control-file" id="avatar" name="avatar">
+                                <small id="avatar-help" class="form-text text-muted">Avatar que se mostrará</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" col-md-6">
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="{{$user->slogan_en}}" class="rounded float-left img-thumbnail" alt="test">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <h4 for="slogan_en">Imagen del logo con Eslogan en Inglés</h4>
+                                <input type="file" class="form-control-file" id="slogan_en" name="slogan_en">
+                                <small id="slogan_en-help" class="form-text text-muted">Imagen o logo que se mostrará como eslogan en Inglés</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" col-md-6">
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="{{$user->slogan_es}}" class="rounded float-left img-thumbnail" alt="test">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <h4 for="slogan_es">Imagen del logo con Eslogan en Español</h4>
+                                <input type="file" class="form-control-file" id="slogan_es" name="slogan_es">
+                                <small id="slogan_es-help" class="form-text text-muted">Imagen o logo que se mostrará como eslogan en Español</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class=" col-md-6">
             <div class="card mb-3">
                 <div class="row no-gutters">

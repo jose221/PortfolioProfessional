@@ -3,6 +3,16 @@
 @section('title','administrador-experiencia profesional')
 
 @section('content')
+    <style>
+        .popover-title {
+            color: blue !important;
+            font-size: 15px;
+        }
+        .popover-content {
+            color: red !important;
+            font-size: 10px;
+        }
+    </style>
 
     <a href="{{route('experience.professional.view')}}" class="float-right btn btn-outline-success">Ver todo</a>
     <h2>Nueva experiencia Profesional</h2>
@@ -93,17 +103,67 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="description_es">Descripción de tu rol en la empresa en español</label>
-                <textarea type="text" class="form-control" id="description_es" name="description_es" aria-describedby="description_es-help" cols="6"></textarea>
+                <input type="hidden" class="form-control" id="description_es" name="description_es" aria-describedby="description_es-help">
+                <trix-editor input="description_es"></trix-editor>
                 <small id="description_es-help" class="form-text text-muted">¿Qué hiciste en la empresa, con que trabajaste, describelo(Puedes utilizar codigo html) en español</small>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="description_en">Descripción de tu rol en la empresa en español</label>
-                <textarea type="text" class="form-control" id="description_en" name="description_en" aria-describedby="description_en-help" cols="6"></textarea>
+                <label for="description_en">Descripción de tu rol en la empresa en Inglés</label>
+                <input type="hidden" class="form-control" id="description_en" name="description_en" aria-describedby="description_en-help">
+                <trix-editor input="description_en"></trix-editor>
                 <small id="description_en-help" class="form-text text-muted">¿Qué hiciste en la empresa, con que trabajaste, describelo(Puedes utilizar codigo html) en inglés</small>
             </div>
         </div>
+        <div class="col-md-12 mb-3">
+            <div class="form-group">
+                <label for="description_en">Descripción de tu rol en la empresa en español</label>
+                <select class="js-example-basic-multiple-limit form-control" id="portfolio" name="portfolio[]" multiple></select>
+            </div>
+        </div>
         <button type="submit" class="btn btn-secondary btn-lg btn-block">Guardar </button>
+        <!--<a tabindex="0" class="btn btn-lg btn-danger popover-dismiss" role="button" data-bs-toggle="popover"
+           data-bs-trigger="focus" title="Dismissible popover" data-bs-content="w<div class='progress'> <div class='progress-bar bg-success' role='progressbar' style='width: 55%' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'></div> </div>">Dismissible popover</a>-->
     </form>
+    <div class='progress'> <div class='progress-bar bg-success' role='progressbar' style='width: 55%' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'></div> </div>
+    <script>
+        $('.js-example-basic-multiple-limit').select2({
+            ajax: {
+                url: '/api/list/portfolios',
+                data: function (params) {
+                    var query = {
+                        search: params.term,
+                        type: 'query'
+                    }
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function (data) {
+                    console.log(data)
+                    return {
+                        results: data
+                    };
+                },
+            },
+            templateResult: formatState,
+            placeholder: 'Selecciona una opción',
+        });
+        function formatState (state) {
+            if (!state.id) {
+                return state.text;
+            }
+            var baseUrl = state.url_img;
+            var $state = $(
+                '<span><img width="40" src="' + baseUrl + '" class="img-flag" /> ' + state.text + '</span>'
+            );
+            return $state;
+        };
+        /**var popover = new bootstrap.Popover(document.querySelector('.popover-dismiss'), {
+            trigger: 'focus hover',
+            html:true,
+            customClass:"popover-style"
+        })**/
+    </script>
 @endsection
+

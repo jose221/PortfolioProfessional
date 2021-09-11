@@ -1,5 +1,5 @@
 jQuery(function ($) {
-
+    console.log("funcionando");
     $(".sidebar-dropdown > a").click(function() {
         $(".sidebar-submenu").slideUp(200);
         if (

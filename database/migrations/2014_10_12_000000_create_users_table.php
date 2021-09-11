@@ -29,7 +29,12 @@ class CreateUsersTable extends Migration
             $table->string('country_en')->nullable();
             $table->string('header_image_path')->nullable();
             $table->string('my_perfil')->nullable();
+            $table->string('logo')->nullable();
+            $table->string('slogan_es')->nullable();
+            $table->string('slogan_en')->nullable();
             $table->string('avatar')->nullable();
+            $table->string('header_text_es')->nullable();
+            $table->string('header_text_en')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

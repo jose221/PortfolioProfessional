@@ -6,6 +6,8 @@ use App\Models\Knowledge;
 use App\Models\KnowledgeAbility;
 use App\Models\MyContact;
 use App\Models\personalProject;
+use App\Models\Portfolio;
+use App\Models\PortfolioCategory;
 use App\Models\professionalExperience;
 use App\Models\Study;
 use App\User;
@@ -32,9 +34,11 @@ class indexController extends Controller
             'myContacts'=>$this->myContacts($lang),
             'myKnowledges'=>$this->myKnowledges($lang),
             'professional_projects'=>$this->professionalProjects($lang),
-            'personal_projects'=>$this->personalProjects($lang)
+            'personal_projects'=>$this->personalProjects($lang),
+            'portfolio_categories' => $this->portfolioCategories($lang)
         );
-
+        //return $myPortafolio;
+        //return $myPortafolio;
         return view('home.content',compact('myPortafolio'));
     }
     protected function setLanguage($lang){
@@ -44,6 +48,7 @@ class indexController extends Controller
     }
 
     protected function myPerfil($lang){
+        //'header_text_es','header_text_en', 'slogan_en','slogan_es','logo','avatar'
         $user = User::where('id',$this->usuario_id)->first();
         return array(
             'id'=>1,
@@ -56,7 +61,10 @@ class indexController extends Controller
             'country'=>$user['country_'.$lang],
             'header_image_path'=>$user['header_image_path'],
             'my_perfil'=>$user['my_perfil'],
-            'avatar'=>$user['avatar']
+            'avatar'=>$user['avatar'],
+            'header_text'=>$user['header_text_'.$lang],
+            'slogan'=>$user['slogan_'.$lang],
+            'logo'=>$user['logo']
         );
     }
     protected function studies($lang){
@@ -145,9 +153,37 @@ class indexController extends Controller
                 'job'=>$experience['job_'.$lang],
                 'date_start'=>$experience['date_start'],
                 'date_end'=>$experience['date_end'],
+                'portfolio' => $experience['portfolio'],
                 'description'=>$experience['description_'.$lang],
                 'country'=>$experience['country_'.$lang],
                 'user_id'=>$experience['user_id']
+            ));
+        }
+        return $array_personal_projects;
+    }
+    protected function portfolioCategories($lang){
+        $array_personal_projects = array();
+        $experiences = PortfolioCategory::all()->toArray();
+        foreach ($experiences as $experience) {
+            $portfolios = Portfolio::where('portfolio_categories_id', $experience['id'])->get()->toArray();
+            $port = [];
+            foreach ($portfolios as $portfolio){
+                array_push($port, [
+                    'id' => $portfolio['id'],
+                    'code' => $portfolio['code'],
+                    'icon_path' => $portfolio['icon_path'],
+                    'title' => $portfolio['title_'.$lang],
+                    'description' => $portfolio['description_'.$lang],
+                    'years_experience'=> $portfolio['years_experience'],
+                    'knowledge_level'=> $portfolio['knowledge_level'],
+                ]);
+            }
+            array_push($array_personal_projects, array(
+                'id'=>$experience['id'],
+                'code'=> $experience['code'],
+                'title'=> $experience['title_'.$lang],
+                'description'=> $experience['title_'.$lang],
+                'portfolios'=>$port
             ));
         }
         return $array_personal_projects;

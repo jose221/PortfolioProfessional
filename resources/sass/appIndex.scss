@@ -1,0 +1,282 @@
+@import 'variables';
+
+.header-img{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    img{
+        width: 100%;
+        height: auto;
+    }
+}
+.header-text{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    h2{
+        font-weight: bold;
+        font-size: 45px;
+        color: $primary-color;
+    }
+    h3{
+        font-size: 25px;
+        color: $text-primary-color;
+    }
+
+}
+.btn{
+    border: 5px solid;
+    border-radius: 20px;
+}
+.btn-contact{
+    border-radius: 25px;
+    width: 50px;
+    height: 50px;
+    border-color:  $primary-color;
+    color: $primary-color;
+    display:inline-block;
+    font-size:1.25em;
+    margin-left: 10px;
+    padding:5px 0;
+    text-align:center;
+    i{
+        color: $primary-color;
+    }
+}
+.btn-contact:hover{
+    background-color: $primary-color;
+    i{
+        color: white;
+    }
+}
+.btn.outliner-primary{
+    background: none;
+    color: $primary-color;
+    border-radius: 25px;
+    border: 5px solid $primary-color;
+}
+.content-section.bg-light{
+    .content-section-heading{
+        .text-name-section{
+            color: $primary-color;
+            font-weight: bold;
+        }
+        hr{
+            height: 5px;
+            justify-content: center;
+            background-color: $primary-color;
+            width: 5rem;
+            margin: auto;
+        }
+    }
+    h2{
+        color: $primary-color !important;
+    }
+    h3, h5{
+        color: $text-primary-color;
+    }
+    p{
+        color: $text-primary-color;
+        text-space: 35px;
+        text-align: justify;
+        font-size: 18px;
+    }
+    span{
+        color: $primary-color;
+        font-weight: bold;
+    }
+
+}
+.description-content{
+    position: relative;
+    margin: auto;
+    text-align: center;
+    justify-content: center;
+    max-width: 60%;
+
+}
+.content-section.bg-blue{
+    background-color: $primary-color;
+    .content-section-heading{
+        .text-name-section{
+            color: $sub-text-primary-color;
+            font-weight: bold;
+        }
+        hr{
+            height: 5px;
+            justify-content: center;
+            background-color: $sub-text-primary-color;
+            width: 5rem;
+            margin: auto;
+        }
+
+    }
+    h2, h4, h5{
+        color: $sub-text-primary-color !important;
+    }
+    p{
+        color: $text-primary-color;
+        text-space: 35px;
+        text-align: justify;
+        font-size: 18px;
+    }
+    span{
+        color: $primary-color;
+        font-weight: bold;
+    }
+    input{
+        background-color: $sub-primary-color !important;
+        color: $sub-text-primary-color !important;
+        border: none;
+        height: 4rem;
+        border-radius: 10px;
+    }
+    textarea{
+        background-color: $sub-primary-color;
+        color: $sub-text-primary-color !important;
+        border: none;
+        border-radius: 10px;
+        height: 8rem;
+    }
+    input::placeholder, textarea::placeholder{
+        color: $sub-text-primary-color !important;
+        background-color: $sub-primary-color !important;
+    }
+}
+.item-column{
+    background-color: $sub-primary-color;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+   .item-head{
+       background-color: $sub-primary-color;
+       color:  $sub-primary-color;
+       justify-content: center;
+
+   }
+    .item-content{
+        p, h5{
+            color: $sub-text-primary-color;
+        }
+        margin:2rem 2rem 1rem 1rem;
+    }
+}
+
+.footer{
+    background-color: $color-header;
+    color: white;
+    .btn-contact{
+
+        border-color:  white;
+        color: white;
+        i{
+            color: white;
+        }
+    }
+    .btn-contact:hover{
+        background-color: $primary-color;
+        border-color:   $primary-color;
+        i{
+            color: white;
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .header-img{
+        display: flex;
+    }
+}
+.modal-jobs{
+    .modal-header{
+        border-radius: 30px 30px 0 0;
+        background: none;
+        .modal-title{
+            color: $sub-text-primary-color !important;
+        }
+        .btn-close{
+            color: $sub-text-primary-color !important;
+        }
+    }
+    .float-text-center {
+        justify-content: center;
+        color: white !important;
+        font-size: 2.5em;
+
+        position: relative
+    }
+  .modal-header::before{
+      border-radius: 30px 30px 0 0;
+      content:'';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      //background-color: rgb(48, 88, 166, .6);
+      background-color: rgba(0, 0, 0, 0.9);
+  }
+}
+.modal-content{
+    border:none ;
+    border-radius: 30px;
+}
+.text-content{
+    font-size: 0.850em !important;
+}
+.btn-close-modal{
+    color: white !important;
+    background:none !important;
+    position: absolute !important;
+    border-radius: 30px;
+    width: 2.5rem;
+    height: 2.5rem;
+    right: 1rem;
+    top: 1rem;
+    border: 3px solid white;
+}
+.btn-close-modal:hover{
+    color: black !important;
+    border-color: black !important;
+    background:white !important;
+}
+.outline-badge{
+    color: $secondary-color !important;
+    border: 2px solid $secondary-color;
+}
+
+.nav-link.active{
+    border: 2px solid $primary-color;
+    border-radius: 10px;
+    color: white !important;
+    background-color: $primary-color !important;
+}
+.navbar{
+    height: 4.5rem;
+    margin-top: 0.5rem;
+    //background-color: $primary-color !important;
+    color: white !important;
+}
+.navbar.shadow{
+    border-radius: 10px;
+}
+@media only screen and (max-width: 768px){
+    .navbar-collapse.show{
+        z-index: 21;
+        box-shadow: 0 .8rem 1rem rgba(0,0,0,.15)!important;
+        border-radius: 10px;
+        width: 21rem;
+        position: absolute;
+        top: 5rem;
+    }
+    .nav-link{
+        margin-bottom: 0.5rem;
+        margin-top: 0.5rem;
+        margin-left: 2rem;
+        margin-right: 2rem;
+    }
+    .nav-text{
+        margin-left: 2rem;
+    }
+
+}

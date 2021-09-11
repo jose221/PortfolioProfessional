@@ -61,18 +61,46 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
             Route::get('/','messagesController@index')->name('view');
             Route::post('viewed/{id}','messagesController@updateStatusViewed')->name('viewed');
             Route::delete('delete/{id}','messagesController@destroy')->name('delete');
-            Route::post('send','messagesController@send')->name('send');
         });
     });
     //mis contactos
     Route::group(['prefix'=>'contacts','namespace'=>'Admin'],function (){
         Route::name('contacts.')->group(function (){
             Route::get('/','myContactsController@index')->name('view');
+            Route::post('contacts/store', 'myContactsController@store')->name('store');
             Route::get('/edit/{id}','myContactsController@edit')->name('edit');
             Route::get('/create','myContactsController@create')->name('create');
             Route::post('/update/{id}', 'myContactsController@update')->name('update');
-            Route::post('/store', 'myContactsController@store')->name('store');
             Route::delete('/delete/{id}', 'myContactsController@destroy')->name('delete');
+        });
+    });
+
+    //mi categoria de porfatolios
+    Route::group(['prefix'=>'portfolio-categories','namespace'=>'Admin'],function (){
+        Route::name('portfolio-categories.')->group(function (){
+            Route::get('/','portfolioCategoriesController@index')->name('view');
+            Route::post('contacts/store', 'portfolioCategoriesController@store')->name('store');
+            Route::get('/edit/{id}','portfolioCategoriesController@edit')->name('edit');
+            Route::get('/create','portfolioCategoriesController@create')->name('create');
+            Route::post('/update/{id}', 'portfolioCategoriesController@update')->name('update');
+            Route::delete('/delete/{id}', 'portfolioCategoriesController@destroy')->name('delete');
+        });
+        Route::group(['prefix'=>'portfolio'],function (){
+            Route::name('portfolio-categories.portfolio.')->group(function () {
+                Route::get('/{id}','portfolioController@index')->name('view');
+                Route::post('/update/{id}', 'portfolioController@update')->name('update');
+                Route::post('/store/{id}', 'portfolioController@store')->name('store');
+                Route::delete('/delete/{id}', 'portfolioController@destroy')->name('delete');
+            });
+        });
+    });
+    Route::group(['prefix'=>'vitae', 'namespace'=>'Admin'],function (){
+        Route::name('users.vitae.')->group(function () {
+            Route::get('/','historyCurriculumVitaeController@index')->name('view');
+            Route::post('/update/{id}', 'historyCurriculumVitaeController@update')->name('update');
+            Route::post('/selected/{id}', 'historyCurriculumVitaeController@selected')->name('selected');
+            Route::post('/store', 'historyCurriculumVitaeController@store')->name('store');
+            Route::delete('/delete/{id}', 'historyCurriculumVitaeController@destroy')->name('delete');
         });
     });
     //mis conocimientos
@@ -96,8 +124,7 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
             });
         });
     });
-
 });
-
+Route::post('message/send','admin\messagesController@send')->name('messages.send');
 
 Route::get('admin/home', 'HomeController@index')->name('home');
