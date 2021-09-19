@@ -37,7 +37,7 @@ class indexController extends Controller
             'personal_projects'=>$this->personalProjects($lang),
             'portfolio_categories' => $this->portfolioCategories($lang)
         );
-        //return $myPortafolio;
+
         //return $myPortafolio;
         return view('home.content',compact('myPortafolio'));
     }
@@ -49,7 +49,8 @@ class indexController extends Controller
 
     protected function myPerfil($lang){
         //'header_text_es','header_text_en', 'slogan_en','slogan_es','logo','avatar'
-        $user = User::where('id',$this->usuario_id)->first();
+        $user = User::select('users.*', 'vitae.path as cv_path')
+            ->where('users.id',$this->usuario_id)->join('history_curriculum_vitae as vitae','users.cv','=', 'vitae.id' )->first();
         return array(
             'id'=>1,
             'name'=> $user['name'],
@@ -64,7 +65,8 @@ class indexController extends Controller
             'avatar'=>$user['avatar'],
             'header_text'=>$user['header_text_'.$lang],
             'slogan'=>$user['slogan_'.$lang],
-            'logo'=>$user['logo']
+            'logo'=>$user['logo'],
+            'cv' => $user['cv_path']
         );
     }
     protected function studies($lang){

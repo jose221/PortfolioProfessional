@@ -108,9 +108,9 @@
                                 </div>
                             </div>
                         </div>
-                        <!--<div class="col-lg-12 text-center mt-4">
-                            <a class="btn outliner-primary" href="#professional-experience-section">{!! trans('index.VER MI PORTAFOLIO') !!}</a>
-                        </div>-->
+                        <div class="col-lg-12 text-center mt-4">
+                            <a class="btn outliner-primary" target="_blank" href="{{asset($myPortafolio['myPerfil']['cv'])}}">{!! trans('index.VER MI PORTAFOLIO') !!}</a>
+                        </div>
 
                     </div>
                 </div>
@@ -171,7 +171,7 @@
                         @foreach($categories['portfolios'] as $portfolio)
                             <div class="col">
                                 <div>
-                                    <img width="100" height="120" src="{{asset($portfolio['icon_path'])}}" loading="lazy">
+                                    <img width="100" height="120" src="{{asset($portfolio['icon_path'])}}" data-bs-toggle="tooltip" data-bs-placement="top" title="{{$portfolio['description']}}" loading="lazy">
                                 </div>
                             </div>
                         @endforeach

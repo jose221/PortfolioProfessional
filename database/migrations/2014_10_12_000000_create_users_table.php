@@ -35,6 +35,8 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable();
             $table->string('header_text_es')->nullable();
             $table->string('header_text_en')->nullable();
+            $table->unsignedBigInteger('cv')->nullable();
+            $table->foreign('cv')->references('id')->on('history_curriculum_vitae')->onDelete('set null')->onUpdate('set null');
             $table->rememberToken();
             $table->timestamps();
         });

@@ -128,3 +128,7 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
 Route::post('message/send','admin\messagesController@send')->name('messages.send');
 
 Route::get('admin/home', 'HomeController@index')->name('home');
+/**Route::get('/uploads/cv/{id}', function ($id) {
+    $data = \App\Models\HistoryCurriculumVitae::find($id);
+    return Storage::url($data->path);
+});**/
