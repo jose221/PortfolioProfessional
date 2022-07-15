@@ -125,7 +125,9 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
         });
     });
 });
-Route::post('message/send','admin\messagesController@send')->name('messages.send');
+Route::group(['namespace'=>'Admin'],function (){
+    Route::post('message/send','messagesController@send')->name('messages.send');
+});
 
 Route::get('admin/home', 'HomeController@index')->name('home');
 /**Route::get('/uploads/cv/{id}', function ($id) {

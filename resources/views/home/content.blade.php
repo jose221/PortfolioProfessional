@@ -37,16 +37,16 @@
                             <div class="mb-3">
                                 @foreach($myPortafolio['myContacts'] as $contact)
                                     <a class="btn btn-contact" href="{{$contact['url_path']}}" target="_blank">
-                                        <i class=" {{$contact['icon_path']}} text-center"></i>
+                                        <i class=" {{$contact['icon_path']}} text-center" loading="lazy"></i>
                                     </a>
                                 @endforeach
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <h2>{{Str::upper($myPortafolio['myPerfil']['name'])}}</h2>
+                            <h2 loading="lazy">{{Str::upper($myPortafolio['myPerfil']['name'])}}</h2>
                         </div>
                         <div class="col-md-12">
-                            <h3>
+                            <h3 loading="lazy">
                                 {{Str::upper($myPortafolio['myPerfil']['header_text'])}}
                             </h3>
                         </div>
@@ -250,7 +250,9 @@
                                     position: relative;
                                     ">
                                     <h3 class="float-text-center">{{Str::upper($experience['company'])}}</h3>
-                                    <button type="button" class="btn-close-modal "   data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
+                                    <button type="button" class="btn-close-modal"   data-bs-dismiss="modal">
+                                        <i class="fas fa-times"></i>
+                                    </button>
                                     <!--<h5 class="modal-title">{{$experience['company']}} | {{$experience['country']}}</h5>
                                     <button type="button" class="btn-closeund-image:" data-bs-dismiss="modal" aria-label="Close"></button>-->
 

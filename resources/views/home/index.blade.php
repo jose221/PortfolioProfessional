@@ -5,33 +5,38 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
+    <meta name="description" content="Cross-Platform Application Developer">
+    <meta name="author" content="José Ángel Alvarado Gonzalez">
+    <meta property="og:title" content="José Ángel Alvarado Gonzalez">
+    <meta property="og:image:url" content="{{asset('img/logo.png')}}">
+    <meta property="og:image:secure_url" content="{{asset('img/logo.png')}}">
+    <meta property="og:image:width" content="2500">
+    <meta property="og:image:height" content="1330">
+    <meta property="og:url" content="https://jose.alvarado.herandro.com.mx/">
+    <meta property="og:site_name" content="José Ángel">
+    <meta property="og:type" content="website">
+    <link rel="shortcut icon" href="{{asset('img/logo.svg')}}" />
     <title>José Ángel</title>
     <!-- Scripts -->
     <!--<script src="{{ asset('js/app.js') }}" defer></script>-->
     <!-- Styles -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"  integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous" lazyload>
     <!--<link href="{{ asset('css/app.css') }}" rel="stylesheet">-->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <!-- Custom Fonts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,200;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>z
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,200;1,700&display=swap" rel="preload">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous" lazyload>
     <!-- Custom CSS -->
-    <link href="css/stylish-portfolio.css" rel="stylesheet">
-    <link type="text/css" href="{{ mix('/css/my-portafolio.css') }}" rel="stylesheet">
-    <link type="text/css" href="{{ mix('/css/appIndex.css') }}" rel="stylesheet">
+    <link href="css/stylish-portfolio.css" rel="stylesheet" lazyload>
+    <link type="text/css" href="{{ mix('/css/my-portafolio.css') }}" rel="stylesheet" lazyload>
+    <link type="text/css" href="{{ mix('/css/appIndex.css') }}" rel="stylesheet" lazyload>
     <!--<link href="css/my-portafolio.css" rel="stylesheet">-->
 
-    <title>Portafolio - @yield('title')</title>
-    <script src="js/stylish-portfolio.js"></script>
+    <title> @yield('title')</title>
 </head>
 <body id="page-top" data-bs-spy="scroll" data-bs-target="#navbar-example">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10" ></script>
+<script src="https://cdn.jsdelivr.net/npm/promise-polyfill" ></script>
 <!-- Navigation -->
 <!--<a class="menu-toggle rounded" href="#">
     <i class="fas fa-bars"></i>
@@ -101,7 +106,7 @@
                 </ul>
             </div>
             <a class="menu-toggle-language rounded" href="{{route('index.language',(App()->getLocale() === 'es')?'en':'es')}}">
-                <i class="fas "><img src="{{asset("img/".App()->getLocale().".png")}}"></i>
+                <i class="fas "><img src="{{asset("img/".App()->getLocale().".webp")}}"></i>
             </a>
         </div>
     </nav>
@@ -113,11 +118,11 @@
 <!-- Footer -->
 <footer class="footer text-center" id="footer-info">
     <div class="container">
-        <img width="90" class="img-circle text-center mb-5" src="{{asset($myPortafolio['myPerfil']['slogan'])}}" alt="Card image cap">
-        <div class="mb-3">
+        <img width="90" class="img-circle text-center mb-5" src="{{asset($myPortafolio['myPerfil']['slogan'])}}" alt="Card image cap" loading="lazy">
+        <div class="mb-3" loading="lazy">
             @foreach($myPortafolio['myContacts'] as $contact)
-                <a class="btn btn-contact">
-                    <i class=" {{$contact['icon_path']}}   text-center"></i>
+                <a class="btn btn-contact" href="{{$contact['url_path']}}" target="_blank">
+                    <i class=" {{$contact['icon_path']}} text-center"></i>
                 </a>
             @endforeach
         </div>
@@ -131,6 +136,10 @@
 </a>
 <!-- Bootstrap core JavaScript -->
 <!-- Custom scripts for this template -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<!-- Custom Fonts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
+<script src="js/stylish-portfolio.js"></script>
 <script>
     var scrollSpy = new bootstrap.ScrollSpy(document.body, {
         target: '#navbar-example'
@@ -138,7 +147,6 @@
     $(function (){
         $(window).scroll(function(){
             if ($(this).scrollTop() > 100) {
-                console.log("paso")
                 $('.navbar').addClass("shadow");
             } else {
                 $(".navbar").removeClass("shadow");
