@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/list/portfolio-categories','Admin\portfolioCategoriesController@getPortfoliosCategories');
 Route::get('/list/portfolios','Admin\portfolioController@getPortfolios');
 //peticiones principales
+Route::post('/myportfolio/message/send/{lang}','api\messageController@send');
 Route::get('/myportfolio/{lang}','api\LandingController@index');
 Route::get('/myportfolio/myperfil/{lang}','api\LandingController@myPerfil');
 Route::get('/myportfolio/studies/{lang}','api\LandingController@studies');
