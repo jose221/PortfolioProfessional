@@ -1,11 +1,7 @@
-$primary-color: #3058A6;
-$sub-primary-color:#3963B5;
-$secondary-color:#656768;
-$text-primary-color:#656768;
-//contrario de los colores default
-$sub-text-primary-color:#F1F1F1;
-//color de los iconos
-$icon-color-primary:#525253;
-$icon-color-primary-active:#3058A6;
+// Body
+$body-bg: #f8fafc;
 
-$color-header:#464646;
+// Typography
+$font-family-sans-serif: 'Nunito', sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;

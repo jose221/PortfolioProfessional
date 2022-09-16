@@ -12,9 +12,5 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
+    .react()
     .sass('resources/sass/app.scss', 'public/css');
-
-mix.sass('resources/sass/appIndex.scss', 'public/css');
-mix.sass('resources/sass/admin.scss', 'public/css');
-mix.sass('resources/sass/my-portafolio.scss', 'public/css');
-mix.sass('resources/sass/stylish-auth.scss', 'public/css');
