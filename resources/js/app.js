@@ -13,3 +13,4 @@ require('./bootstrap');
  */
 
 require('./components/Example');
+import FormComponent from './components/home/FormComponent';

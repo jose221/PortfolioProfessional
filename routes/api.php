@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +30,15 @@ Route::get('/myportfolio/myknowledges/{lang}','api\LandingController@myKnowledge
 Route::get('/myportfolio/personalprojects/{lang}','api\LandingController@personalProjects');
 Route::get('/myportfolio/professionalprojects/{lang}','api\LandingController@professionalProjects');
 Route::get('/myportfolio/portfoliocategories/{lang}','api\LandingController@portfolioCategories');
+
+
+//Admin
+
+Route::group(['prefix'=>'admin'],function (){
+    Route::get('/user/{id}', 'api\admin\UserController@find');
+    Route::post('/user/{id}', 'api\admin\UserController@update');
+    Route::post('/upload', function (Request $request){
+        $image = $request->file('header_image_path')->store('public');
+        $params['header_image_path'] = Storage::url($image);
+    });
+});

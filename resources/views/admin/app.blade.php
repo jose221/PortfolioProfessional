@@ -10,7 +10,6 @@
     <title>@yield('title')</title>
 
     <!-- Scripts -->
-    <!--<script src="{{ asset('js/app.js') }}" defer></script>-->
     <!-- Styles -->
     <!--<link href="{{ asset('css/app.css') }}" rel="stylesheet">-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
@@ -27,6 +26,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.css" integrity="sha512-5m1IeUDKtuFGvfgz32VVD0Jd/ySGX7xdLxhqemTmThxHdgqlgPdupWoSN8ThtUSLpAGBvA8DY2oO7jJCrGdxoA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.js" integrity="sha512-2RLMQRNr+D47nbLnsbEqtEmgKy67OSCpWJjJM394czt99xj3jJJJBQ43K7lJpfYAYtvekeyzqfZTx2mqoDh7vg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('js/admin-portafolio.js') }}" defer></script>
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
 <body>
 <div class="page-wrapper chiller-theme">
     @guest
@@ -47,8 +47,8 @@
                 </div>
                 <div class="sidebar-header">
                     <div class="user-pic">
-                        <img class="img-responsive img-rounded" src="{{Auth::user()->my_perfil}}"
-                             alt="User picture">
+                        <!--<img class="img-responsive img-rounded" src="{{Auth::user()->my_perfil}}"
+                             alt="User picture">-->
                     </div>
                     <div class="user-info">
           <span class="user-name">
@@ -56,8 +56,8 @@
           </span>
                         <span class="user-role">Administrator</span>
                         <span class="user-status">
-            <i class="fa fa-circle"></i>
-            <span>Online</span>
+            <!--<i class="fa fa-circle"></i>
+            <span>Online</span>-->
           </span>
                     </div>
                 </div>
@@ -213,10 +213,9 @@
         </main>
     @endguest
 </div>
+
 <!-- page-wrapper -->
-
-
-
+<script src="{{ asset('js/app.js') }}" ></script>
 </body>
 
 </html>
