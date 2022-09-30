@@ -13,8 +13,13 @@ use Illuminate\Testing\Fluent\Concerns\Has;
 class UserController extends Controller
 {
     public function find($id){
-        $user = User::find($id);
-        return response()->json($user);
+        $items = User::find($id);
+        return response()->json([
+            'message'=>'Datos encontrados',
+            'code'=>200,
+            'data'=>$items,
+            'response'=>'success'
+        ]);
     }
     public function update($id, Request $request)
     {

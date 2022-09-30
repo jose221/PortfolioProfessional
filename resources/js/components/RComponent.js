@@ -49,12 +49,19 @@ export default class RComponent extends Component{
         this.setState({isLoading: true})
         let data = await DefaultService.find(url, params);
         data.updated_at = this.formatDateString(data.updated_at)
-        await this.setState({data: data});
+        this.setState({isLoading: false})
+        return data;
+    }
+    async getItems(url, params = {}){
+        this.setState({isLoading: true})
+        let data = await DefaultService.all(url, params);
+        data.updated_at = this.formatDateString(data.updated_at)
         this.setState({isLoading: false})
         return data;
     }
 
     onUpdate = async (url, params) =>{
+        //console.log(this.validData(this.state.data,))
         this.setState({isLoading: true})
         let response = await DefaultService.update(url, params)
         console.log(response)
@@ -63,4 +70,15 @@ export default class RComponent extends Component{
         this.setState({isSuccessMessage: response.message});
         return response;
     }
+    isValid(data, required=true){
+        let  isInvalid = false;
+        if(data != undefined){
+            data = data.toString();
+            if(required && (!data || data.trim() == "" || data == null)) isInvalid = true;
+        }else{
+            isInvalid = true;
+        }
+        return isInvalid
+    }
+
 }

@@ -2,8 +2,6 @@
 @section('title', 'Mis contactos')
 @section('content')
     <a href="{{route('contacts.create')}}" class="float-right btn btn-outline-success">Nuevo Contacto</a>
-    <h2>Mi contacto</h2>
-    <hr>
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>¡Exitoso! </strong> {{session('success')}}
@@ -20,6 +18,10 @@
             </button>
         </div>
     @endif
+   <div class="container">
+       <h3 class="pb-4 title-text mt-2">Mis contactos</h3>
+       <contacts-component data-id="{{auth()->id()}}"></contacts-component>
+   </div>
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead>

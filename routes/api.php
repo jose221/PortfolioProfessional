@@ -37,8 +37,6 @@ Route::get('/myportfolio/portfoliocategories/{lang}','api\LandingController@port
 Route::group(['prefix'=>'admin'],function (){
     Route::get('/user/{id}', 'api\admin\UserController@find');
     Route::post('/user/{id}', 'api\admin\UserController@update');
-    Route::post('/upload', function (Request $request){
-        $image = $request->file('header_image_path')->store('public');
-        $params['header_image_path'] = Storage::url($image);
-    });
+    Route::get('/contacts/{id}', 'api\admin\MyContactsController@index');
+
 });

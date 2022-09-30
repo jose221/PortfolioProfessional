@@ -9,12 +9,23 @@ export class DefaultService{
         let items = null;
         try {
             items = await axios.get(url, params);
-            items = items.data;
+            items = items.data.data;
         }
         catch (e){
             console.log(e);
         }
         return items;
+    }
+    static async all(url, params = {}){
+        let items = null;
+        try {
+            items = await axios.get(url, params);
+            items = items.data.data;
+        }
+        catch (e){
+            console.log(e);
+        }
+        return items || [];
     }
     static async update(url, params = {}, config = header){
         let items = null;

@@ -1,13 +1,10 @@
 import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-import CardMedia from '@mui/material/CardMedia';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import Fab from '@mui/material/Fab';
 import SaveIcon from '@mui/icons-material/Save';
 import Alert from '@mui/material/Alert';
@@ -18,18 +15,23 @@ import Collapse from '@mui/material/Collapse';
 import RComponent from "../RComponent";
 import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';
 import PersonIcon from '@mui/icons-material/Person';
-import CardHeader from '@mui/material/CardHeader';
+import User from "../../models/User";
 class FormComponent extends RComponent {
     constructor(props) {
         super(props);
         //this.getItem(`/api/admin/user/${this.props.id}`);
     }
-    componentDidMount() {
-        this.getItem(`/api/admin/user/${this.props.id}`);
+    async componentDidMount() {
+        let res = await this.getItem(`/api/admin/user/${this.props.id}`)
+        let data = new User(res);
+        await this.setState({data: data});
     }
     handleSubmit = async (e) =>{
         e.preventDefault();
-        await this.onUpdate(`/api/admin/user/${this.props.id}`, this.state.data)
+        console.log(this.state.data.getRequired())
+        if(this.state.data.validData()){
+            await this.onUpdate(`/api/admin/user/${this.props.id}`, this.state.data)
+        }
     }
 
     render() {
@@ -49,6 +51,7 @@ class FormComponent extends RComponent {
                             <h5 className="subtitle-text pb-3 ico-r"> <PersonIcon /> Información personal </h5>
                             <div className="row">
                                 <TextField
+                                    error={this.isValid(this.state.data.name)}
                                     className="col-md-6 mt-3 p-1"
                                     id="name"
                                     label="Nombre completo"
@@ -59,7 +62,7 @@ class FormComponent extends RComponent {
                                 />
                                 <TextField
                                     className="col-md-2 mt-3 p-1"
-                                    error
+                                    error={this.isValid(this.state.data.age)}
                                     id="outlined-error"
                                     label="Edad"
                                     type="number"
@@ -71,6 +74,7 @@ class FormComponent extends RComponent {
                                 <TextField
                                     className="col-md-4 mt-3 p-1"
                                     id="date"
+                                    error={this.isValid(this.state.data.date_birthday)}
                                     label="Fecha de cumpleaños"
                                     type="date"
                                     name="date_birthday"
@@ -84,7 +88,7 @@ class FormComponent extends RComponent {
 
                                 <TextField
                                     className="col-md-6 mt-3 p-1"
-                                    error
+                                    error={this.isValid(this.state.data.nationality_es)}
                                     id="outlined-error"
                                     label="Nacionalidad en español"
                                     name="nationality_es"
@@ -94,7 +98,7 @@ class FormComponent extends RComponent {
                                 />
                                 <TextField
                                     className="col-md-6 mt-3 p-1"
-                                    error
+                                    error={this.isValid(this.state.data.nationality_en)}
                                     id="outlined-error"
                                     label="Nacionalidad en inglés"
                                     name="nationality_en"
@@ -105,7 +109,7 @@ class FormComponent extends RComponent {
 
                                 <TextField
                                     className="col-md-6 mt-3 p-1"
-                                    error
+                                    error={this.isValid(this.state.data.country_es)}
                                     id="outlined-error"
                                     label="Ciudad donde vives en español"
                                     name="country_es"
@@ -117,7 +121,7 @@ class FormComponent extends RComponent {
 
                                 <TextField
                                     className="col-md-6 mt-3 p-1"
-                                    error
+                                    error={this.isValid(this.state.data.country_en)}
                                     id="outlined-error"
                                     label="Ciudad donde vives en inglés"
                                     name="country_en"
@@ -128,7 +132,7 @@ class FormComponent extends RComponent {
 
                                 <TextField
                                     className="col-md-6 mt-3 p-1"
-                                    error
+                                    error={this.isValid(this.state.data.description_es)}
                                     id="outlined-error"
                                     label="Descripción en español"
                                     name="description_es"
@@ -142,7 +146,7 @@ class FormComponent extends RComponent {
 
                                 <TextField
                                     className="col-md-6 mt-3 p-1"
-                                    error
+                                    error={this.isValid(this.state.data.description_en)}
                                     id="outlined-error"
                                     label="Descripción en inglés"
                                     name="description_en"
@@ -155,19 +159,8 @@ class FormComponent extends RComponent {
                                 />
 
                                 <TextField
-                                    className="col-md-12 mt-3 p-1"
-                                    error
-                                    id="outlined-error"
-                                    label="Correo electrónico"
-                                    name="email"
-                                    onChange={this.handleChange}
-                                    value={this.state.data.email || ' '}
-                                    helperText="Correo electrónico(Recuerda que tambien es el correo de contacto)"
-                                />
-
-                                <TextField
                                     className="col-md-6 mt-3 p-1"
-                                    error
+                                    error={this.isValid(this.state.data.header_text_es)}
                                     id="outlined-error"
                                     label="Texto o descripción del header en Español"
                                     name="header_text_es"
@@ -177,11 +170,11 @@ class FormComponent extends RComponent {
                                 />
                                 <TextField
                                     className="col-md-6 mt-3 p-1"
-                                    error
                                     id="outlined-error"
                                     label="Texto o descripción del header en Inglés"
                                     name="header_text_en"
                                     onChange={this.handleChange}
+                                    error={this.isValid(this.state.data.header_text_en)}
                                     value={this.state.data.header_text_en || ' '}
                                     helperText="Texto o descripción del header en Inglés"
                                 />
