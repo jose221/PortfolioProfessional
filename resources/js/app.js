@@ -15,3 +15,5 @@ require('./bootstrap');
 require('./components/Example');
 import FormComponent from './components/home/FormComponent';
 import ContactsComponent from './components/contacts/ContactsComponent';
+import CreateContactsComponent from "./components/contacts/CreateContactsComponent";
+import KnowLedgesComponent from "./components/knowledges/KnowLedgesComponent";

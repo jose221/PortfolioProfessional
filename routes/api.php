@@ -37,6 +37,13 @@ Route::get('/myportfolio/portfoliocategories/{lang}','api\LandingController@port
 Route::group(['prefix'=>'admin'],function (){
     Route::get('/user/{id}', 'api\admin\UserController@find');
     Route::post('/user/{id}', 'api\admin\UserController@update');
+
     Route::get('/contacts/{id}', 'api\admin\MyContactsController@index');
+    Route::post('/contacts/edit/{id}', 'api\admin\MyContactsController@edit');
+    Route::post('/contacts/delete', 'api\admin\MyContactsController@delete');
+    Route::post('/contacts/create', 'api\admin\MyContactsController@create');
+
+    Route::get('/knowledges/{id}', 'api\admin\KnowLedgesController@index');
+
 
 });

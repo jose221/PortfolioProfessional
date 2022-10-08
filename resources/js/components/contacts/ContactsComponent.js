@@ -26,45 +26,50 @@ class ContactsComponent extends RComponent {
     }
 
     async componentDidMount() {
+        await this.onInit();
+    }
+    onInit = async ()=>{
         let res = await this.getItems(`/api/admin/contacts/${this.props.id}`)
         console.log(res);
         //let data = new User(res);
         await this.setState({data: res});
     }
-    handleSubmit = async (e) =>{
-        e.preventDefault();
-        console.log(this.state.data.getRequired())
-        //if(this.state.data.validData()){
-            //await this.onUpdate(`/api/admin/user/${this.props.id}`, this.state.data.getItem())
-        //}
+    onSelectionModelChange = (params)=>{
+        this.setState({ids: params})
+        //this.setState({openModal : true});
     }
+    onCellEditCommit = (params)=>{
+        if(params.value != "") this.handleEdit(`/api/admin/contacts/edit/${params.id}`, params);
+    }
+    handleDelete = async()=>{
+        await this.onDelete("/api/admin/contacts/delete", this.state.ids)
+        await this.onInit();
+    }
+
     render() {
+        /**
+         * {field: 'image_upload', headerName: 'image_upload', width: 100,
+                type: 'file', description: 'icono del contacto de awesome fonts',
+                renderCell: (params) => {
+                const ELEMENT = <div>
+                    <img data-open="icon_path" id="image-icon_path" src="https://play-lh.googleusercontent.com/ZvMvaLTdYMrD6U1B3wPKL6siMYG8nSTEnzhLiMsH7QHwQXs3ZzSZuYh3_PTxoU5nKqU" />
+                    <input onChange={this.handleChangeInputGrid} hidden accept="image/*" multiple type="file"
+                           id="icon_path" name="icon_path" />
+                </div>;
+                    return ELEMENT;
+            },sortable: true
+            },
+         * **/
         let columns = [
             { field: 'id', headerName: 'ID', width: 70 },
-            {field: 'name_en', headerName: 'Nombre en ingles', width: 200, type: 'string', description: 'Nombre que se verá inglés', sortable: true},
-            {field: 'name_es', headerName: 'Nombre en español', width: 200, type: 'string', description: 'Nombre que se verá en español', sortable: true},
+            {field: 'name_en', headerName: 'Nombre en ingles', width: 200, type: 'string', description: 'Nombre que se verá inglés', sortable: true, editable: true},
+            {field: 'name_es', headerName: 'Nombre en español', width: 200, type: 'string', description: 'Nombre que se verá en español', sortable: true, editable: true},
             {field: 'url_path', headerName: 'Url', width: 400,
-                type: 'string', description: 'Url del contacto',
-                renderCell: (params) => <a href={params.row.url_path || ''}>{params.row.url_path || ''}</a>,  sortable: true},
+                type: 'string', description: 'Url del contacto',editable: true,
+                renderCell: (params) => <a href={params.row.url_path || ''}>{params.row.url_path || ''}</a>,  sortable: true, },
             {field: 'icon_path', headerName: 'Icono', width: 100,
                 type: 'string', description: 'icono del contacto de awesome fonts',
-                renderCell: (params) => <i className={ params.row.icon_path+' fa-2x text-center'}></i>,  sortable: true},
-            { headerName: 'Acciones', width: 120,
-                type: 'string', description: 'Acciones de la tabla',
-                renderCell: (params) => {
-
-                return (
-                    <div className="flex">
-                        <IconButton aria-label="edit" color="secondary">
-                            <EditIcon />
-                        </IconButton>
-                        <IconButton aria-label="delete" color="error">
-                            <DeleteIcon />
-                        </IconButton>
-
-                    </div>
-                );
-                },  sortable: true},
+                renderCell: (params) => <i className={ params.row.icon_path+' fa-2x text-center'}></i>,  sortable: true, editable: true},
 
         ];
         return (
@@ -82,7 +87,14 @@ class ContactsComponent extends RComponent {
                 </Snackbar>
                 <Card className="container">
                     <CardContent>
-                        <h5 className="subtitle-text pb-3 ico-r"> <PersonIcon /> Información de contacto </h5>
+                        <div className="d-flex justify-content-between">
+                            <h5 className="subtitle-text pb-3 ico-r"> <PersonIcon /> Información de contacto </h5>
+                            <div>
+                                <IconButton disabled={this.state.ids.length <=0} aria-label="delete" onClick={this.handleDelete} color="error">
+                                    <DeleteIcon />
+                                </IconButton>
+                            </div>
+                        </div>
                         <div style={{ height: 400, width: '100%' }}>
                             <DataGrid
                                 rows={this.state.data}
@@ -90,10 +102,14 @@ class ContactsComponent extends RComponent {
                                 pageSize={5}
                                 rowsPerPageOptions={[4]}
                                 checkboxSelection
+                                onCellEditCommit={(params)=>this.onCellEditCommit(params)}
+                                onSelectionModelChange={(params)=> this.onSelectionModelChange(params)}
+                                onCellClick={(params, e)=> this.onCellClick(params,e)}
                             />
                         </div>
                     </CardContent>
                 </Card>
+                <create-contacts-component data-user_id={this.props.id}></create-contacts-component>
             </div>
         )
     }

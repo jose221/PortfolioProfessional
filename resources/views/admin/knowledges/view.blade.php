@@ -5,22 +5,8 @@
     <a href="{{route('knowledges.create')}}" class="float-right btn btn-outline-success">Nuevo Conocimiento</a>
     <h2>Mis Conocimientos</h2>
     <hr>
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>¡Exitoso! </strong> {{session('success')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
-    @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>¡Error! </strong> {{session('error')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
+
+    <knowledges-component data-id="{{auth()->id()}}"></knowledges-component>
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead>
