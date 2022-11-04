@@ -1,5 +1,7 @@
 import React, { Component, useState } from 'react';
 import {DefaultService} from "../services/DefaultService";
+import store from "../redux/store/store";
+import addTodo from "../redux/actions/add-todo";
 export default class RComponent extends Component{
     state = {
         ids:[],
@@ -8,6 +10,7 @@ export default class RComponent extends Component{
         isSuccess: false,
         openEdit:false,
         isSuccessMessage:"Exitoso!",
+        openModal: false,
         form:{}
     }
     handleChangeInputGrid = (event) =>{
@@ -18,7 +21,7 @@ export default class RComponent extends Component{
     }
     onCellClick = (params, e)=>{
         let target =  e.target;
-        console.log(params.colDef.type,params)
+        //console.log(params.colDef.type,params)
         /**let input = e.target.getAttribute("data-open");
         if(input){
             let file_input = document.querySelector(`#${input}`)
@@ -34,6 +37,7 @@ export default class RComponent extends Component{
         let response = await DefaultService.edit(url, param)
         this.setState({isSuccess: true});
         this.setState({isSuccessMessage: response.message});
+        this.dispatchStore(this.state)
     }
     handleChange = (event) => {
         let key = event.target.getAttribute('name');
@@ -45,8 +49,8 @@ export default class RComponent extends Component{
         }else{
             this.state.data[key] = event.target.value;
         }
-        console.log(this.state.data)
         this.setState(this.state.data);
+        this.dispatchStore(this.state)
     }
     handleChangeForm = (event) => {
         let key = event.target.getAttribute('name');
@@ -58,17 +62,21 @@ export default class RComponent extends Component{
         }else{
             this.state.form[key] = event.target.value;
         }
-        console.log(this.state.form)
         this.setState(this.state.form);
+        this.dispatchStore(this.state)
     }
     loadImage(image, id){
         let vm = this;
         if(typeof image == 'object'){
-            var reader = new FileReader();
-            reader.readAsDataURL(image);
-            reader.onloadend = function() {
-                image = reader.result;
-                document.querySelector(id).src = image;
+            try{
+                var reader = new FileReader();
+                reader.readAsDataURL(image);
+                reader.onloadend = function() {
+                    image = reader.result;
+                    document.querySelector(id).src = image;
+                }
+            }catch (e){
+                image = "";
             }
         }else{
             return image;
@@ -80,6 +88,7 @@ export default class RComponent extends Component{
         }
 
         this.setState({isSuccess: false});
+        this.dispatchStore(this.state)
     };
     formatDateString = (item)=>{
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -91,6 +100,7 @@ export default class RComponent extends Component{
         let data = await DefaultService.find(url, params);
         data.updated_at = this.formatDateString(data.updated_at)
         this.setState({isLoading: false})
+        this.dispatchStore(this.state)
         return data;
     }
     async getItems(url, params = {}){
@@ -98,6 +108,7 @@ export default class RComponent extends Component{
         let data = await DefaultService.all(url, params);
         data.updated_at = this.formatDateString(data.updated_at)
         this.setState({isLoading: false})
+        this.dispatchStore(this.state)
         return data;
     }
 
@@ -109,16 +120,17 @@ export default class RComponent extends Component{
         this.setState({isLoading: false})
         this.setState({isSuccess: true});
         this.setState({isSuccessMessage: response.message});
+        this.dispatchStore(this.state)
         return response;
     }
     onCreate = async (url, params) =>{
         //console.log(this.validData(this.state.data,))
         this.setState({isLoading: true})
         let response = await DefaultService.create(url, params)
-        console.log(response)
         this.setState({isLoading: false})
         this.setState({isSuccess: true});
         this.setState({isSuccessMessage: response.message});
+        this.dispatchStore(this.state)
         return response;
     }
     onDelete = async (url, params) =>{
@@ -127,6 +139,7 @@ export default class RComponent extends Component{
         })
         this.setState({isSuccess: true});
         this.setState({isSuccessMessage: response.message});
+        this.dispatchStore(this.state)
         return response;
     }
     isValid(data, required=true){
@@ -139,5 +152,16 @@ export default class RComponent extends Component{
         }
         return isInvalid
     }
+    dispatchStore(state){
+        store.dispatch(addTodo(state));
+    }
+    subscribeStore(callback = function (res){}){
+        store.subscribe(() => {
+            let res = store.getState();
+            this.setState(res.data);
+            callback(res.data)
+        });
+    }
+
 
 }

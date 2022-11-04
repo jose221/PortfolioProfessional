@@ -14,32 +14,38 @@ import TextField from "@mui/material/TextField";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import MyContact from "../../models/MyContact";
+import store from "../../redux/store/store";
+import addTodo from "../../redux/actions/add-todo";
 class CreateContactsComponent extends RComponent {
     constructor(props) {
         super(props);
-        this.state.openModal = false;
-        this.state.form = new MyContact();
     }
     async componentDidMount() {
+        this.state.form = new MyContact();
         this.state.form.user_id = this.props.user_id;
-        console.log(this.state.form)
+        this.dispatchStore(this.state)
+        this.subscribeStore()
     }
     handleSubmit = async (e) =>{
         e.preventDefault();
-        console.log(this.state.form.getRequired())
+        console.log(this.state.form)
         if(this.state.form.validData()){
             await this.onCreate("/api/admin/contacts/create", this.state.form)
-            this.setState({openModal : false});
-            window.location.reload();
+            this.state.openModal = false;
+            this.state.data = await this.getItems(`/api/admin/contacts/${this.props.user_id}`)
+            this.dispatchStore(this.state)
+            //window.location.reload();
         }
     }
     render() {
 
         const handleClose = () => {
-            this.setState({openModal : false});
+            this.state.openModal = false;
+            this.dispatchStore(this.state)
         };
         const handleOpen = () => {
-            this.setState({openModal : true});
+            this.state.openModal = true;
+            this.dispatchStore(this.state)
         };
         return (
             <div>
@@ -52,7 +58,7 @@ class CreateContactsComponent extends RComponent {
                     aria-describedby="alert-dialog-slide-description"
                 >
                     <DialogTitle>{"Agregar nuevo contacto"}</DialogTitle>
-                    <form encType="multipart/form-data" noValidate="true" onSubmit={this.handleSubmit}>
+                    <form encType="multipart/form-data" noValidate={true} onSubmit={this.handleSubmit}>
                         <DialogContent>
                             <div className="row">
                                 <TextField
