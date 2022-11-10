@@ -44,12 +44,12 @@ export default class RComponent extends Component{
         //this.state.form[name] = event.target.value;
         if(event.target.getAttribute('type')  == 'file'){
             if(event.target.files.length){
-                this.state.data[key] = event.target.files[0];
+                this.state.form[key] = event.target.files[0];
             }
         }else{
-            this.state.data[key] = event.target.value;
+            tthis.state.form[key] = event.target.value;
         }
-        this.setState(this.state.data);
+        this.setState(this.state.form);
         this.dispatchStore(this.state)
     }
     handleChangeForm = (event) => {
@@ -79,7 +79,7 @@ export default class RComponent extends Component{
                 image = "";
             }
         }else{
-            return image;
+            return image   || "https://amazonia.mapbiomas.org/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png";
         }
     }
     successHandleClose = (event, reason) => {
@@ -161,6 +161,9 @@ export default class RComponent extends Component{
             this.setState(res.data);
             callback(res.data)
         });
+    }
+    goToHref = async(url)=>{
+        window.location.href=url;
     }
 
 

@@ -2,20 +2,16 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
+
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
+
 import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
 import RComponent from "../RComponent";
 import ReactDOM from "react-dom";
-import SaveIcon from "@mui/icons-material/Save";
+import AddIcon from '@mui/icons-material/Add';
 import Fab from "@mui/material/Fab";
 import TextField from "@mui/material/TextField";
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
 import MyContact from "../../models/MyContact";
-import store from "../../redux/store/store";
-import addTodo from "../../redux/actions/add-todo";
 class CreateContactsComponent extends RComponent {
     constructor(props) {
         super(props);
@@ -115,7 +111,7 @@ class CreateContactsComponent extends RComponent {
                     bottom: (theme) => theme.spacing(2),
                     right: (theme) => theme.spacing(2)
                 }} aria-label="add">
-                    <SaveIcon/>
+                    <AddIcon/>
                 </Fab>
             </div>
         );

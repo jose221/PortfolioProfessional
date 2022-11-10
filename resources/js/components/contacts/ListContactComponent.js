@@ -29,7 +29,6 @@ class ListContactsComponent extends RComponent {
     }
     onInit = async ()=>{
         let res = await this.getItems(`/api/admin/contacts/${this.props.id}`)
-        //console.log(res);
         this.state.data = res;
         this.dispatchStore(this.state)
         //let data = new User(res);

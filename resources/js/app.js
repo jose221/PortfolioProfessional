@@ -18,3 +18,5 @@ import ContactsComponent from './components/contacts/ContactsComponent';
 import ListContactsComponent from './components/contacts/ListContactComponent';
 import CreateContactsComponent from "./components/contacts/CreateContactsComponent";
 import KnowLedgesComponent from "./components/knowledges/KnowLedgesComponent";
+import ListKnowLedgesComponent from "./components/knowledges/ListKnowLedgesComponent";
+import FormKnowLedgesComponent from "./components/knowledges/FormKnowLedgesComponent";

@@ -44,6 +44,9 @@ Route::group(['prefix'=>'admin'],function (){
     Route::post('/contacts/create', 'api\admin\MyContactsController@create');
 
     Route::get('/knowledges/{id}', 'api\admin\KnowLedgesController@index');
+    Route::post('/knowledges/create', 'api\admin\KnowLedgesController@create');
+    Route::post('/knowledges/edit/{id}', 'api\admin\KnowLedgesController@edit');
+    Route::post('/knowledges/delete', 'api\admin\KnowLedgesController@delete');
 
 
 });
