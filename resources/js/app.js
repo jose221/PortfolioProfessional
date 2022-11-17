@@ -20,3 +20,7 @@ import CreateContactsComponent from "./components/contacts/CreateContactsCompone
 import KnowLedgesComponent from "./components/knowledges/KnowLedgesComponent";
 import ListKnowLedgesComponent from "./components/knowledges/ListKnowLedgesComponent";
 import FormKnowLedgesComponent from "./components/knowledges/FormKnowLedgesComponent";
+import KnowledgeAbilityComponent from "./components/knowledgesAbility/KnowledgeAbilityComponent";
+import ListKnowledgeAbilityComponent from "./components/knowledgesAbility/ListKnowledgeAbilityComponent";
+import FormKnowledgeAbilityComponent from "./components/knowledgesAbility/FormKnowledgeAbilityComponent";
+import InfoKnowLedgesComponent from "./components/knowledges/InfoKnowLedgesComponent";

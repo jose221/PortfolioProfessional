@@ -44,9 +44,15 @@ Route::group(['prefix'=>'admin'],function (){
     Route::post('/contacts/create', 'api\admin\MyContactsController@create');
 
     Route::get('/knowledges/{id}', 'api\admin\KnowLedgesController@index');
+    Route::get('/knowledges/find/{id}', 'api\admin\KnowLedgesController@find');
     Route::post('/knowledges/create', 'api\admin\KnowLedgesController@create');
     Route::post('/knowledges/edit/{id}', 'api\admin\KnowLedgesController@edit');
     Route::post('/knowledges/delete', 'api\admin\KnowLedgesController@delete');
+
+    Route::get('/knowledges/abilities/{id}', 'api\admin\KnowLedgesAbilitiesController@index');
+    Route::post('/knowledges/abilities/create', 'api\admin\KnowLedgesAbilitiesController@create');
+    Route::post('/knowledges/abilities/edit/{id}', 'api\admin\KnowLedgesAbilitiesController@edit');
+    Route::post('/knowledges/abilities/delete', 'api\admin\KnowLedgesAbilitiesController@delete');
 
 
 });

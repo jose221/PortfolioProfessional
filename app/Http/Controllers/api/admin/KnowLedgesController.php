@@ -28,6 +28,25 @@ class KnowLedgesController extends Controller
             ]);
         }
     }
+    public function find($id){
+        try {
+            $item = Knowledge::find($id);
+            return response()->json([
+                'message'=>'Datos encontrados',
+                'code'=>200,
+                'data'=>$item,
+                'response'=>'success'
+            ]);
+        }catch (\Exception $e){
+            return response()->json([
+                'message'=>'No se ha podido actualizar correctamente',
+                'error'=>$e->getMessage(),
+                'data'=>[],
+                'code'=>500,
+                'response'=>'error'
+            ]);
+        }
+    }
     public function edit($id, Request $request){
         try {
             $item = Knowledge::find($id);

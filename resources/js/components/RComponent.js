@@ -11,7 +11,8 @@ export default class RComponent extends Component{
         openEdit:false,
         isSuccessMessage:"Exitoso!",
         openModal: false,
-        form:{}
+        form:{},
+        information:{}
     }
     handleChangeInputGrid = (event) =>{
         let key = event.target.getAttribute('name');
