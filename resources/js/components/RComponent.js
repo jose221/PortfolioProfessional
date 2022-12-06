@@ -12,7 +12,8 @@ export default class RComponent extends Component{
         isSuccessMessage:"Exitoso!",
         openModal: false,
         form:{},
-        information:{}
+        information:{},
+        expandedAccordion:""
     }
     handleChangeInputGrid = (event) =>{
         let key = event.target.getAttribute('name');
@@ -48,23 +49,29 @@ export default class RComponent extends Component{
                 this.state.form[key] = event.target.files[0];
             }
         }else{
-            tthis.state.form[key] = event.target.value;
+            this.state.form[key] = event.target.value;
         }
         this.setState(this.state.form);
         this.dispatchStore(this.state)
     }
     handleChangeForm = (event) => {
-        let key = event.target.getAttribute('name');
-        //this.state.form[name] = event.target.value;
-        if(event.target.getAttribute('type')  == 'file'){
-            if(event.target.files.length){
-                this.state.form[key] = event.target.files[0];
+        console.log(event)
+        if(event.target){
+            let key = event.target.getAttribute('name');
+            //this.state.form[name] = event.target.value;
+            if(event.target.getAttribute('type')  == 'file'){
+                if(event.target.files.length){
+                    this.state.form[key] = event.target.files[0];
+                }
+            }else{
+                this.state.form[key] = event.target.value;
             }
-        }else{
-            this.state.form[key] = event.target.value;
         }
         this.setState(this.state.form);
         this.dispatchStore(this.state)
+    }
+    handleChangeTrixEditor(html, text) {
+        console.log(html, text)
     }
     loadImage(image, id){
         let vm = this;

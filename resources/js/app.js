@@ -4,6 +4,7 @@
  * building robust, powerful web applications using React + Laravel.
  */
 
+
 require('./bootstrap');
 
 /**
@@ -24,3 +25,5 @@ import KnowledgeAbilityComponent from "./components/knowledgesAbility/KnowledgeA
 import ListKnowledgeAbilityComponent from "./components/knowledgesAbility/ListKnowledgeAbilityComponent";
 import FormKnowledgeAbilityComponent from "./components/knowledgesAbility/FormKnowledgeAbilityComponent";
 import InfoKnowLedgesComponent from "./components/knowledges/InfoKnowLedgesComponent";
+import ProfessionalExperiencesComponent from "./components/ProfessionalExperiences/ProfessionalExperiencesComponent";
+import ListProfessionalExperiencesComponent from "./components/ProfessionalExperiences/ListProfessionalExperiencesComponent";

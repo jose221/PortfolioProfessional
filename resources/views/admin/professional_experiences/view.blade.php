@@ -7,22 +7,11 @@
     <a href="{{route('experience.professional.create')}}" class="float-right btn btn-outline-success">Nueva Experiencia </a>
     <h2>Experiencia Profesional</h2>
     <hr>
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>¡Exitoso! </strong> {{session('success')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
-    @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>¡Error! </strong> {{session('error')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
+    <div class="container">
+        <h3 class="pb-4 title-text mt-2">Mi Experiencia Profesional</h3>
+    <professional-experiences-component  data-id="{{auth()->id()}}"></professional-experiences-component>
+    </div>
+
     <div class="row">
         @foreach($experiences as $experience)
             <div class="col-md-4">

@@ -10,7 +10,8 @@ const initialState = {
         openEdit:false,
         isSuccessMessage:"Exitoso!",
         form:{},
-        information:{}
+        information:{},
+        expandedAccordion:""
     }
 }
 const store = createStore(reducers, initialState);
