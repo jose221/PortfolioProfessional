@@ -35,8 +35,10 @@
         "@mui/x-data-grid": "^5.17.5",
         "@mui/x-date-pickers": "^5.0.1",
         "dayjs": "^1.11.5",
+        "draft-js": "^0.11.7",
         "react-dropzone": "^14.2.2",
         "react-redux": "^8.0.4",
+        "react-trix": "^0.10.0",
         "redux": "^4.2.0",
         "styled-components": "^5.3.5"
     }

@@ -53,21 +53,53 @@ class ListProfessionalExperiencesComponent extends RComponent{
                        <div className="d-flex justify-content-between">
                            <h5 className="subtitle-text pb-3 ico-r"> <PersonIcon /> Información de conocimientos </h5>
                        </div>
-                       <div>
-                           <Accordion expanded={this.state.expandedAccordion === 'panel1'} onChange={selectAccordion('panel1')}>
-                               <AccordionSummary
-                                   expandIcon={<ExpandMoreIcon />}
-                                   aria-controls="panel1bh-content"
-                                   id="panel1bh-header"
-                               >
-                               </AccordionSummary>
-                               <AccordionDetails>
-                                   <Typography>
-                                       Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-                                       Aliquam eget maximus est, id dignissim quam.
-                                   </Typography>
-                               </AccordionDetails>
-                           </Accordion>
+                       <div className="row">
+                           <div className="col-md-2">
+                               <div className="h-100 item-professional">
+                                   <img src="/storage/v9SvXWRTBoUKApLvG82u6WCjIABzkMAzd0Q1tVFl.svg"
+                                        className="rounded card-img-top " alt="test"/>
+                                   <p className="info-title">Order2gonow</p>
+                               </div>
+                           </div>
+                           <div className="col-md-2">
+                               <div className="h-100 item-professional">
+                                   <img src="/storage/831Wnsp4MpK9tmFODrxxswq8U8kX0fvx8Pqs8k3N.svg"
+                                        className="rounded card-img-top " alt="test"/>
+                                   <p className="info-title">price travel</p>
+                               </div>
+                           </div>
+                           <div className="col-md-2">
+                              <div className="h-100 item-professional">
+                                  <img src="http://portfolioprofessional.test/storage/SWnVSoktCmTv8rvhGm7alrQ59asj4ULDcQGIUYhJ.svg"
+                                       className="rounded card-img-top " alt="test"/>
+                                  <p className="info-title">price travel</p>
+                              </div>
+                           </div>
+                           <div className="col-md-2">
+                               <div className="h-100 item-professional">
+                                   <img src="http://portfolioprofessional.test/storage/sqi89AcMGZ8qK12vpd0sg4BYzE6XuUnvilL4Ei35.svg"
+                                        className="rounded card-img-top " alt="test"/>
+                                   <p className="info-title">price travel</p>
+                               </div>
+                           </div>
+                           <div className="col-md-2">
+                               <div className="h-100 item-professional">
+                                   <img src="http://portfolioprofessional.test/storage/aGFxe929MFmidWByIjBNqDa3kTMof6fAq5FZRfpY.svg"
+                                        className="rounded card-img-top " alt="test"/>
+                                   <p className="info-title">price travel</p>
+                               </div>
+                           </div>
+                           <div className="col-md-2">
+                               <div className="h-100 item-professional">
+                                   <img src="/storage/v9SvXWRTBoUKApLvG82u6WCjIABzkMAzd0Q1tVFl.svg"
+                                        className="rounded card-img-top " alt="test"/>
+                                   <p className="info-title">price travel</p>
+                               </div>
+                           </div>
+
+
+
+
                        </div>
                    </CardContent>
                </Card>

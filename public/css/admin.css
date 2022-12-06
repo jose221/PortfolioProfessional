@@ -649,4 +649,26 @@ body {
   float: right;
 }
 
+.item-professional {
+  background-color: #f7f7f7;
+  border-radius: 7px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+.item-professional img {
+  width: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+  width: 200px;
+  padding: 1.2rem 2.5rem 5px 2.5rem;
+}
+.item-professional .info-title {
+  text-transform: uppercase;
+  font-size: 13px;
+  text-align: center;
+}
+
 /** new sliderbar **/
