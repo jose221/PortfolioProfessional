@@ -54,5 +54,9 @@ Route::group(['prefix'=>'admin'],function (){
     Route::post('/knowledges/abilities/edit/{id}', 'api\admin\KnowLedgesAbilitiesController@edit');
     Route::post('/knowledges/abilities/delete', 'api\admin\KnowLedgesAbilitiesController@delete');
 
+    Route::group(['prefix'=>'experience/professional'],function (){
+    Route::get('/{id}', 'api\admin\ProfessionalExperiencesController@index');
+    });
+
 
 });

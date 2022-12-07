@@ -17,7 +17,7 @@
 .header-text h2 {
   font-weight: bold;
   font-size: 45px;
-  color: #3058A6;
+  color: #115be8;
 }
 .header-text h3 {
   font-size: 25px;
@@ -33,8 +33,8 @@
   border-radius: 25px;
   width: 50px;
   height: 50px;
-  border-color: #3058A6;
-  color: #3058A6;
+  border-color: #115be8;
+  color: #115be8;
   display: inline-block;
   font-size: 1.25em;
   margin-left: 10px;
@@ -42,11 +42,11 @@
   text-align: center;
 }
 .btn-contact i {
-  color: #3058A6;
+  color: #115be8;
 }
 
 .btn-contact:hover {
-  background-color: #3058A6;
+  background-color: #115be8;
 }
 .btn-contact:hover i {
   color: white;
@@ -54,24 +54,24 @@
 
 .btn.outliner-primary {
   background: none;
-  color: #3058A6;
+  color: #115be8;
   border-radius: 25px;
-  border: 5px solid #3058A6;
+  border: 5px solid #115be8;
 }
 
 .content-section.bg-light .content-section-heading .text-name-section {
-  color: #3058A6;
+  color: #115be8;
   font-weight: bold;
 }
 .content-section.bg-light .content-section-heading hr {
   height: 5px;
   justify-content: center;
-  background-color: #3058A6;
+  background-color: #115be8;
   width: 5rem;
   margin: auto;
 }
 .content-section.bg-light h2 {
-  color: #3058A6 !important;
+  color: #115be8 !important;
 }
 .content-section.bg-light h3, .content-section.bg-light h5 {
   color: #656768;
@@ -83,7 +83,7 @@
   font-size: 18px;
 }
 .content-section.bg-light span {
-  color: #3058A6;
+  color: #115be8;
   font-weight: bold;
 }
 
@@ -96,7 +96,7 @@
 }
 
 .content-section.bg-blue {
-  background-color: #3058A6;
+  background-color: #115be8;
 }
 .content-section.bg-blue .content-section-heading .text-name-section {
   color: #F1F1F1;
@@ -119,7 +119,7 @@
   font-size: 18px;
 }
 .content-section.bg-blue span {
-  color: #3058A6;
+  color: #115be8;
   font-weight: bold;
 }
 .content-section.bg-blue input {
@@ -174,8 +174,8 @@
   color: white;
 }
 .footer .btn-contact:hover {
-  background-color: #3058A6;
-  border-color: #3058A6;
+  background-color: #115be8;
+  border-color: #115be8;
 }
 .footer .btn-contact:hover i {
   color: white;
@@ -246,10 +246,10 @@
 }
 
 .nav-link.active {
-  border: 2px solid #3058A6;
+  border: 2px solid #115be8;
   border-radius: 10px;
   color: white !important;
-  background-color: #3058A6 !important;
+  background-color: #115be8 !important;
 }
 
 .navbar {
