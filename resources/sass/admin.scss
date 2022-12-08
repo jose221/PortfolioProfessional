@@ -638,6 +638,14 @@ body {
         align-items: center;
     }
     .action-contain{
+        .btn-edit{
+            padding: 20px;
+            background-color: transparent;
+            border: none;
+            color: white;
+            //border: 1px solid white;
+
+        }
         color: white;
         :hover{
             color: $primary-color;

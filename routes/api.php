@@ -56,6 +56,10 @@ Route::group(['prefix'=>'admin'],function (){
 
     Route::group(['prefix'=>'experience/professional'],function (){
     Route::get('/{id}', 'api\admin\ProfessionalExperiencesController@index');
+    Route::get('find/{id}', 'api\admin\ProfessionalExperiencesController@find');
+    Route::post('create', 'api\admin\ProfessionalExperiencesController@create');
+    Route::post('edit/{id}', 'api\admin\ProfessionalExperiencesController@edit');
+    Route::post('delete', 'api\admin\ProfessionalExperiencesController@delete');
     });
 
 

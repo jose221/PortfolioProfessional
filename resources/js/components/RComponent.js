@@ -111,12 +111,16 @@ export default class RComponent extends Component{
         this.dispatchStore(this.state)
         return data;
     }
-    async getItems(url, params = {}){
-        this.setState({isLoading: true})
+    async getItems(url, params = {}, showLoading=true){
+        if(showLoading) this.setState({isLoading: true})
         let data = await DefaultService.all(url, params);
-        data.updated_at = this.formatDateString(data.updated_at)
-        this.setState({isLoading: false})
-        this.dispatchStore(this.state)
+        if(data.updated_at){
+            data.updated_at = this.formatDateString(data.updated_at)
+        }
+        if(showLoading){
+            this.setState({isLoading: false})
+            this.dispatchStore(this.state)
+        }
         return data;
     }
 
@@ -141,13 +145,15 @@ export default class RComponent extends Component{
         this.dispatchStore(this.state)
         return response;
     }
-    onDelete = async (url, params) =>{
+    onDelete = async (url, params, showMessage=true) =>{
         let response = await DefaultService.delete(url, {
             ids: JSON.stringify(params)
         })
-        this.setState({isSuccess: true});
-        this.setState({isSuccessMessage: response.message});
-        this.dispatchStore(this.state)
+        if(showMessage){
+            this.setState({isSuccess: true});
+            this.setState({isSuccessMessage: response.message});
+            this.dispatchStore(this.state)
+        }
         return response;
     }
     isValid(data, required=true){
@@ -163,10 +169,12 @@ export default class RComponent extends Component{
     dispatchStore(state){
         store.dispatch(addTodo(state));
     }
-    subscribeStore(callback = function (res){}){
+    subscribeStore(callback = function (res){}, noSate=false){
         store.subscribe(() => {
             let res = store.getState();
-            this.setState(res.data);
+            if(!noSate){
+                this.setState(res.data);
+            }
             callback(res.data)
         });
     }

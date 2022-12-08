@@ -15,26 +15,50 @@ import Alert from "@mui/material/Alert";
 import PersonIcon from "@mui/icons-material/Person";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ProfessionalExperience from "../../models/ProfessionalExperience";
+
+let primary_url = "/api/admin/experience/professional";
+let title = "Información de mi experiencia profesional";
 function ItemProfessionalExperiencesComponent(props) {
+    let rComponent = new RComponent(props);
+    let state = {};
+    rComponent.subscribeStore(function (data){
+        state = data;
+    }, true)
     let data = props.data;
     let listItems = [];
     if(Object.keys(data).length){
+        let onRemove = async (item)=>{
+             let response = await rComponent.onDelete(primary_url+"/delete", [item.id], false)
+            let res = await rComponent.getItems(`${primary_url}/${item.user_id}`,{}, false)
+            state.isSuccess = true;
+            state.isSuccessMessage = response.message;
+            state.data = res;
+            rComponent.dispatchStore(state);
+        }
+        let onEdit = (form)=>{
+            state.form = new ProfessionalExperience(form);
+            state.openModal = true;
+            rComponent.dispatchStore(state);
+
+        }
         listItems = Object.keys(data).map((pos) =>
             {
                 let item = data[pos];
                if(item?.id){
-                   return <div key={pos} className="col-lg-2 col-md-6 col-sm-6 mt-3">
+                   return <div id={item.id} key={pos} className="col-lg-2 col-md-6 col-sm-6 mt-3">
                        <div className="h-100 item-professional">
                            <img src={item.image_path}
                                 className="rounded card-img-top " alt="test"/>
                            <p className="info-title">{item.company}</p>
 
                            <div className="action-contain">
-                               <EditIcon />
-                               <button className="btn-remove"> <DeleteIcon /> </button>
+                               <button onClick={()=>onEdit(item)} className="btn-edit"><EditIcon /></button>
+                               <button onClick={()=>onRemove(item)} className="btn-remove"> <DeleteIcon /> </button>
                            </div>
                        </div>
                    </div>;
+                   documen.querySelect
                }
             }
         );
@@ -43,20 +67,24 @@ function ItemProfessionalExperiencesComponent(props) {
         <div className="row">{listItems}</div>
     );
 }
+
+
 class ListProfessionalExperiencesComponent extends RComponent{
     constructor(props) {
         super(props);
     }
     async componentDidMount() {
         this.subscribeStore();
-        //await this.onInit();
-        this.onInit();
+        await this.onInit();
     }
     onInit = async ()=>{
-        let res = await this.getItems(`/api/admin/experience/professional/${this.props.id}`)
+        let res = await this.getItems(`${primary_url}/${this.props.id}`)
         this.state.data = res;
         this.dispatchStore(this.state)
 
+    }
+    actionDelete(id){
+        console.log(id)
     }
 
     render() {
@@ -81,7 +109,7 @@ class ListProfessionalExperiencesComponent extends RComponent{
                <Card className="container">
                    <CardContent>
                        <div className="d-flex justify-content-between">
-                           <h5 className="subtitle-text pb-3 ico-r"> <PersonIcon /> Información de conocimientos </h5>
+                           <h5 className="subtitle-text pb-3 ico-r"> <PersonIcon /> {title} </h5>
                        </div>
                        <ItemProfessionalExperiencesComponent data={this.state.data}/>
                    </CardContent>

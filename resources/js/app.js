@@ -27,3 +27,6 @@ import FormKnowledgeAbilityComponent from "./components/knowledgesAbility/FormKn
 import InfoKnowLedgesComponent from "./components/knowledges/InfoKnowLedgesComponent";
 import ProfessionalExperiencesComponent from "./components/ProfessionalExperiences/ProfessionalExperiencesComponent";
 import ListProfessionalExperiencesComponent from "./components/ProfessionalExperiences/ListProfessionalExperiencesComponent";
+
+
+import FormProfessionalExperiencesComponent from "./components/ProfessionalExperiences/FormProfessionalExperiencesComponent";

@@ -13,6 +13,7 @@ class ProfessionalExperiencesComponent extends RComponent{
             <Provider store={store}>
                 <div>
                     <list-professional-experiences-component data-id={this.props.id} ></list-professional-experiences-component>
+                    <form-professional-experiences-component  data-user_id={this.props.id} />
                 </div>
             </Provider>
         )

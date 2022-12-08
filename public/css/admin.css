@@ -683,6 +683,12 @@ body {
 .item-professional .action-contain {
   color: white;
 }
+.item-professional .action-contain .btn-edit {
+  padding: 20px;
+  background-color: transparent;
+  border: none;
+  color: white;
+}
 .item-professional .action-contain :hover {
   color: #115be8;
 }
