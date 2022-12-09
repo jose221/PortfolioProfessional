@@ -114,7 +114,7 @@ class FormKnowLedgesComponent extends RComponent {
                         </DialogContent>
                         <DialogActions>
                             <Button type="button" onClick={handleClose}>Cerrar</Button>
-                            <Button type="submit" onClick={handleClose}>Guardar</Button>
+                            <Button type="submit">Guardar</Button>
                         </DialogActions>
                     </form>
                 </Dialog>

@@ -13,6 +13,7 @@ import Fab from "@mui/material/Fab";
 import TextField from "@mui/material/TextField";
 import KnowLedge from "../../models/KnowLedge";
 import ProfessionalExperience from "../../models/ProfessionalExperience";
+let primary_url = "/api/admin/experience/professional"
 class FormProfessionalExperiencesComponent extends RComponent {
     constructor(props) {
         super(props);
@@ -24,10 +25,10 @@ class FormProfessionalExperiencesComponent extends RComponent {
         e.preventDefault();
         console.log(this.state.form)
         if(this.state.form.validData()){
-            if(this.state.form?.id) await this.onUpdate(`/api/admin/experience/professional/edit/${this.state.form?.id}`, this.state.form);
-            else await this.onCreate("/api/admin/experience/professional/create", this.state.form)
+            if(this.state.form?.id) await this.onUpdate(`${primary_url}/edit/${this.state.form?.id}`, this.state.form);
+            else await this.onCreate(`${primary_url}/create`, this.state.form)
             this.state.openModal = false;
-            this.state.data = await this.getItems(`/api/admin/experience/professional/${this.props.user_id}`)
+            this.state.data = await this.getItems(`${primary_url}/${this.props.user_id}`)
             this.dispatchStore(this.state)
             //window.location.reload();
         }
@@ -137,6 +138,10 @@ class FormProfessionalExperiencesComponent extends RComponent {
                                     name="date_start"
                                     onChange={this.handleChangeForm}
                                     helperText="Escribe la fecha de inicio"
+                                    type="date"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
                                 />
                                 <TextField
                                     error={this.isValid(this.state.form.date_end)}
@@ -147,6 +152,10 @@ class FormProfessionalExperiencesComponent extends RComponent {
                                     name="date_end"
                                     onChange={this.handleChangeForm}
                                     helperText="Escribe la fecha de fin"
+                                    type="date"
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
                                 />
                             </div>
                             <div className="row">
@@ -165,7 +174,7 @@ class FormProfessionalExperiencesComponent extends RComponent {
                         </DialogContent>
                         <DialogActions>
                             <Button type="button" onClick={handleClose}>Cerrar</Button>
-                            <Button type="submit" onClick={this.handleSubmit}>Guardar</Button>
+                            <Button type="submit">Guardar</Button>
                         </DialogActions>
                     </form>
                 </Dialog>

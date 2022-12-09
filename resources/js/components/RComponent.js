@@ -55,11 +55,10 @@ export default class RComponent extends Component{
         this.dispatchStore(this.state)
     }
     handleChangeForm = (event) => {
-        console.log(event)
         if(event.target){
-            let key = event.target.getAttribute('name');
+            let key = event.target.name;
             //this.state.form[name] = event.target.value;
-            if(event.target.getAttribute('type')  == 'file'){
+            if(event.target.type  == 'file'){
                 if(event.target.files.length){
                     this.state.form[key] = event.target.files[0];
                 }

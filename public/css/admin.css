@@ -716,4 +716,9 @@ body {
   display: flex !important;
 }
 
+.upload-file {
+  width: 4em !important;
+  height: 4em !important;
+}
+
 /** new sliderbar **/

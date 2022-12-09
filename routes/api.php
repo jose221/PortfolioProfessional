@@ -62,5 +62,29 @@ Route::group(['prefix'=>'admin'],function (){
     Route::post('delete', 'api\admin\ProfessionalExperiencesController@delete');
     });
 
+    Route::group(['prefix'=>'studies'],function (){
+        Route::get('/{id}', 'api\admin\StudiesController@index');
+        Route::get('find/{id}', 'api\admin\StudiesController@find');
+        Route::post('create', 'api\admin\StudiesController@create');
+        Route::post('edit/{id}', 'api\admin\StudiesController@edit');
+        Route::post('delete', 'api\admin\StudiesController@delete');
+    });
+    Route::group(['prefix'=>'personal-projects'],function (){
+        Route::get('/{id}', 'api\admin\PersonalProjectsController@index');
+        Route::get('find/{id}', 'api\admin\PersonalProjectsController@find');
+        Route::post('create', 'api\admin\PersonalProjectsController@create');
+        Route::post('edit/{id}', 'api\admin\PersonalProjectsController@edit');
+        Route::post('delete', 'api\admin\PersonalProjectsController@delete');
+    });
+
+    Route::group(['prefix'=>'vitae'],function (){
+        Route::get('/{id}', 'api\admin\VitaeController@index');
+        Route::get('find/{id}', 'api\admin\VitaeController@find');
+        Route::post('create', 'api\admin\VitaeController@create');
+        Route::post('edit/{id}', 'api\admin\VitaeController@edit');
+        Route::post('show-user/{id}', 'api\admin\VitaeController@selected');
+        Route::post('delete', 'api\admin\VitaeController@delete');
+    });
+
 
 });

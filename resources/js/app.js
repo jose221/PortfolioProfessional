@@ -30,3 +30,14 @@ import ListProfessionalExperiencesComponent from "./components/ProfessionalExper
 
 
 import FormProfessionalExperiencesComponent from "./components/ProfessionalExperiences/FormProfessionalExperiencesComponent";
+import StudiesComponent from "./components/studies/StudiesComponent";
+import ListStudiesComponent from "./components/studies/ListStudiesComponent";
+import FormStudiesComponent from "./components/studies/FormStudiesComponent";
+
+import PersonalProjectsComponent from "./components/personalProjects/PersonalProjectsComponent";
+import ListPersonalProjectsComponent from "./components/personalProjects/ListPersonalProjectsComponent";
+import FormPersonalProjectsComponent from "./components/personalProjects/FormPersonalProjectsComponent";
+
+import VitaeComponent from "./components/vitae/VitaeComponent";
+import ListVitaeComponent from "./components/vitae/ListVitaeComponent";
+import FormVitaeComponent from "./components/vitae/FormVitaeComponent";
