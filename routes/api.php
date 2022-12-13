@@ -35,6 +35,7 @@ Route::get('/myportfolio/portfoliocategories/{lang}','api\LandingController@port
 //Admin
 
 Route::group(['prefix'=>'admin'],function (){
+    Route::get('/user', 'api\admin\UserController@index');
     Route::get('/user/{id}', 'api\admin\UserController@find');
     Route::post('/user/{id}', 'api\admin\UserController@update');
 

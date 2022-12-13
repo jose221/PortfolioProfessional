@@ -40,6 +40,8 @@
         "react-redux": "^8.0.4",
         "react-trix": "^0.10.0",
         "redux": "^4.2.0",
-        "styled-components": "^5.3.5"
+        "styled-components": "^5.3.5",
+        "suneditor": "^2.44.3",
+        "suneditor-react": "^3.4.1"
     }
 }

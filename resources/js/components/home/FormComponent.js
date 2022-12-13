@@ -16,6 +16,9 @@ import RComponent from "../RComponent";
 import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';
 import PersonIcon from '@mui/icons-material/Person';
 import User from "../../models/User";
+import SunEditor from 'suneditor-react';
+import FormHelperText from "@mui/material/FormHelperText";
+
 class FormComponent extends RComponent {
     constructor(props) {
         super(props);
@@ -130,33 +133,32 @@ class FormComponent extends RComponent {
                                     helperText="Ciudad donde vives actualmente en inglés"
                                 />
 
-                                <TextField
-                                    className="col-md-6 mt-3 p-1"
-                                    error={this.isValid(this.state.form.description_es)}
-                                    id="outlined-error"
-                                    label="Descripción en español"
-                                    name="description_es"
-                                    onChange={this.handleChange}
-                                    value={this.state.form.description_es || ' '}
-                                    multiline
-                                    rows={5}
-                                    maxRows={10}
-                                    helperText="Descripción de tu perfil en español"
-                                />
-
-                                <TextField
-                                    className="col-md-6 mt-3 p-1"
-                                    error={this.isValid(this.state.form.description_en)}
-                                    id="outlined-error"
-                                    label="Descripción en inglés"
-                                    name="description_en"
-                                    onChange={this.handleChange}
-                                    value={this.state.form.description_en || ' '}
-                                    multiline
-                                    rows={5}
-                                    maxRows={10}
-                                    helperText="Descripción de tu perfil en inglés"
-                                />
+                                <div className={(!this.isValid(this.state.form.description_es)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error'}>
+                                    <label>Descripción en español</label>
+                                    <SunEditor lang="es"
+                                               id="outlined-error"
+                                               placeholder="Descripción en español"
+                                               name="description_es"
+                                               height="100%"
+                                               onChange={(e)=>this.handleChangeForm({target:{name: 'description_es', value:e}})}
+                                               setContents={this.state.form.description_es || ''}
+                                               helperText="Descripción de tu perfil en español"
+                                    />
+                                    <FormHelperText error={this.isValid(this.state.form.description_es)}>Descripción de tu perfil en español</FormHelperText>
+                                </div>
+                                <div className={(!this.isValid(this.state.form.description_en)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error'}>
+                                    <label>Descripción en inglés</label>
+                                    <SunEditor lang="es"
+                                               id="outlined-error"
+                                               placeholder="Descripción en inglés"
+                                               name="description_en"
+                                               height="100%"
+                                               onChange={(e)=>this.handleChangeForm({target:{name: 'description_en', value:e}})}
+                                               setContents={this.state.form.description_en || ''}
+                                               helperText="Descripción de tu perfil en inglés"
+                                    />
+                                    <FormHelperText error={this.isValid(this.state.form.description_en)}>Descripción de tu perfil en inglés</FormHelperText>
+                                </div>
 
                                 <TextField
                                     className="col-md-6 mt-3 p-1"

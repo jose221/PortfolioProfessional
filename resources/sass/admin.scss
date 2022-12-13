@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'suneditor/dist/css/suneditor.min.css';
 @keyframes swing {
     0% {
         transform: rotate(0deg);
@@ -405,9 +406,16 @@ body {
 
 
 /*-----------------------------chiller-theme-------------------------------------------------*/
-
+$navbar-primary-bg-color:#11101d;
+$navbar-secondary-bg-color:#3a3f48;
+.chiller-theme{
+ &.theme-blue{
+     $navbar-primary-color:#082359;
+     $navbar-secondary-bg-color:#082359;
+ }
+}
 .chiller-theme .sidebar-wrapper {
-    background: #11101d;
+    background: $navbar-primary-bg-color;
 }
 .input-group-text{
     padding: 0.75rem .75rem;
@@ -465,7 +473,7 @@ body {
 .chiller-theme .sidebar-wrapper .sidebar-menu .sidebar-dropdown div,
 .chiller-theme .sidebar-wrapper .sidebar-search input.search-menu,
 .chiller-theme .sidebar-wrapper .sidebar-search .input-group-text {
-    background: #3a3f48;
+    background: $navbar-secondary-bg-color;
 }
 
 .chiller-theme .sidebar-wrapper .sidebar-menu .header-menu span {
@@ -473,7 +481,7 @@ body {
 }
 
 .chiller-theme .sidebar-footer {
-    background: #3a3f48;
+    background: $navbar-secondary-bg-color;
     box-shadow: 0px -1px 5px #282c33;
     border-top: 1px solid #464a52;
 }
@@ -688,3 +696,52 @@ body {
 
 /** new sliderbar **/
 
+/** sun editor**/
+.textarea-editor{
+    position: relative;
+    .sun-editor{
+        border-radius: 4px;
+        .se-toolbar{
+            outline: none;
+            border-radius: 4px;
+            padding-top: 17px;
+            background-color: transparent;
+        }
+        .se-resizing-bar{
+            background-color: transparent;
+        }
+        .se-btn {
+            width: 30px;
+            height: 30px;
+        }
+    }
+    label{
+        z-index: 10;
+        color: rgba(0, 0, 0, 0.6);
+        font-family: "Roboto","Helvetica","Arial",sans-serif;
+        font-weight: 400;
+        font-size: 13px;
+        line-height: 1.4375em;
+        letter-spacing: 0.00938em;
+        padding: 0;
+        position: relative;
+        display: block;
+        transform-origin: top left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: calc(133% - 24px);
+        position: absolute;
+        left: 14px;
+        top: -7px;
+        background-color: white;
+    }
+    &.error{
+        .sun-editor{
+            border: 1px solid #d32f2f;
+        }
+        label{
+            color: #d32f2f;
+        }
+    }
+}

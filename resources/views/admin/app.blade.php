@@ -28,8 +28,8 @@
     <script src="{{ asset('js/admin-portafolio.js') }}" defer></script>
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
 <body>
-<?php $isOpen = (isset($_GET['isOpen'])) ? "toggled": "" ?>
-<div class="page-wrapper chiller-theme {{$isOpen}}">
+
+<div class="page-wrapper chiller-theme theme-blue">
     @guest
         <main>
             @yield('content')
@@ -82,7 +82,13 @@
                             <span>General</span>
                         </li>
                         <li class="">
-                            <a href="{{route('home')}}?isOpen=true">
+                            <a href="{{route('users.view')}}">
+                                <i class="fa fa-chart-line"></i>
+                                <span>Usuarios</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="{{route('home')}}">
                                 <i class="fa fa-tachometer-alt"></i>
                                 <span>Mi información</span>
                                 <!--<span class="badge badge-pill badge-warning">New</span>-->
@@ -104,43 +110,43 @@
                             </div>-->
                         </li>
                         <li class="">
-                            <a href="{{route('contacts.view')}}?isOpen=true">
+                            <a href="{{route('contacts.view')}}">
                                 <i class="fa fa-chart-line"></i>
                                 <span>Mis contactos</span>
                             </a>
                         </li>
                         <li class="">
-                            <a href="{{route('studies.view')}}?isOpen=true">
+                            <a href="{{route('studies.view')}}">
                                 <i class="fa fa-globe"></i>
                                 <span>Mis estudios</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{route('knowledges.view')}}?isOpen=true">
+                            <a href="{{route('knowledges.view')}}">
                                 <i class="fa fa-book"></i>
                                 <span>Mis conocimientos</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{route('project.personal.view')}}?isOpen=true">
+                            <a href="{{route('project.personal.view')}}">
                                 <i class="fa fa-book"></i>
                                 <span>Mis proyectos personales</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{route('experience.professional.view')}}?isOpen=true">
+                            <a href="{{route('experience.professional.view')}}">
                                 <i class="fa fa-book"></i>
                                 <span>Mi experiencia profesional</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{route('portfolio-categories.view')}}?isOpen=true">
+                            <a href="{{route('portfolio-categories.view')}}">
                                 <i class="fa fa-book"></i>
                                 <span>Mi portafolio</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{route('users.vitae.view')}}?isOpen=true">
+                            <a href="{{route('users.vitae.view')}}">
                                 <i class="fa fa-book"></i>
                                 <span>Mi CV</span>
                             </a>
@@ -189,7 +195,7 @@
                     <i class="fa fa-bell"></i>
                     <!--<span class="badge badge-pill badge-warning notification">3</span>-->
                 </a>
-                <a href="{{route('messages.view')}}?isOpen=true">
+                <a href="{{route('messages.view')}}">
                     <i class="fa fa-envelope"></i>
                     <span class="badge badge-pill badge-success notification">{{\App\Models\Message::where('viewed',0)->count()}}</span>
                 </a>

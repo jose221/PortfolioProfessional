@@ -13,6 +13,8 @@ import Fab from "@mui/material/Fab";
 import TextField from "@mui/material/TextField";
 import KnowLedge from "../../models/KnowLedge";
 import ProfessionalExperience from "../../models/ProfessionalExperience";
+import SunEditor from "suneditor-react";
+import FormHelperText from "@mui/material/FormHelperText";
 let primary_url = "/api/admin/experience/professional"
 class FormProfessionalExperiencesComponent extends RComponent {
     constructor(props) {
@@ -61,7 +63,7 @@ class FormProfessionalExperiencesComponent extends RComponent {
                             <div className="row">
                                 <TextField
                                     error={this.isValid(this.state.form.company)}
-                                    className="col-md-6 mt-3 p-1"
+                                    className="col-md-12 mt-3 p-1"
                                     id="company"
                                     label="Nombre de la empresa"
                                     value={this.state.form.company || ' '}
@@ -89,26 +91,30 @@ class FormProfessionalExperiencesComponent extends RComponent {
                                     onChange={this.handleChangeForm}
                                     helperText="Escribe el país en inglés"
                                 />
-                                <TextField
-                                    error={this.isValid(this.state.form.description_es)}
-                                    className="col-md-6 mt-3 p-1"
-                                    id="description_es"
-                                    label="Descripción en español"
-                                    value={this.state.form.description_es || ' '}
-                                    name="description_es"
-                                    onChange={this.handleChangeForm}
-                                    helperText="Escribe la descripción en español"
-                                />
-                                <TextField
-                                    error={this.isValid(this.state.form.description_en)}
-                                    className="col-md-6 mt-3 p-1"
-                                    id="description_en"
-                                    label="Descripción en inglés"
-                                    value={this.state.form.description_en || ' '}
-                                    name="description_en"
-                                    onChange={this.handleChangeForm}
-                                    helperText="Escribe la descripción en inglés"
-                                />
+                                <div className={(!this.isValid(this.state.form.description_es)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error'}>
+                                    <label>Descripción en español</label>
+                                    <SunEditor lang="es"
+                                               id="outlined-error"
+                                               placeholder="Descripción en español"
+                                               name="description_es"
+                                               height="100%"
+                                               onChange={(e)=>this.handleChangeForm({target:{name: 'description_es', value:e}})}
+                                               setContents={this.state.form.description_es || ''}
+                                    />
+                                    <FormHelperText error={this.isValid(this.state.form.description_es)}>Descripción de tu experiencia en español</FormHelperText>
+                                </div>
+                                <div className={(!this.isValid(this.state.form.description_en)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error'}>
+                                    <label>Descripción en inglés</label>
+                                    <SunEditor lang="es"
+                                               id="outlined-error"
+                                               placeholder="Descripción en inglés"
+                                               name="description_en"
+                                               height="100%"
+                                               onChange={(e)=>this.handleChangeForm({target:{name: 'description_en', value:e}})}
+                                               setContents={this.state.form.description_en || ''}
+                                    />
+                                    <FormHelperText error={this.isValid(this.state.form.description_en)}>Descripción de tu experiencia en inglés</FormHelperText>
+                                </div>
                                 <TextField
                                     error={this.isValid(this.state.form.job_en)}
                                     className="col-md-6 mt-3 p-1"

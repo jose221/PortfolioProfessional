@@ -1,8 +1,8 @@
 {
     "/js/app.js": "/js/app.js",
+    "/css/admin.css": "/css/admin.css",
     "/css/app.css": "/css/app.css",
     "/css/stylish-auth.css": "/css/stylish-auth.css",
     "/css/my-portafolio.css": "/css/my-portafolio.css",
-    "/css/admin.css": "/css/admin.css",
     "/css/appIndex.css": "/css/appIndex.css"
 }

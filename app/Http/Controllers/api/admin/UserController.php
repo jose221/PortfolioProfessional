@@ -12,6 +12,15 @@ use Illuminate\Testing\Fluent\Concerns\Has;
 
 class UserController extends Controller
 {
+    public function index(){
+        $items = User::all();
+        return response()->json([
+            'message'=>'Datos encontrados',
+            'code'=>200,
+            'data'=>$items,
+            'response'=>'success'
+        ]);
+    }
     public function find($id){
         $items = User::find($id);
         return response()->json([

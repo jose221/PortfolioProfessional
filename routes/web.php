@@ -22,6 +22,12 @@ Route::prefix('admin')->group(function() {
 //USUARIO
 Route::post('/update','HomeController@update')->middleware('auth')->name('user.update');
 Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
+    //users
+    Route::group(['prefix'=>'users','namespace'=>'Admin'],function (){
+        Route::name('users.')->group(function () {
+            Route::get('/', 'UsersController@index')->name('view');
+        });
+    });
     //estudios
     Route::group(['prefix'=>'studies','namespace'=>'Admin'],function (){
         Route::name('studies.')->group(function (){

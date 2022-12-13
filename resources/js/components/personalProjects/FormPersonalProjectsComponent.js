@@ -13,6 +13,8 @@ import Fab from "@mui/material/Fab";
 import TextField from "@mui/material/TextField";
 
 import PersonalProject from "../../models/PersonalProject";
+import SunEditor from "suneditor-react";
+import FormHelperText from "@mui/material/FormHelperText";
 let primary_url = "/api/admin/personal-projects"
 let title_action = "Proyecto personal"
 class FormPersonalProjectsComponent extends RComponent {
@@ -80,26 +82,30 @@ class FormPersonalProjectsComponent extends RComponent {
                                     onChange={this.handleChangeForm}
                                     helperText="Escribe el nombre del proyecto en inglés"
                                 />
-                                <TextField
-                                    error={this.isValid(this.state.form.description_es)}
-                                    className="col-md-6 mt-3 p-1"
-                                    id="description_es"
-                                    label="Descripción en español"
-                                    value={this.state.form.description_es || ' '}
-                                    name="description_es"
-                                    onChange={this.handleChangeForm}
-                                    helperText="Escribe la descripción en español"
-                                />
-                                <TextField
-                                    error={this.isValid(this.state.form.description_en)}
-                                    className="col-md-6 mt-3 p-1"
-                                    id="description_en"
-                                    label="Descripción en inglés"
-                                    value={this.state.form.description_en || ' '}
-                                    name="description_en"
-                                    onChange={this.handleChangeForm}
-                                    helperText="Escribe la descripción en inglés"
-                                />
+                                <div className={(!this.isValid(this.state.form.description_es)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error'}>
+                                    <label>Descripción en español</label>
+                                    <SunEditor lang="es"
+                                               id="outlined-error"
+                                               placeholder="Descripción en español"
+                                               name="description_es"
+                                               height="100%"
+                                               onChange={(e)=>this.handleChangeForm({target:{name: 'description_es', value:e}})}
+                                               setContents={this.state.form.description_es || ''}
+                                    />
+                                    <FormHelperText error={this.isValid(this.state.form.description_es)}>Descripción de tu proyecto en español</FormHelperText>
+                                </div>
+                                <div className={(!this.isValid(this.state.form.description_en)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error'}>
+                                    <label>Descripción en inglés</label>
+                                    <SunEditor lang="es"
+                                               id="outlined-error"
+                                               placeholder="Descripción en inglés"
+                                               name="description_en"
+                                               height="100%"
+                                               onChange={(e)=>this.handleChangeForm({target:{name: 'description_en', value:e}})}
+                                               setContents={this.state.form.description_en || ''}
+                                    />
+                                    <FormHelperText error={this.isValid(this.state.form.description_en)}>Descripción de tu proyecto en inglés</FormHelperText>
+                                </div>
                                 <TextField
                                     error={this.isValid(this.state.form.link)}
                                     className="col-md-6 mt-3 p-1"

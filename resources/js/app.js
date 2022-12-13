@@ -49,3 +49,7 @@ import FormPortfolioCategoriesComponent from "./components/portfolio/portfolioCa
 import PortfolioComponent from "./components/portfolio/PortfolioComponent";
 import ListPortfolioComponent from "./components/portfolio/ListPortfolioComponent";
 import FormPortfolioComponent from "./components/portfolio/FormPortfolioComponent";
+import InfoPortfolioCategoriesComponent from "./components/portfolio/portfolioCategories/InfoPortfolioCategoriesComponent";
+
+import UsersComponent from "./components/users/UsersComponent";
+import ListUsersComponent from "./components/users/ListUsersComponent";

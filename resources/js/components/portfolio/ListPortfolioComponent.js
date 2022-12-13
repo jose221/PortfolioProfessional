@@ -91,30 +91,38 @@ class ListPortfolioComponent extends RComponent{
                         {this.state.isSuccessMessage}
                     </Alert>
                 </Snackbar>
-                <Card className="container">
-                    <CardContent>
-                        <div className="d-flex justify-content-between">
-                            <h5 className="subtitle-text pb-3 ico-r"> <PersonIcon /> Información de los portafolios</h5>
-                            <div>
-                                <IconButton disabled={this.state.ids.length <=0} aria-label="delete" onClick={this.handleDelete} color="error">
-                                    <DeleteIcon />
-                                </IconButton>
-                            </div>
-                        </div>
-                        <div style={{ height: 500, width: '100%' }}>
-                            <DataGrid
-                                rows={this.state.data}
-                                columns={columns}
-                                pageSize={10}
-                                rowsPerPageOptions={[2]}
-                                checkboxSelection
-                                onCellEditCommit={(params)=>this.onCellEditCommit(params)}
-                                onSelectionModelChange={(params)=> this.onSelectionModelChange(params)}
-                                onCellClick={(params, e)=> this.onCellClick(params,e)}
-                            />
-                        </div>
-                    </CardContent>
-                </Card>
+
+                <div>
+                    <div >
+                        <info-portfolio-categories-component data-id={this.props.id} ></info-portfolio-categories-component>
+                    </div>
+                    <div className=" mt-4">
+                        <Card className="container">
+                            <CardContent>
+                                <div className="d-flex justify-content-between">
+                                    <h5 className="subtitle-text pb-3 ico-r"> <PersonIcon /> Información de los portafolios</h5>
+                                    <div>
+                                        <IconButton disabled={this.state.ids.length <=0} aria-label="delete" onClick={this.handleDelete} color="error">
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </div>
+                                </div>
+                                <div style={{ height: 500, width: '100%' }}>
+                                    <DataGrid
+                                        rows={this.state.data}
+                                        columns={columns}
+                                        pageSize={10}
+                                        rowsPerPageOptions={[2]}
+                                        checkboxSelection
+                                        onCellEditCommit={(params)=>this.onCellEditCommit(params)}
+                                        onSelectionModelChange={(params)=> this.onSelectionModelChange(params)}
+                                        onCellClick={(params, e)=> this.onCellClick(params,e)}
+                                    />
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
             </div>
         )
     }

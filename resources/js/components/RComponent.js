@@ -42,6 +42,7 @@ export default class RComponent extends Component{
         this.dispatchStore(this.state)
     }
     handleChange = (event) => {
+        console.log(event)
         let key = event.target.getAttribute('name');
         //this.state.form[name] = event.target.value;
         if(event.target.getAttribute('type')  == 'file'){
@@ -68,9 +69,6 @@ export default class RComponent extends Component{
         }
         this.setState(this.state.form);
         this.dispatchStore(this.state)
-    }
-    handleChangeTrixEditor(html, text) {
-        console.log(html, text)
     }
     loadImage(image, id){
         let vm = this;
@@ -159,7 +157,7 @@ export default class RComponent extends Component{
         let  isInvalid = false;
         if(data != undefined){
             data = data.toString();
-            if(required && (!data || data.trim() == "" || data == null)) isInvalid = true;
+            if(required && (!data || data.trim() == "" || data == null || data == '<p><br></p>')) isInvalid = true;
         }else{
             isInvalid = true;
         }
