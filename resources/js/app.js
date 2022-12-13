@@ -41,3 +41,7 @@ import FormPersonalProjectsComponent from "./components/personalProjects/FormPer
 import VitaeComponent from "./components/vitae/VitaeComponent";
 import ListVitaeComponent from "./components/vitae/ListVitaeComponent";
 import FormVitaeComponent from "./components/vitae/FormVitaeComponent";
+
+import PortfolioCategoriesComponent from "./components/portfolio/portfolioCategories/PortfolioCategoriesComponent";
+import ListPortfolioCategoriesComponent from "./components/portfolio/portfolioCategories/ListPortfolioCategoriesComponent";
+import FormPortfolioCategoriesComponent from "./components/portfolio/portfolioCategories/FormPortfolioCategoriesComponent";

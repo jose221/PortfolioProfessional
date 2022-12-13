@@ -86,5 +86,14 @@ Route::group(['prefix'=>'admin'],function (){
         Route::post('delete', 'api\admin\VitaeController@delete');
     });
 
+    Route::group(['prefix'=>'portfolio-categories'],function (){
+        Route::get('/{id}', 'api\admin\PortfolioCategoriesController@index');
+        Route::get('find/{id}', 'api\admin\PortfolioCategoriesController@find');
+        Route::post('create', 'api\admin\PortfolioCategoriesController@create');
+        Route::post('edit/{id}', 'api\admin\PortfolioCategoriesController@edit');
+        Route::post('show-user/{id}', 'api\admin\PortfolioCategoriesController@selected');
+        Route::post('delete', 'api\admin\PortfolioCategoriesController@delete');
+    });
+
 
 });
