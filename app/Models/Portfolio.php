@@ -10,7 +10,7 @@ class Portfolio extends Model
     protected $table = 'portfolios';
     protected $primaryKey = 'id';
     protected $fillable= [
-        'code', 'icon_path','title_es', 'title_en','description_es', 'description_en','portfolio_categories_id', 'years_experience', 'years_experience'
+        'code', 'icon_path','title_es', 'title_en','description_es', 'description_en','portfolio_categories_id', 'knowledge_level', 'years_experience'
     ];
 
     public function getPortfolios($search){

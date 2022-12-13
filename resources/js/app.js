@@ -45,3 +45,7 @@ import FormVitaeComponent from "./components/vitae/FormVitaeComponent";
 import PortfolioCategoriesComponent from "./components/portfolio/portfolioCategories/PortfolioCategoriesComponent";
 import ListPortfolioCategoriesComponent from "./components/portfolio/portfolioCategories/ListPortfolioCategoriesComponent";
 import FormPortfolioCategoriesComponent from "./components/portfolio/portfolioCategories/FormPortfolioCategoriesComponent";
+
+import PortfolioComponent from "./components/portfolio/PortfolioComponent";
+import ListPortfolioComponent from "./components/portfolio/ListPortfolioComponent";
+import FormPortfolioComponent from "./components/portfolio/FormPortfolioComponent";

@@ -1,6 +1,12 @@
 @extends('admin.app')
 @section('title', 'portfolio-categories')
 @section('content')
+
+    <div class="container">
+        <h3 class="pb-4 title-text mt-2">Mi portafolio</h3>
+        <portfolio-component data-id="{{$id}}" data-user_id="{{auth()->id()}}"></portfolio-component>
+    </div>
+
     <button class="float-right btn btn-outline-success" onclick="initModal('newItemModal','{{route('portfolio-categories.portfolio.store',$id)}}')">Nuevo item </button>
     <h2>Portafolio</h2>
     <hr>
