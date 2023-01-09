@@ -14,7 +14,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import {DataGrid} from "@mui/x-data-grid";
 import ReactDOM from "react-dom";
 import React from "react";
-
+let primary_url = "http://localhost:8080/api/admin/my-contacts";
 class ListContactsComponent extends RComponent {
     constructor(props) {
         super(props);
@@ -28,7 +28,7 @@ class ListContactsComponent extends RComponent {
         await this.onInit();
     }
     onInit = async ()=>{
-        let res = await this.getItems(`/api/admin/contacts/${this.props.id}`)
+        let res = await this.getItems(`${primary_url}`)
         this.state.data = res;
         this.dispatchStore(this.state)
         //let data = new User(res);
@@ -39,10 +39,10 @@ class ListContactsComponent extends RComponent {
         //this.setState({openModal : true});
     }
     onCellEditCommit = (params)=>{
-        if(params.value != "") this.handleEdit(`/api/admin/contacts/edit/${params.id}`, params);
+        if(params.value != "") this.handleEdit(`${primary_url}/${params.id}`, params);
     }
     handleDelete = async()=>{
-        await this.onDelete("/api/admin/contacts/delete", this.state.ids)
+        await this.onCreate(`${primary_url}/delete`, {ids:[this.state.ids]})
         await this.onInit();
     }
 
