@@ -42,7 +42,7 @@ class ListContactsComponent extends RComponent {
         if(params.value != "") this.handleEdit(`${primary_url}/${params.id}`, params);
     }
     handleDelete = async()=>{
-        await this.onCreate(`${primary_url}/delete`, {ids:[this.state.ids]})
+        await this.onDelete(`${primary_url}/delete`, this.state.ids)
         await this.onInit();
     }
 

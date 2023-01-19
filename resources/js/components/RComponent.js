@@ -144,7 +144,7 @@ export default class RComponent extends Component{
     }
     onDelete = async (url, params, showMessage=true) =>{
         let response = await DefaultService.delete(url, {
-            ids: JSON.stringify(params)
+            ids: params
         })
         if(showMessage){
             this.setState({isSuccess: true});

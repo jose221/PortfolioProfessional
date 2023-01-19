@@ -16,6 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Avatar from '@mui/material/Avatar';
 import { deepOrange, green } from '@mui/material/colors';
 import KnowLedge from "../../models/KnowLedge";
+let primary_url = "http://localhost:8080/api/admin/knowledges";
 class ListKnowLedgesComponent extends RComponent{
     constructor(props) {
         super(props);
@@ -26,7 +27,7 @@ class ListKnowLedgesComponent extends RComponent{
         await this.onInit();
     }
     onInit = async ()=>{
-        let res = await this.getItems(`/api/admin/knowledges/${this.props.id}`)
+        let res = await this.getItems(`${primary_url}`)
         this.state.data = res;
         this.dispatchStore(this.state)
     }
@@ -35,10 +36,10 @@ class ListKnowLedgesComponent extends RComponent{
         this.dispatchStore(this.state)
     }
     onCellEditCommit = (params)=>{
-        if(params.value != "") this.handleEdit(`/api/admin/knowledges/edit/${params.id}`, params);
+        if(params.value != "") this.handleEdit(`${primary_url}/${params.id}`, params);
     }
     handleDelete = async()=>{
-        await this.onDelete("/api/admin/knowledges/delete", this.state.ids)
+        await this.onDelete(`${primary_url}/delete`, this.state.ids)
         await this.onInit();
     }
     openEdit = async(params)=>{

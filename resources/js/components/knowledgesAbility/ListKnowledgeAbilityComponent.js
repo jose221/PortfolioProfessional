@@ -14,7 +14,7 @@ import React from "react";
 import KnowLedgeAbility from "../../models/KnowLedgeAbility";
 import EditIcon from "@mui/icons-material/Edit";
 import Collapse from "@mui/material/Collapse";
-
+let primary_url = "http://localhost:8080/api/admin/knowledges-abilities";
 class ListKnowledgeAbilityComponent extends RComponent {
     constructor(props) {
         super(props);
@@ -28,7 +28,7 @@ class ListKnowledgeAbilityComponent extends RComponent {
         await this.onInit();
     }
     onInit = async ()=>{
-        let res = await this.getItems(`/api/admin/knowledges/abilities/${this.props.id}`)
+        let res = await this.getItems(`${primary_url}`, {knowledges_id: this.props.id})
         this.state.data = res;
         this.dispatchStore(this.state)
         //let data = new User(res);
@@ -39,10 +39,10 @@ class ListKnowledgeAbilityComponent extends RComponent {
         //this.setState({openModal : true});
     }
     onCellEditCommit = (params)=>{
-        if(params.value != "") this.handleEdit(`/api/admin/knowledges/abilities/edit/${params.id}`, params);
+        if(params.value != "") this.handleEdit(`${primary_url}/${params.id}`, params);
     }
     handleDelete = async()=>{
-        await this.onDelete("/api/admin/knowledges/abilities/delete", this.state.ids)
+        await this.onDelete(`${primary_url}/delete`, this.state.ids)
         await this.onInit();
     }
     openEdit = async(params)=>{

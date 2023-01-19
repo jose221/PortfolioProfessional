@@ -17,7 +17,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ProfessionalExperience from "../../models/ProfessionalExperience";
 
-let primary_url = "/api/admin/experience/professional";
+let primary_url = "http://localhost:8080/api/admin/professional-experience";
 let title = "Información de mi experiencia profesional";
 function ItemProfessionalExperiencesComponent(props) {
     let rComponent = new RComponent(props);
@@ -30,7 +30,7 @@ function ItemProfessionalExperiencesComponent(props) {
     if(Object.keys(data).length){
         let onRemove = async (item)=>{
              let response = await rComponent.onDelete(primary_url+"/delete", [item.id], false)
-            let res = await rComponent.getItems(`${primary_url}/${item.user_id}`,{}, false)
+            let res = await rComponent.getItems(`${primary_url}`,{}, false)
             state.isSuccess = true;
             state.isSuccessMessage = response.message;
             state.data = res;
@@ -78,7 +78,7 @@ class ListProfessionalExperiencesComponent extends RComponent{
         await this.onInit();
     }
     onInit = async ()=>{
-        let res = await this.getItems(`${primary_url}/${this.props.id}`)
+        let res = await this.getItems(`${primary_url}`)
         this.state.data = res;
         this.dispatchStore(this.state)
 

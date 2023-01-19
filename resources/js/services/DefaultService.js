@@ -2,7 +2,7 @@ import axios from 'axios';
 let header = {
     headers: {
         'Content-Type': 'multipart/form-data',
-        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6Ikpvc8OpIMOBbmdlbCBBbHZhcmFkbyBHb256YWxleiIsImVtYWlsIjoiam9zZS5hbHZhcmFkbzIyMEBob3RtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJEdkL2NISUpPL280LmVWc0ZLdUpoSE8ubjlmRmRwNlpFR1VjWVA4ZGtrRzVKbHdVYzdEV01TIiwiZXhwaXJlZF90b2tlbiI6MTY3MTIyNjc3ODcyOCwiaWF0IjoxNjcxMTQwMzc4fQ.K6A3pXkm2LOM3itZzZC7nREA5gkwG4kMiBV5oTJjGcs'
+        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6Ikpvc8OpIMOBbmdlbCBBbHZhcmFkbyBHb256YWxleiIsImVtYWlsIjoiam9zZS5hbHZhcmFkbzIyMEBob3RtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJEdkL2NISUpPL280LmVWc0ZLdUpoSE8ubjlmRmRwNlpFR1VjWVA4ZGtrRzVKbHdVYzdEV01TIiwiZXhwaXJlZF90b2tlbiI6MTY3Mjk1ODUzMTE4MywiaWF0IjoxNjcyODcyMTMxfQ.-DFSb8onbTS8TyirZMPZQv_0iTBsYMBefp_iNOItVec'
     }
 }
 export class DefaultService{
@@ -37,6 +37,10 @@ export class DefaultService{
     static async update(url, params = {}, config = header){
         let items = null;
         try {
+            if(params.id) delete params.id;
+            if(params.item) delete params.item;
+            if(params.required) delete params.required;
+            if(params.user_id) delete params.user_id;
             const data = await this.formData(params)
             items = await axios.put(url, data, config);
             items = items.data;
@@ -63,6 +67,9 @@ export class DefaultService{
     }
     static async edit(url, params = {}, config = header){
         let items = null;
+        if(params.id) delete params.id;
+        if(params.item) delete params.item;
+        if(params.required) delete params.required;
         try {
             const data = await this.formData(params)
             items = await axios.put(url, data, config);

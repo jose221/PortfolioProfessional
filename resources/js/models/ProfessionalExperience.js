@@ -19,8 +19,6 @@ export default class ProfessionalExperience extends Model{
         country_es : "",
         country_en : "",
         image_path: "",
-        portfolio: "",
-        updated_at: "",
         user_id: 0,
     }) {
         super(attributes)

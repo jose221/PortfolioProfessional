@@ -6,6 +6,8 @@ import Card from "@mui/material/Card";
 import ReactDOM from "react-dom";
 import Typography from '@mui/material/Typography';
 
+let primary_url = "http://localhost:8080/api/admin/knowledges";
+
 class InfoKnowLedgesComponent extends RComponent {
     constructor(props) {
         super(props);
@@ -17,7 +19,7 @@ class InfoKnowLedgesComponent extends RComponent {
     }
 
     onInit = async () => {
-        let res = await this.getItems(`/api/admin/knowledges/find/${this.props.id}`)
+        let res = await this.getItems(`${primary_url}/${this.props.id}`)
         this.state.information = res;
         console.log(res)
         this.dispatchStore(this.state)

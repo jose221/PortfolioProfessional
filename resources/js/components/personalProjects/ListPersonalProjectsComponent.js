@@ -18,7 +18,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ProfessionalExperience from "../../models/ProfessionalExperience";
 import PersonalProject from "../../models/PersonalProject";
 
-let primary_url = "/api/admin/personal-projects";
+let primary_url = "http://localhost:8080/api/admin/personal-projects";
 let title = "Información del mis proyectos personal";
 function ItemPersonalProjectsComponent(props) {
     let rComponent = new RComponent(props);
@@ -31,7 +31,7 @@ function ItemPersonalProjectsComponent(props) {
     if(Object.keys(data).length){
         let onRemove = async (item)=>{
             let response = await rComponent.onDelete(primary_url+"/delete", [item.id], false)
-            let res = await rComponent.getItems(`${primary_url}/${item.user_id}`,{}, false)
+            let res = await rComponent.getItems(`${primary_url}`,{}, false)
             state.isSuccess = true;
             state.isSuccessMessage = response.message;
             state.data = res;
@@ -78,7 +78,7 @@ class ListPersonalProjectsComponent extends RComponent{
         await this.onInit();
     }
     onInit = async ()=>{
-        let res = await this.getItems(`${primary_url}/${this.props.id}`)
+        let res = await this.getItems(`${primary_url}`)
         this.state.data = res;
         this.dispatchStore(this.state)
 
