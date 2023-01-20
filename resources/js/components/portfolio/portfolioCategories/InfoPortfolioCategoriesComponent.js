@@ -6,7 +6,7 @@ import Card from "@mui/material/Card";
 import ReactDOM from "react-dom";
 import Typography from '@mui/material/Typography';
 
-let primary_url = "/api/admin/portfolio-categories";
+let primary_url = "http://localhost:8080/api/admin/portfolio-categories";
 
 class InfoPortfolioCategoriesComponent extends RComponent {
     constructor(props) {
@@ -20,7 +20,7 @@ class InfoPortfolioCategoriesComponent extends RComponent {
     }
 
     onInit = async () => {
-        let res = await this.getItems(`${primary_url}/find/${this.props.id}`)
+        let res = await this.getItems(`${primary_url}/${this.props.id}`)
         this.state.information = res;
         console.log(res)
         this.dispatchStore(this.state)

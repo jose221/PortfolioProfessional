@@ -19,7 +19,7 @@ import PortfolioCategory from "../../../models/PortfolioCategory";
 
 
 
-let primary_url = "/api/admin/portfolio-categories";
+let primary_url = "http://localhost:8080/api/admin/portfolio-categories";
 class ListPortfolioCategoriesComponent extends RComponent{
     constructor(props) {
         super(props);
@@ -30,7 +30,7 @@ class ListPortfolioCategoriesComponent extends RComponent{
         await this.onInit();
     }
     onInit = async ()=>{
-        let res = await this.getItems(`${primary_url}/${this.props.id}`)
+        let res = await this.getItems(`${primary_url}`)
         this.state.data = res;
         this.dispatchStore(this.state)
     }
@@ -39,7 +39,7 @@ class ListPortfolioCategoriesComponent extends RComponent{
         this.dispatchStore(this.state)
     }
     onCellEditCommit = (params)=>{
-        if(params.value != "") this.handleEdit(`${primary_url}/edit/${params.id}`, params);
+        if(params.value != "") this.handleEdit(`${primary_url}/${params.id}`, params);
     }
     handleDelete = async()=>{
         await this.onDelete(`${primary_url}/delete`, this.state.ids)
