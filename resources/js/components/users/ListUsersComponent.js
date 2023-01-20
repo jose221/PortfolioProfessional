@@ -18,7 +18,7 @@ import Avatar from "@mui/material/Avatar";
 import {green} from "@mui/material/colors";
 import EditIcon from "@mui/icons-material/Edit";
 import KnowLedge from "../../models/KnowLedge";
-let primary_url = "/api/admin/user"
+let primary_url = "http://localhost:8080/api/admin/user";
 class ListUsersComponent extends RComponent {
     constructor(props) {
         super(props);
@@ -43,7 +43,7 @@ class ListUsersComponent extends RComponent {
         //this.setState({openModal : true});
     }
     onCellEditCommit = (params)=>{
-        if(params.value != "") this.handleEdit(`${primary_url}/edit/${params.id}`, params);
+        if(params.value != "") this.handleEdit(`${primary_url}/${params.id}`, params);
     }
     handleDelete = async()=>{
         await this.onDelete(`${primary_url}/delete`, this.state.ids)

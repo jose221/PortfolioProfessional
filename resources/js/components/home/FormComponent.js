@@ -19,13 +19,15 @@ import User from "../../models/User";
 import SunEditor from 'suneditor-react';
 import FormHelperText from "@mui/material/FormHelperText";
 
+let primary_url = "http://localhost:8080/api/admin/user";
+
 class FormComponent extends RComponent {
     constructor(props) {
         super(props);
         //this.getItem(`/api/admin/user/${this.props.id}`);
     }
     async componentDidMount() {
-        let res = await this.getItem(`/api/admin/user/${this.props.id}`)
+        let res = await this.getItem(`${primary_url}/${this.props.id}`)
         let data = new User(res);
         await this.setState({form: data});
     }
@@ -33,7 +35,7 @@ class FormComponent extends RComponent {
         e.preventDefault();
         console.log(this.state.form.getRequired())
         if(this.state.form.validData()){
-            await this.onUpdate(`/api/admin/user/${this.props.id}`, this.state.form)
+            await this.onUpdate(`${primary_url}/${this.props.id}`, this.state.form)
         }
     }
 
