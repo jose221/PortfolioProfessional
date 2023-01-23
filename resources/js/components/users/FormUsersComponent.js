@@ -12,6 +12,9 @@ import AddIcon from '@mui/icons-material/Add';
 import Fab from "@mui/material/Fab";
 import TextField from "@mui/material/TextField";
 import MyContact from "../../models/MyContact";
+
+let primary_url = "http://localhost:8080/api/admin/user";
+
 class FormUsersComponent extends RComponent {
     constructor(props) {
         super(props);
@@ -26,9 +29,9 @@ class FormUsersComponent extends RComponent {
         e.preventDefault();
         console.log(this.state.form)
         if(this.state.form.validData()){
-            await this.onCreate("/api/admin/contacts/create", this.state.form)
+            await this.onCreate(`${primary_url}`, this.state.form)
             this.state.openModal = false;
-            this.state.data = await this.getItems(`/api/admin/contacts/${this.props.user_id}`)
+            this.state.data = await this.getItems(`${primary_url}`)
             this.dispatchStore(this.state)
             //window.location.reload();
         }

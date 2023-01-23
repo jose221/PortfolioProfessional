@@ -23,8 +23,9 @@ import ImageIcon from '@mui/icons-material/Image';
 import Vitae from "../../models/Vitae";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-let primary_url = "/api/admin/vitae";
-let title = "Informacion de mi Historial de CV";
+let primary_url = "http://localhost:8080/api/admin/history-curriculum-vitae";
+let primary_url_user = "http://localhost:8080/api/admin/user";
+let title = "Información de mi Historial de CV";
 class ListVitaeComponent extends RComponent{
     constructor(props) {
         super(props);
@@ -34,7 +35,8 @@ class ListVitaeComponent extends RComponent{
         await this.onInit();
     }
     onInit = async ()=>{
-        let res = await this.getItems(`${primary_url}/${this.props.user_id}`)
+        let res = await this.getItems(`${primary_url}`)
+        console.log(res)
         this.state.data = res;
         this.dispatchStore(this.state)
     }
@@ -43,7 +45,7 @@ class ListVitaeComponent extends RComponent{
         this.dispatchStore(this.state)
     }
     onCellEditCommit = (params)=>{
-        if(params.value != "") this.handleEdit(`${primary_url}/edit/${params.id}`, params);
+        if(params.value != "") this.handleEdit(`${primary_url}/${params.id}`, params);
     }
     handleDelete = async()=>{
         await this.onDelete(`${primary_url}/delete`, this.state.ids)
@@ -56,8 +58,8 @@ class ListVitaeComponent extends RComponent{
         this.dispatchStore(this.state)
     }
     actionShowInUser = async(params)=>{
-        let res = await this.onUpdate(`${primary_url}/show-user/${params.row.id}`, {
-            user_id: this.props.user_id
+        let res = await this.onUpdate(`${primary_url_user}/${this.props.user_id}`, {
+            cv: params.row.id
         });
         await this.onInit();
     }
@@ -71,8 +73,8 @@ class ListVitaeComponent extends RComponent{
                 width: 100,
                 sortable: false, editable: false,
                 renderCell: (params) =>{
-                    const icon = params.row.selected ? <VisibilityIcon /> : <VisibilityOffIcon />;
-                    const color = params.row.selected ? "success" : "error";
+                    const icon = (params.row.User?.id == this.props.user_id) ? <VisibilityIcon /> : <VisibilityOffIcon />;
+                    const color = (params.row.User?.id == this.props.user_id) ? "success" : "error";
 
 
                     return <IconButton onClick={()=>this.actionShowInUser(params)} aria-label="edit" color={color}>

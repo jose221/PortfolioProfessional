@@ -17,7 +17,7 @@ import SunEditor from "suneditor-react";
 import FormHelperText from "@mui/material/FormHelperText";
 
 
-let primary_url = "/api/admin/portfolios";
+let primary_url = "http://localhost:8080/api/admin/portfolios";
 class FormPortfolioComponent extends RComponent {
     constructor(props) {
         super(props);
@@ -29,10 +29,10 @@ class FormPortfolioComponent extends RComponent {
         e.preventDefault();
         console.log(this.state.form)
         if(this.state.form.validData()){
-            if(this.state.form?.id) await this.onUpdate(`${primary_url}/edit/${this.state.form?.id}`, this.state.form);
-            else await this.onCreate(`${primary_url}/create`, this.state.form)
+            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form);
+            else await this.onCreate(`${primary_url}`, this.state.form)
             this.state.openModal = false;
-            this.state.data = await this.getItems(`${primary_url}/${this.props.user_id}`)
+            this.state.data = await this.getItems(`${primary_url}`)
             this.dispatchStore(this.state)
             //window.location.reload();
         }

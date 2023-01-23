@@ -14,8 +14,6 @@ import TextField from "@mui/material/TextField";
 import Study from "../../models/Study";
 import Vitae from "../../models/Vitae";
 
-let primary_url = "/api/admin/vitae";
-let title_action = "Mis curriculums"
 
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import ArticleIcon from '@mui/icons-material/Article';
@@ -23,6 +21,10 @@ import ImageIcon from '@mui/icons-material/Image';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import FormHelperText from '@mui/material/FormHelperText';
 import {MenuItem} from "@mui/material";
+
+let primary_url = "http://localhost:8080/api/admin/history-curriculum-vitae";
+let title_action = "Mis curriculums";
+
 class FormVitaeComponent extends RComponent {
     constructor(props) {
         super(props);
@@ -32,12 +34,12 @@ class FormVitaeComponent extends RComponent {
     }
     handleSubmit = async (e) =>{
         e.preventDefault();
-        console.log(this.state.form)
+        if(this.state.form.User) delete this.state.form.User;
         if(this.state.form.validData()){
-            if(this.state.form?.id) await this.onUpdate(`${primary_url}/edit/${this.state.form?.id}`, this.state.form);
-            else await this.onCreate(`${primary_url}/create`, this.state.form)
+            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form);
+            else await this.onCreate(`${primary_url}`, this.state.form)
             this.state.openModal = false;
-            this.state.data = await this.getItems(`${primary_url}/${this.props.user_id}`)
+            this.state.data = await this.getItems(`${primary_url}`)
             this.dispatchStore(this.state)
             //window.location.reload();
         }
