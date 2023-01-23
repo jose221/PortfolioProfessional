@@ -53,3 +53,4 @@ import InfoPortfolioCategoriesComponent from "./components/portfolio/portfolioCa
 
 import UsersComponent from "./components/users/UsersComponent";
 import ListUsersComponent from "./components/users/ListUsersComponent";
+import LoginComponent from "./components/auth/LoginComponent";
