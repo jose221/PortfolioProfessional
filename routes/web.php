@@ -20,8 +20,8 @@ Route::prefix('admin')->group(function() {
 });
 //Grupo de rutas para el administrador
 //USUARIO
-Route::post('/update','HomeController@update')->middleware('auth')->name('user.update');
-Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
+Route::post('/update','HomeController@update')->middleware(['auth','api.access.admin'])->name('user.update');
+Route::group(['prefix'=>'admin','middleware'=>['auth','api.access.admin']],function(){
     //users
     Route::group(['prefix'=>'users','namespace'=>'Admin'],function (){
         Route::name('users.')->group(function () {
