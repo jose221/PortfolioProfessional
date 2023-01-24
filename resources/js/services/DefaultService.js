@@ -2,7 +2,7 @@ import axios from 'axios';
 let header = {
     headers: {
         'Content-Type': 'multipart/form-data',
-        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6Ikpvc8OpIMOBbmdlbCBBbHZhcmFkbyBHb256YWxleiIsImVtYWlsIjoiam9zZS5hbHZhcmFkbzIyMEBob3RtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJEdkL2NISUpPL280LmVWc0ZLdUpoSE8ubjlmRmRwNlpFR1VjWVA4ZGtrRzVKbHdVYzdEV01TIiwiZXhwaXJlZF90b2tlbiI6MTY3Mjk1ODUzMTE4MywiaWF0IjoxNjcyODcyMTMxfQ.-DFSb8onbTS8TyirZMPZQv_0iTBsYMBefp_iNOItVec'
+        'auth-token': window.token
     }
 }
 export class DefaultService{
