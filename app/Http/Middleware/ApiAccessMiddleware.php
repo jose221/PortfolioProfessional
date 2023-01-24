@@ -32,4 +32,7 @@ class ApiAccessMiddleware
     {
         return Auth::guard();
     }
+    protected function verifyToken(){
+        $client = new \GuzzleHttp\Client();
+    }
 }

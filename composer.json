@@ -12,11 +12,12 @@
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "genert/bbcode": "^1.1",
-        "guzzlehttp/guzzle": "^7.0.1",
+        "guzzlehttp/guzzle": "^7.5",
         "laravel/framework": "^8.0",
         "laravel/legacy-factories": "^1.3",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
+        "nesbot/carbon": "^2.65",
         "xpersonas/laravel-styleguide": "^1.0"
     },
     "require-dev": {
