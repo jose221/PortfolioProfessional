@@ -6,7 +6,7 @@ import Card from "@mui/material/Card";
 import ReactDOM from "react-dom";
 import Typography from '@mui/material/Typography';
 
-let primary_url = "http://localhost:8080/api/admin/knowledges";
+let primary_url = window.url_api+"/admin/knowledges";
 
 class InfoKnowLedgesComponent extends RComponent {
     constructor(props) {
@@ -29,7 +29,7 @@ class InfoKnowLedgesComponent extends RComponent {
         return (
             <div className="h-100">
                 <Card className="h-100">
-                    <img className="info-header" src={this.state.information.icon_path}/>
+                    <img className="info-header" src={ this.loadImage(this.state.information.icon_path)}/>
                     <CardContent className="pb-1">
                         <div className="justify-card-column">
                             <div>

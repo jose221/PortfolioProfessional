@@ -12,7 +12,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Fab from "@mui/material/Fab";
 import TextField from "@mui/material/TextField";
 import MyContact from "../../models/MyContact";
-let primary_url = "http://localhost:8080/api/admin/my-contacts";
+let primary_url = window.url_api+"/admin/my-contacts";
 class CreateContactsComponent extends RComponent {
     constructor(props) {
         super(props);

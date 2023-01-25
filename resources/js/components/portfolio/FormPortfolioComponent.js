@@ -17,7 +17,7 @@ import SunEditor from "suneditor-react";
 import FormHelperText from "@mui/material/FormHelperText";
 
 
-let primary_url = "http://localhost:8080/api/admin/portfolios";
+let primary_url = window.url_api+"/admin/portfolios";
 class FormPortfolioComponent extends RComponent {
     constructor(props) {
         super(props);

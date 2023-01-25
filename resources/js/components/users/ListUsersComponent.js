@@ -18,7 +18,7 @@ import Avatar from "@mui/material/Avatar";
 import {green} from "@mui/material/colors";
 import EditIcon from "@mui/icons-material/Edit";
 import KnowLedge from "../../models/KnowLedge";
-let primary_url = "http://localhost:8080/api/admin/user";
+let primary_url = window.url_api+"/admin/user";
 class ListUsersComponent extends RComponent {
     constructor(props) {
         super(props);

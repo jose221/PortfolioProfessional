@@ -17,8 +17,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ProfessionalExperience from "../../models/ProfessionalExperience";
 
-let primary_url = "http://localhost:8080/api/admin/professional-experience";
-let autocomplete_portfolio_url = "http://localhost:8080/api/admin/portfolios";
+let primary_url = window.url_api+"/admin/professional-experience";
+let autocomplete_portfolio_url = window.url_api+"/admin/portfolios";
 let title = "Información de mi experiencia profesional";
 function ItemProfessionalExperiencesComponent(props) {
     let rComponent = new RComponent(props);
@@ -49,7 +49,7 @@ function ItemProfessionalExperiencesComponent(props) {
                if(item?.id){
                    return <div id={item.id} key={pos} className="col-lg-2 col-md-6 col-sm-6 mt-3">
                        <div className="h-100 item-professional">
-                           <img src={item.image_path}
+                           <img src={rComponent.loadImage(item.image_path)}
                                 className="rounded card-img-top " alt="test"/>
                            <p className="info-title">{item.company}</p>
 

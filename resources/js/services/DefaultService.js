@@ -43,6 +43,7 @@ export class DefaultService{
             if(params.user_id) delete params.user_id;
             if(params.created_at) delete params.created_at;
             if(params.updated_at) delete params.updated_at;
+            if(params.casts) delete params.casts;
             const data = await this.formData(params)
             items = await axios.put(url, data, config);
             items = items.data;
@@ -55,12 +56,12 @@ export class DefaultService{
     static async create(url, params = {}, config = header){
         let items = null;
         try {
-
             if(params.id == 0) delete params.id;
             if(params.item) delete params.item;
             if(params.required) delete params.required;
             if(params.created_at) delete params.created_at;
             if(params.updated_at) delete params.updated_at;
+            if(params.casts) delete params.casts;
             const data = await this.formData(params)
             items = await axios.post(url, data, config);
             items = items.data;
@@ -75,6 +76,7 @@ export class DefaultService{
         if(params.id) delete params.id;
         if(params.item) delete params.item;
         if(params.required) delete params.required;
+        if(params.casts) delete params.casts;
         try {
             const data = await this.formData(params)
             items = await axios.put(url, data, config);
@@ -88,7 +90,7 @@ export class DefaultService{
     static async delete(url, params = {}, config = header){
         let items = null;
         try {
-            const data = await this.formData(params)
+            const data = await this.formData(params, true)
             items = await axios.post(url, data, config);
             items = items.data;
         }
@@ -98,12 +100,16 @@ export class DefaultService{
         return items;
     }
 
-    static formData(params){
+    static formData(params, simple_form = false){
         const data = new FormData();
-        params = params.convertStringCasts();
-        if(params.casts) delete params.casts;
+
         for ( var key in params ) {
-            data.append(key, params[key]);
+            if(Array.isArray(params[key]) && !simple_form){
+                data.append(key, JSON.stringify(params[key].map((item)=>{
+                    return JSON.stringify(item);
+                })));
+            }
+            else data.append(key, params[key]);
         }
         return data;
     }

@@ -15,7 +15,7 @@ import KnowLedge from "../../models/KnowLedge";
 import SunEditor from "suneditor-react";
 import FormHelperText from "@mui/material/FormHelperText";
 
-let primary_url = "http://localhost:8080/api/admin/knowledges";
+let primary_url = window.url_api+"/admin/knowledges";
 class FormKnowLedgesComponent extends RComponent {
     constructor(props) {
         super(props);

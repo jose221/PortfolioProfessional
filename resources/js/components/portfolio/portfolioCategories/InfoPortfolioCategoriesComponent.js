@@ -6,7 +6,7 @@ import Card from "@mui/material/Card";
 import ReactDOM from "react-dom";
 import Typography from '@mui/material/Typography';
 
-let primary_url = "http://localhost:8080/api/admin/portfolio-categories";
+let primary_url = window.url_api+"/admin/portfolio-categories";
 
 class InfoPortfolioCategoriesComponent extends RComponent {
     constructor(props) {

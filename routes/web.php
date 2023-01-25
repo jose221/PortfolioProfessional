@@ -15,8 +15,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/{lang}', 'indexController@setLanguage')->name('index.language');
 Route::get('/', 'indexController@index')->name('index');
-Route::prefix('admin')->group(function() {
-    Auth::routes();
+
+Route::group(['prefix'=>'admin','namespace'=>'Auth'],function (){
+    Route::get('/login','LoginController@showLoginForm')->name('login');
+    Route::post('/login','LoginController@login')->name('login');
+    Route::post('/logout','LoginController@logout')->name('logout');
+    Route::get('/register','RegisterController@showRegistrationForm')->name('register');
+    Route::get('/home','HomeController@index')->middleware(['auth','api.access.admin'])->name('home');
 });
 //Grupo de rutas para el administrador
 //USUARIO

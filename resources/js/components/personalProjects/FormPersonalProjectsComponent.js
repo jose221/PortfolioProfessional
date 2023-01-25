@@ -15,7 +15,7 @@ import TextField from "@mui/material/TextField";
 import PersonalProject from "../../models/PersonalProject";
 import SunEditor from "suneditor-react";
 import FormHelperText from "@mui/material/FormHelperText";
-let primary_url = "http://localhost:8080/api/admin/personal-projects";
+let primary_url = window.url_api+"/admin/personal-projects";
 let title_action = "Proyecto personal"
 class FormPersonalProjectsComponent extends RComponent {
     constructor(props) {

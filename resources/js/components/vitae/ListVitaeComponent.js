@@ -23,8 +23,8 @@ import ImageIcon from '@mui/icons-material/Image';
 import Vitae from "../../models/Vitae";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-let primary_url = "http://localhost:8080/api/admin/history-curriculum-vitae";
-let primary_url_user = "http://localhost:8080/api/admin/user";
+let primary_url = window.url_api+"/admin/history-curriculum-vitae";
+let primary_url_user = window.url_api+"/admin/user";
 let title = "Información de mi Historial de CV";
 class ListVitaeComponent extends RComponent{
     constructor(props) {
@@ -109,7 +109,7 @@ class ListVitaeComponent extends RComponent{
                 },  sortable: false, },
             {field: 'path', headerName: 'Url', width: 400,
                 type: 'action', description: 'url del archivo',editable: false,
-                renderCell: (params) => <a target="_blank" href={params.row.path || ''}>Seleccionar archivo</a>,  sortable: false, },
+                renderCell: (params) => <a target="_blank" href={ this.loadImage(params.row.path) || ''}>Seleccionar archivo</a>,  sortable: false, },
         ];
         return (
             <div>

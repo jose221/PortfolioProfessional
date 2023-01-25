@@ -36,7 +36,14 @@ export default class Model {
             for (const [key, value] of Object.entries(this.casts)) {
                 switch (value) {
                     case 'array':
-                        this[key] = (typeof (this[key]) == 'string') ? JSON.parse(this[key]) : this[key];
+                         if(typeof (this[key]) == 'string'){
+                             this[key] = JSON.parse(this[key]);
+
+                             this[key] = this[key].map((item)=>{
+                                 return JSON.parse(item);
+                             });
+                         }
+                         else this[key];
                         console.log(this[key])
                         break;
                     case 'object':
@@ -48,22 +55,22 @@ export default class Model {
         }
     }
     convertStringCasts(){
+        let data = this;
         if(this.casts){
             for (const [key, value] of Object.entries(this.casts)) {
                 switch (value) {
                     case 'array':
-                        this[key] = JSON.stringify(this[key].map((item)=>{
+                        data[key] = JSON.stringify(data[key].map((item)=>{
                             return JSON.stringify(item);
                         }));
-                        console.log(this[key])
+                        console.log(data[key])
                         break;
                     case 'object':
-                        this[key] = JSON.stringify(this[key]);
+                        data[key] = JSON.stringify(data[key]);
                         break;
                 }
             }
         }
-        console.log(this)
-        return this;
+        return data;
     }
 }

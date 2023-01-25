@@ -14,7 +14,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import {DataGrid} from "@mui/x-data-grid";
 import ReactDOM from "react-dom";
 import React from "react";
-let primary_url = "http://localhost:8080/api/admin/my-contacts";
+let primary_url = window.url_api+"/admin/my-contacts";
 class ListContactsComponent extends RComponent {
     constructor(props) {
         super(props);

@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 import KnowLedgeAbility from "../../models/KnowLedgeAbility";
 import SunEditor from "suneditor-react";
 import FormHelperText from "@mui/material/FormHelperText";
-let primary_url = "http://localhost:8080/api/admin/knowledges-abilities";
+let primary_url = window.url_api+"/admin/knowledges-abilities";
 class FormKnowledgeAbilityComponent extends RComponent {
     constructor(props) {
         super(props);

@@ -20,7 +20,7 @@ import Portfolio from "../../models/Portfolio";
 
 
 
-let primary_url = "http://localhost:8080/api/admin/portfolios";
+let primary_url = window.url_api+"/admin/portfolios";
 class ListPortfolioComponent extends RComponent{
     constructor(props) {
         super(props);
@@ -67,7 +67,7 @@ class ListPortfolioComponent extends RComponent{
             {field: 'code', headerName: 'Codigo del item', width: 200, type: 'string', sortable: true, editable: true},
             {field: 'icon_path', headerName: 'url del icono', width: 100,
                 type: 'string', description: 'Url del icono',
-                renderCell: (params) => <Avatar sx={{ bgcolor: green[500] }} src={ params.row.icon_path} variant="square">
+                renderCell: (params) => <Avatar sx={{ bgcolor: green[500] }} src={ this.loadImage(params.row.icon_path)} variant="square">
                 </Avatar>,  sortable: true, },
             {field: 'title_es', headerName: 'Titulo en español', width: 200, type: 'string', description: 'Titulo en español', sortable: true, editable: true},
             {field: 'title_en', headerName: 'Titulo en inglés', width: 200, type: 'string', description: 'Titulo en inglés', sortable: true, editable: true},

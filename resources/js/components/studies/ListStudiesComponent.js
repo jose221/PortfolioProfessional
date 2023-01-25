@@ -16,7 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Avatar from '@mui/material/Avatar';
 import { deepOrange, green } from '@mui/material/colors';
 import KnowLedge from "../../models/KnowLedge";
-let primary_url = "http://localhost:8080/api/admin/studies";
+let primary_url = window.url_api+"/admin/studies";
 let title = "Información de mis estudios"
 class ListStudiesComponent extends RComponent{
     constructor(props) {

@@ -16,6 +16,11 @@ export default class RComponent extends Component{
         expandedAccordion:"",
         dataAutocomplete:{}
     }
+    constructor() {
+        super();
+        window.url_api = window.url_api || "http://localhost:8080/api";
+        window.url_image = window.url_image || "http://localhost:8080";
+    }
     handleChangeInputGrid = (event) =>{
         let key = event.target.getAttribute('name');
         if(event.target.files.length){
@@ -88,6 +93,7 @@ export default class RComponent extends Component{
         this.dispatchStore(this.state)
     }
     loadImage(image, id){
+        let url = window.url_image || "http://localhost:8080";
         let vm = this;
         if(typeof image == 'object'){
             try{
@@ -101,7 +107,7 @@ export default class RComponent extends Component{
                 image = "";
             }
         }else{
-            return image   || "https://amazonia.mapbiomas.org/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png";
+            return url + image   || "https://amazonia.mapbiomas.org/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png";
         }
     }
     successHandleClose = (event, reason) => {

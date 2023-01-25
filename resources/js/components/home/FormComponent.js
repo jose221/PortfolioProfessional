@@ -19,7 +19,7 @@ import User from "../../models/User";
 import SunEditor from 'suneditor-react';
 import FormHelperText from "@mui/material/FormHelperText";
 
-let primary_url = "http://localhost:8080/api/admin/user";
+let primary_url = window.url_api+"/admin/user";
 
 class FormComponent extends RComponent {
     constructor(props) {

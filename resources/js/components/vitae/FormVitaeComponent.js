@@ -22,7 +22,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import FormHelperText from '@mui/material/FormHelperText';
 import {MenuItem} from "@mui/material";
 
-let primary_url = "http://localhost:8080/api/admin/history-curriculum-vitae";
+let primary_url = window.url_api+"/admin/history-curriculum-vitae";
 let title_action = "Mis curriculums";
 
 class FormVitaeComponent extends RComponent {

@@ -1,7 +1,11 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <script>window.token = "{{session('auth-token')}}"</script>
+    <script>
+        window.token = "{{session('auth-token')}}";
+        window.url_api = "{{env('API_HOST', 'http://localhost:8080')."/api"}}" || "http://localhost:8080/api";
+        window.url_image = "{{env('API_HOST', 'http://localhost:8080')}}" || "http://localhost:8080";
+    </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 

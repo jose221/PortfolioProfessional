@@ -16,7 +16,7 @@ import ProfessionalExperience from "../../models/ProfessionalExperience";
 import SunEditor from "suneditor-react";
 import FormHelperText from "@mui/material/FormHelperText";
 import {Autocomplete} from "@mui/material";
-let primary_url = "http://localhost:8080/api/admin/professional-experience";
+let primary_url = window.url_api+"/admin/professional-experience";
 class FormProfessionalExperiencesComponent extends RComponent {
     constructor(props) {
         super(props);

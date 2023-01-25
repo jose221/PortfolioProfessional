@@ -19,7 +19,7 @@ import PortfolioCategory from "../../../models/PortfolioCategory";
 
 
 
-let primary_url = "http://localhost:8080/api/admin/portfolio-categories";
+let primary_url = window.url_api+"/admin/portfolio-categories";
 class ListPortfolioCategoriesComponent extends RComponent{
     constructor(props) {
         super(props);

@@ -18,7 +18,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ProfessionalExperience from "../../models/ProfessionalExperience";
 import PersonalProject from "../../models/PersonalProject";
 
-let primary_url = "http://localhost:8080/api/admin/personal-projects";
+let primary_url = window.url_api+"/admin/personal-projects";
 let title = "Información del mis proyectos personal";
 function ItemPersonalProjectsComponent(props) {
     let rComponent = new RComponent(props);
@@ -49,7 +49,7 @@ function ItemPersonalProjectsComponent(props) {
                 if(item?.id){
                     return <div id={item.id} key={pos} className="col-lg-2 col-md-6 col-sm-6 mt-3">
                         <div className="h-100 item-professional">
-                            <img src={item.image_path}
+                            <img src={rComponent.loadImage(item.image_path)}
                                  className="rounded card-img-top " alt="test"/>
                             <p className="info-title">{item.company}</p>
 

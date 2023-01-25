@@ -14,7 +14,7 @@ import React from "react";
 import KnowLedgeAbility from "../../models/KnowLedgeAbility";
 import EditIcon from "@mui/icons-material/Edit";
 import Collapse from "@mui/material/Collapse";
-let primary_url = "http://localhost:8080/api/admin/knowledges-abilities";
+let primary_url = window.url_api+"/admin/knowledges-abilities";
 class ListKnowledgeAbilityComponent extends RComponent {
     constructor(props) {
         super(props);

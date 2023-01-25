@@ -16,7 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Avatar from '@mui/material/Avatar';
 import { deepOrange, green } from '@mui/material/colors';
 import KnowLedge from "../../models/KnowLedge";
-let primary_url = "http://localhost:8080/api/admin/knowledges";
+let primary_url = window.url_api+"/admin/knowledges";
 class ListKnowLedgesComponent extends RComponent{
     constructor(props) {
         super(props);
@@ -71,7 +71,7 @@ class ListKnowLedgesComponent extends RComponent{
             { field: 'id', headerName: 'ID', width: 70 },
             {field: 'icon_path', headerName: 'url del icono', width: 100,
                 type: 'string', description: 'Url deñ icono',
-                renderCell: (params) => <Avatar sx={{ bgcolor: green[500] }} src={ params.row.icon_path} variant="square">
+                renderCell: (params) => <Avatar sx={{ bgcolor: green[500] }} src={ this.loadImage(params.row.icon_path)} variant="square">
                 </Avatar>,  sortable: true, },
             {field: 'title_es', headerName: 'Titulo en español', width: 200, type: 'string', description: 'Titulo en español', sortable: true, editable: true},
             {field: 'title_en', headerName: 'Titulo en inglés', width: 200, type: 'string', description: 'Titulo en inglés', sortable: true, editable: true},

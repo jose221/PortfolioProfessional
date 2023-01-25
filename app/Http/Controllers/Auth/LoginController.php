@@ -68,9 +68,11 @@ class LoginController extends Controller
         $this->validateLogin($request);
 
         $user = $this->loginApi($request);
-        $request->session()->put('auth-token', $user->token);
+        if(isset($user->token)){
+            $request->session()->put('auth-token', $user->token);
 
-        unset($user->token);
+            unset($user->token);
+        }
 
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle

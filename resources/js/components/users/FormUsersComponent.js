@@ -13,7 +13,7 @@ import Fab from "@mui/material/Fab";
 import TextField from "@mui/material/TextField";
 import MyContact from "../../models/MyContact";
 
-let primary_url = "http://localhost:8080/api/admin/user";
+let primary_url = window.url_api+"/admin/user";
 
 class FormUsersComponent extends RComponent {
     constructor(props) {

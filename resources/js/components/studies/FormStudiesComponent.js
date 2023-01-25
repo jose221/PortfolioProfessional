@@ -13,7 +13,7 @@ import Fab from "@mui/material/Fab";
 import TextField from "@mui/material/TextField";
 import Study from "../../models/Study";
 
-let primary_url = "http://localhost:8080/api/admin/studies";
+let primary_url = window.url_api+"/admin/studies";
 class FormStudiesComponent extends RComponent {
     constructor(props) {
         super(props);

@@ -16,7 +16,7 @@ import SunEditor from "suneditor-react";
 import FormHelperText from "@mui/material/FormHelperText";
 
 
-let primary_url = "http://localhost:8080/api/admin/portfolio-categories";
+let primary_url = window.url_api+"/admin/portfolio-categories";
 class FormPortfolioCategoriesComponent extends RComponent {
     constructor(props) {
         super(props);
