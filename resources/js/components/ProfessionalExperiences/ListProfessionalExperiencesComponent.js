@@ -18,6 +18,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ProfessionalExperience from "../../models/ProfessionalExperience";
 
 let primary_url = "http://localhost:8080/api/admin/professional-experience";
+let autocomplete_portfolio_url = "http://localhost:8080/api/admin/portfolios";
 let title = "Información de mi experiencia profesional";
 function ItemProfessionalExperiencesComponent(props) {
     let rComponent = new RComponent(props);
@@ -81,7 +82,12 @@ class ListProfessionalExperiencesComponent extends RComponent{
         let res = await this.getItems(`${primary_url}`)
         this.state.data = res;
         this.dispatchStore(this.state)
-
+        await this.getDataAutocomplete();
+    }
+    async getDataAutocomplete(){
+        let autocomplete_portfolio = await this.getItems(`${autocomplete_portfolio_url}`)
+        this.state.dataAutocomplete['portfolios'] = autocomplete_portfolio;
+        this.dispatchStore(this.state)
     }
     actionDelete(id){
         console.log(id)

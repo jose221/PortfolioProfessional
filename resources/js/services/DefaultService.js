@@ -55,6 +55,7 @@ export class DefaultService{
     static async create(url, params = {}, config = header){
         let items = null;
         try {
+
             if(params.id == 0) delete params.id;
             if(params.item) delete params.item;
             if(params.required) delete params.required;
@@ -99,7 +100,8 @@ export class DefaultService{
 
     static formData(params){
         const data = new FormData();
-
+        params = params.convertStringCasts();
+        if(params.casts) delete params.casts;
         for ( var key in params ) {
             data.append(key, params[key]);
         }

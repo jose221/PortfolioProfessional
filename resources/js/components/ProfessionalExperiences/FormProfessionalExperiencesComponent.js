@@ -15,6 +15,7 @@ import KnowLedge from "../../models/KnowLedge";
 import ProfessionalExperience from "../../models/ProfessionalExperience";
 import SunEditor from "suneditor-react";
 import FormHelperText from "@mui/material/FormHelperText";
+import {Autocomplete} from "@mui/material";
 let primary_url = "http://localhost:8080/api/admin/professional-experience";
 class FormProfessionalExperiencesComponent extends RComponent {
     constructor(props) {
@@ -25,16 +26,14 @@ class FormProfessionalExperiencesComponent extends RComponent {
     }
     handleSubmit = async (e) =>{
         e.preventDefault();
-        console.log(this.state.form)
         if(this.state.form.validData()){
-            if(this.state.form.portfolio) delete this.state.form.portfolio;
-
-
-            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form);
-            else await this.onCreate(`${primary_url}`, this.state.form)
+            let params = this.state.form;
+            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, params);
+            else await this.onCreate(`${primary_url}`, params)
 
             this.state.openModal = false;
             this.state.data = await this.getItems(`${primary_url}`)
+            this.state.form = new ProfessionalExperience();
             this.dispatchStore(this.state)
             //window.location.reload();
         }
@@ -166,6 +165,25 @@ class FormProfessionalExperiencesComponent extends RComponent {
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
+                                />
+                                <Autocomplete
+                                    multiple
+                                    type="array"
+                                    onChange={(event, new_value) => this.handleChangeAutocomplete(event, new_value, 'portfolio', 'multiple')}
+                                    className="col-md-6 mt-3 p-1"
+                                    id="portfolio"
+                                    name="portfolio"
+                                    options={this.state.dataAutocomplete.portfolios || []}
+                                    getOptionLabel={(option) => option.code}
+                                    value={this.state.form.portfolio || []}
+                                    filterSelectedOptions
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="filterSelectedOptions"
+                                            placeholder="Favorites"
+                                        />
+                                    )}
                                 />
                             </div>
                             <div className="row">

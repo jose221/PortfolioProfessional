@@ -4,6 +4,7 @@ export default class Model {
             this[key] = value;
         }
         this.item = attr;
+
     }
     getRequired(){
         return this.required;
@@ -29,5 +30,40 @@ export default class Model {
     }
     getItem(){
         return this.item;
+    }
+    formatCasts(){
+        if(this.casts){
+            for (const [key, value] of Object.entries(this.casts)) {
+                switch (value) {
+                    case 'array':
+                        this[key] = (typeof (this[key]) == 'string') ? JSON.parse(this[key]) : this[key];
+                        console.log(this[key])
+                        break;
+                    case 'object':
+                        this[key] = (typeof (this[key]) == 'string') ? JSON.parse(this[key]) : this[key];
+                        break;
+                }
+            }
+            window.item = this;
+        }
+    }
+    convertStringCasts(){
+        if(this.casts){
+            for (const [key, value] of Object.entries(this.casts)) {
+                switch (value) {
+                    case 'array':
+                        this[key] = JSON.stringify(this[key].map((item)=>{
+                            return JSON.stringify(item);
+                        }));
+                        console.log(this[key])
+                        break;
+                    case 'object':
+                        this[key] = JSON.stringify(this[key]);
+                        break;
+                }
+            }
+        }
+        console.log(this)
+        return this;
     }
 }

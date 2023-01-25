@@ -2,6 +2,9 @@
 import Model from "./Model";
 
 export default class ProfessionalExperience extends Model{
+    casts = {
+        portfolio:"array"
+    };
     required = ['company','job_es','job_en',
         'date_start','date_end',
         'description_es','description_en',
@@ -20,7 +23,9 @@ export default class ProfessionalExperience extends Model{
         country_en : "",
         image_path: "",
         user_id: 0,
+        portfolio:[]
     }) {
         super(attributes)
+        this.formatCasts();
     }
 }

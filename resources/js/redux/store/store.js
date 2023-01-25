@@ -11,7 +11,8 @@ const initialState = {
         isSuccessMessage:"Exitoso!",
         form:{},
         information:{},
-        expandedAccordion:""
+        expandedAccordion:"",
+        dataAutocomplete:{}
     }
 }
 const store = createStore(reducers, initialState);

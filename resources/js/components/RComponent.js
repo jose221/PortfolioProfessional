@@ -13,7 +13,8 @@ export default class RComponent extends Component{
         openModal: false,
         form:{},
         information:{},
-        expandedAccordion:""
+        expandedAccordion:"",
+        dataAutocomplete:{}
     }
     handleChangeInputGrid = (event) =>{
         let key = event.target.getAttribute('name');
@@ -45,13 +46,25 @@ export default class RComponent extends Component{
         console.log(event)
         let key = event.target.getAttribute('name');
         //this.state.form[name] = event.target.value;
-        if(event.target.getAttribute('type')  == 'file'){
-            if(event.target.files.length){
-                this.state.form[key] = event.target.files[0];
-            }
-        }else{
-            this.state.form[key] = event.target.value;
+        switch (event.target.getAttribute('type')) {
+            case 'file':
+                if(event.target.files.length){
+                    this.state.form[key] = event.target.files[0];
+                }
+                break;
+            case 'array':
+                console.log(event)
+                break;
+            default:
+                this.state.form[key] = event.target.value;
+                break;
+
         }
+        this.setState(this.state.form);
+        this.dispatchStore(this.state)
+    }
+    handleChangeAutocomplete = (event, newValue, key, type)=>{
+        this.state.form[key] = newValue;
         this.setState(this.state.form);
         this.dispatchStore(this.state)
     }
@@ -59,12 +72,16 @@ export default class RComponent extends Component{
         if(event.target){
             let key = event.target.name;
             //this.state.form[name] = event.target.value;
-            if(event.target.type  == 'file'){
-                if(event.target.files.length){
-                    this.state.form[key] = event.target.files[0];
-                }
-            }else{
-                this.state.form[key] = event.target.value;
+            switch (event.target.type) {
+                case 'file':
+                    if(event.target.files.length){
+                        this.state.form[key] = event.target.files[0];
+                    }
+                    break;
+                default:
+                    this.state.form[key] = event.target.value;
+                    break;
+
             }
         }
         this.setState(this.state.form);
