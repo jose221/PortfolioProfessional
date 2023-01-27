@@ -41,7 +41,7 @@ class ApiAccessMiddleware
 
     protected function verifyToken($token){
         $URL = env('API_HOST', 'http://localhost:8080');
-        $client = Http::post($URL."/api/admin/verify-token", [
+        $client = Http::withoutVerifying()->post($URL."/api/admin/verify-token", [
             'token' => $token
         ]);
         $response = json_decode($client->body());

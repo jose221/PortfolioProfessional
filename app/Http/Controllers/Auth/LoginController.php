@@ -68,6 +68,7 @@ class LoginController extends Controller
         $this->validateLogin($request);
 
         $user = $this->loginApi($request);
+        //return response()->json($user);
         if(isset($user->token)){
             $request->session()->put('auth-token', $user->token);
 
@@ -245,7 +246,7 @@ class LoginController extends Controller
     }
     protected function loginApi(Request $request){
         $URL = env('API_HOST', 'http://localhost:8080');
-        $client = Http::post($URL."/api/admin/login", [
+        $client = Http::withoutVerifying()->post($URL."/api/admin/login", [
             'email' => $request->email,
             'password' => $request->password,
         ]);
@@ -254,7 +255,7 @@ class LoginController extends Controller
     }
     protected function logoutApi($token){
         $URL = env('API_HOST', 'http://localhost:8080');
-        $client = Http::withHeaders([
+        $client = Http::withoutVerifying()->withHeaders([
             'auth-token' => $token
         ])->post($URL."/api/admin/logout");
         $response = json_decode($client->body());
