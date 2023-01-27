@@ -414,19 +414,22 @@ CREATE TABLE IF NOT EXISTS `portfolio_categories` (
     `created_at` timestamp NULL DEFAULT NULL,
     `updated_at` timestamp NULL DEFAULT NULL,
     `deleted_at` timestamp NULL DEFAULT NULL,
-    PRIMARY KEY (`id`)
+    `user_id` bigint(20) unsigned NULL DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `prefessional_experiences_user_id_foreign` (`user_id`),
+    CONSTRAINT `prefessional_experiences_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `portfolio_categories`
 --
 
-INSERT INTO `portfolio_categories` (`id`, `code`, `title_es`, `title_en`, `description_es`, `description_en`, `created_at`, `updated_at`) VALUES
-                                                                                                                                              (1, 'lenguajes_programacion', 'Lenguajes de Programación', 'Programming languages', 'Conocimiento en los lenguajes de programación', 'Knowledge of programming languages', '2021-09-06 21:23:20', '2021-10-02 19:23:37'),
-                                                                                                                                              (2, 'frameworks', 'Frameworks', 'Frameworks', 'Frameworks', 'Frameworks', '2021-09-06 22:19:21', '2021-09-06 22:19:21'),
-                                                                                                                                              (3, 'frameworks CSS', 'frameworks CSS', 'frameworks CSS', 'frameworks CSS', 'frameworks CSS', '2021-09-07 02:54:10', '2021-09-07 03:19:33'),
-                                                                                                                                              (4, 'herramientas', 'Herramientas y librerías', 'Tools and libraries', 'Herramientas y librerías', 'Tools and libraries', '2021-09-07 03:20:18', '2022-02-22 06:32:29'),
-                                                                                                                                              (5, 'Base de datos', 'Base de Datos', 'Database', 'Base de Datos', 'Database', '2021-09-07 03:51:38', '2021-09-07 03:51:38');
+INSERT INTO `portfolio_categories` (`id`, `code`, `title_es`, `title_en`, `description_es`, `description_en`,`user_id`, `created_at`, `updated_at`) VALUES
+                                                                                                                                              (1, 'lenguajes_programacion', 'Lenguajes de Programación', 'Programming languages', 'Conocimiento en los lenguajes de programación', 'Knowledge of programming languages',1, '2021-09-06 21:23:20', '2021-10-02 19:23:37'),
+                                                                                                                                              (2, 'frameworks', 'Frameworks', 'Frameworks', 'Frameworks', 'Frameworks',1, '2021-09-06 22:19:21', '2021-09-06 22:19:21'),
+                                                                                                                                              (3, 'frameworks CSS', 'frameworks CSS', 'frameworks CSS', 'frameworks CSS', 'frameworks CSS',1, '2021-09-07 02:54:10', '2021-09-07 03:19:33'),
+                                                                                                                                              (4, 'herramientas', 'Herramientas y librerías', 'Tools and libraries', 'Herramientas y librerías', 'Tools and libraries',1, '2021-09-07 03:20:18', '2022-02-22 06:32:29'),
+                                                                                                                                              (5, 'Base de datos', 'Base de Datos', 'Database', 'Base de Datos', 'Database',1, '2021-09-07 03:51:38', '2021-09-07 03:51:38');
 
 -- --------------------------------------------------------
 
