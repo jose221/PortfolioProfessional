@@ -414,10 +414,10 @@ CREATE TABLE IF NOT EXISTS `portfolio_categories` (
     `created_at` timestamp NULL DEFAULT NULL,
     `updated_at` timestamp NULL DEFAULT NULL,
     `deleted_at` timestamp NULL DEFAULT NULL,
-    `user_id` bigint(20) unsigned NULL DEFAULT NULL,
+    `user_id` bigint(20) unsigned NOT NULL,
     PRIMARY KEY (`id`),
-    KEY `prefessional_experiences_user_id_foreign` (`user_id`),
-    CONSTRAINT `prefessional_experiences_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    KEY `portfolio_categories_user_id_foreign` (`user_id`),
+    CONSTRAINT `portfolio_categories_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
