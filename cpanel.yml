@@ -1,0 +1,4 @@
+deployment:
+  task:
+    export DEPLOYPATH=/home/herawaeg/admin.herandro.tech/
+    rsync -a --exclude 'index.php' public/ $DEPLOYPATH
