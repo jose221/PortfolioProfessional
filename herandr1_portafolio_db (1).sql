@@ -652,7 +652,7 @@ CREATE TABLE IF NOT EXISTS `styleguide_patterns` (
 --
 
 
--- Volcando estructura para tabla herandr1_portafolio_db.data_herandro
+-- Volcando estructura para tabla herawaeg_portafolio_db_prod.data_herandro
 CREATE TABLE IF NOT EXISTS `data_herandro` (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `uid` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -667,36 +667,41 @@ CREATE TABLE IF NOT EXISTS `data_herandro` (
     CONSTRAINT `FK_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='tabla de data_herandro';
 
--- Volcando datos para la tabla herandr1_portafolio_db.data_herandro: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla herawaeg_portafolio_db_prod.data_herandro: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `data_herandro` DISABLE KEYS */;
 /*!40000 ALTER TABLE `data_herandro` ENABLE KEYS */;
 
--- Volcando estructura para tabla herandr1_portafolio_db.data_herandro_event
+-- Volcando estructura para tabla herawaeg_portafolio_db_prod.data_herandro_event
 CREATE TABLE IF NOT EXISTS `data_herandro_event` (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
     `description` longtext COLLATE utf8_unicode_ci,
     `user_id` bigint(20) unsigned DEFAULT NULL,
+    `created_at` timestamp NULL DEFAULT NULL,
+    `updated_at` timestamp NULL DEFAULT NULL,
+    `deleted_at` timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `FK_user_id` (`user_id`),
     CONSTRAINT `FK_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='acciones de data_herandro';
 
--- Volcando datos para la tabla herandr1_portafolio_db.data_herandro_event: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla herawaeg_portafolio_db_prod.data_herandro_event: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `data_herandro_event` DISABLE KEYS */;
 /*!40000 ALTER TABLE `data_herandro_event` ENABLE KEYS */;
 
--- Volcando estructura para tabla herandr1_portafolio_db.data_herandro_event_action
+-- Volcando estructura para tabla herawaeg_portafolio_db_prod.data_herandro_event_action
 CREATE TABLE IF NOT EXISTS `data_herandro_event_action` (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
     `value` longtext COLLATE utf8_unicode_ci,
     `data_herandro_event_id` bigint(20) unsigned DEFAULT NULL,
     `user_id` bigint(20) unsigned DEFAULT NULL,
+    `created_at` timestamp NULL DEFAULT NULL,
+    `updated_at` timestamp NULL DEFAULT NULL,
+    `deleted_at` timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `FK_data_herandro_event` (`data_herandro_event_id`),
     KEY `FK_user_id_event` (`user_id`),
     CONSTRAINT `FK_data_herandro_event` FOREIGN KEY (`data_herandro_event_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT `FK_user_id_event` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
