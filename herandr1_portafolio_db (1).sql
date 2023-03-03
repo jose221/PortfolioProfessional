@@ -652,6 +652,7 @@ CREATE TABLE IF NOT EXISTS `styleguide_patterns` (
 --
 
 
+
 -- Volcando estructura para tabla herawaeg_portafolio_db_prod.data_herandro
 CREATE TABLE IF NOT EXISTS `data_herandro` (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -665,10 +666,14 @@ CREATE TABLE IF NOT EXISTS `data_herandro` (
     PRIMARY KEY (`id`),
     KEY `FK_users` (`user_id`),
     CONSTRAINT `FK_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='tabla de data_herandro';
+    ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='tabla de data_herandro';
 
--- Volcando datos para la tabla herawaeg_portafolio_db_prod.data_herandro: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla herawaeg_portafolio_db_prod.data_herandro: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `data_herandro` DISABLE KEYS */;
+INSERT INTO `data_herandro` (`id`, `uid`, `ip`, `domain`, `created_at`, `updated_at`, `deleted_at`, `user_id`) VALUES
+                                                                                                                   (7, '039a00c1-6cfd-4367-8903-e2c44bd6a461', '::1', 'portfolio-design.test', '2023-03-01 23:36:41', '2023-03-01 23:36:41', NULL, 1),
+                                                                                                                   (8, 'b64523b1-9f91-45a8-90f9-49dd9fb8dffb', '::1', 'portfolio-design.test', '2023-03-01 23:37:01', '2023-03-01 23:37:01', NULL, 1),
+                                                                                                                   (9, 'a790e109-ee2b-4b57-a19c-79c1bbf70e55', '::1', 'portfolio-design.test', '2023-03-01 23:39:29', '2023-03-01 23:39:29', NULL, 1);
 /*!40000 ALTER TABLE `data_herandro` ENABLE KEYS */;
 
 -- Volcando estructura para tabla herawaeg_portafolio_db_prod.data_herandro_event
@@ -680,19 +685,24 @@ CREATE TABLE IF NOT EXISTS `data_herandro_event` (
     `created_at` timestamp NULL DEFAULT NULL,
     `updated_at` timestamp NULL DEFAULT NULL,
     `deleted_at` timestamp NULL DEFAULT NULL,
+    `eventCode` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+    `n_repeat` int(11) DEFAULT '1',
     PRIMARY KEY (`id`),
     KEY `FK_user_id` (`user_id`),
     CONSTRAINT `FK_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='acciones de data_herandro';
+    ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='acciones de data_herandro';
 
--- Volcando datos para la tabla herawaeg_portafolio_db_prod.data_herandro_event: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla herawaeg_portafolio_db_prod.data_herandro_event: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `data_herandro_event` DISABLE KEYS */;
+INSERT INTO `data_herandro_event` (`id`, `name`, `description`, `user_id`, `created_at`, `updated_at`, `deleted_at`, `eventCode`, `n_repeat`) VALUES
+
+    (1, 'CLICK_POST_FORM', 'Evento de cambio de lenguaje', 1, '2023-03-03 08:59:31', '2023-03-03 08:59:31', NULL, 'CLICK_POST_FORM', 1);
 /*!40000 ALTER TABLE `data_herandro_event` ENABLE KEYS */;
 
 -- Volcando estructura para tabla herawaeg_portafolio_db_prod.data_herandro_event_action
 CREATE TABLE IF NOT EXISTS `data_herandro_event_action` (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-    `name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+    `label` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
     `value` longtext COLLATE utf8_unicode_ci,
     `data_herandro_event_id` bigint(20) unsigned DEFAULT NULL,
     `user_id` bigint(20) unsigned DEFAULT NULL,
@@ -704,4 +714,13 @@ CREATE TABLE IF NOT EXISTS `data_herandro_event_action` (
     KEY `FK_user_id_event` (`user_id`),
     CONSTRAINT `FK_data_herandro_event` FOREIGN KEY (`data_herandro_event_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT `FK_user_id_event` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+    ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Volcando datos para la tabla herawaeg_portafolio_db_prod.data_herandro_event_action: ~2 rows (aproximadamente)
+/*!40000 ALTER TABLE `data_herandro_event_action` DISABLE KEYS */;
+INSERT INTO `data_herandro_event_action` (`id`, `label`, `value`, `data_herandro_event_id`, `user_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+                                                                                                                                                     (1, NULL, 'es', 1, 1, '2023-03-02 23:26:51', '2023-03-02 23:26:51', NULL),
+                                                                                                                                                     (2, 'cambio lenguaje', 'es', 1, 1, '2023-03-02 23:27:56', '2023-03-02 23:27:56', NULL),
+                                                                                                                                                     (3, 'CLICK_CHANGE_LANGUAGE', 'es', 1, 1, '2023-03-02 23:28:13', '2023-03-02 23:28:13', NULL),
+                                                                                                                                                     (4, 'CLICK_CHANGE_LANGUAGE', 'es', 1, 1, '2023-03-03 08:58:18', '2023-03-03 08:58:18', NULL);
+/*!40000 ALTER TABLE `data_herandro_event_action` ENABLE KEYS */;
