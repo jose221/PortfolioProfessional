@@ -13,8 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/{lang}', 'indexController@setLanguage')->name('index.language');
-Route::get('/', 'indexController@index')->name('index');
+//Route::get('/{lang}', 'indexController@setLanguage')->name('index.language');
+//Route::get('/', 'indexController@index')->name('index');
+Route::get('/', function (){
+    return redirect('/admin/login');
+})->name('index');
 
 Route::group(['prefix'=>'admin','namespace'=>'Auth'],function (){
     Route::get('/login','LoginController@showLoginForm')->name('login');

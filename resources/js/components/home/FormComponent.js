@@ -33,7 +33,7 @@ class FormComponent extends RComponent {
     }
     handleSubmit = async (e) =>{
         e.preventDefault();
-        console.log(this.state.form.getRequired())
+        if(this.state.form?.HistoryCurriculumVitae) delete this.state.form?.HistoryCurriculumVitae;
         if(this.state.form.validData()){
             await this.onUpdate(`${primary_url}/${this.props.id}`, this.state.form)
         }
