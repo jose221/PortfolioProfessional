@@ -2,149 +2,132 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+// ✅ Importación de controladores
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\StudiesController;
+use App\Http\Controllers\Admin\ProfessionalExperiencesController;
+use App\Http\Controllers\Admin\PersonalProjectsController;
+use App\Http\Controllers\Admin\MessagesController;
+use App\Http\Controllers\Admin\MyContactsController;
+use App\Http\Controllers\Admin\PortfolioCategoriesController;
+use App\Http\Controllers\Admin\PortfolioController;
+use App\Http\Controllers\Admin\HistoryCurriculumVitaeController;
+use App\Http\Controllers\Admin\KnowledgesController;
+use App\Http\Controllers\Admin\KnowledgesAbilitiesController;
 
-//Route::get('/{lang}', 'indexController@setLanguage')->name('index.language');
-//Route::get('/', 'indexController@index')->name('index');
-Route::get('/', function (){
+Route::get('/', function () {
     return redirect('/admin/login');
 })->name('index');
 
-Route::group(['prefix'=>'admin','namespace'=>'Auth'],function (){
-    Route::get('/login','LoginController@showLoginForm')->name('login');
-    Route::post('/login','LoginController@login')->name('login');
-    Route::post('/logout','LoginController@logout')->name('logout');
-    Route::get('/register','RegisterController@showRegistrationForm')->name('register');
-    Route::get('/home','HomeController@index')->middleware(['auth','api.access.admin'])->name('home');
+// 🧩 Login & Registro
+Route::prefix('admin')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login'])->name('login');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::get('/home', [HomeController::class, 'index'])->middleware(['auth','api.access.admin'])->name('home');
 });
-//Grupo de rutas para el administrador
-//USUARIO
-Route::post('/update','HomeController@update')->middleware(['auth','api.access.admin'])->name('user.update');
-Route::group(['prefix'=>'admin','middleware'=>['auth','api.access.admin']],function(){
-    //users
-    Route::group(['prefix'=>'users','namespace'=>'Admin'],function (){
-        Route::name('users.')->group(function () {
-            Route::get('/', 'UsersController@index')->name('view');
-        });
+
+// 🧩 Usuario
+Route::post('/update', [HomeController::class, 'update'])->middleware(['auth','api.access.admin'])->name('user.update');
+
+// 🧩 Rutas protegidas del administrador
+Route::prefix('admin')->middleware(['auth','api.access.admin'])->group(function () {
+
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/', [UsersController::class, 'index'])->name('view');
     });
-    //estudios
-    Route::group(['prefix'=>'studies','namespace'=>'Admin'],function (){
-        Route::name('studies.')->group(function (){
-            Route::get('/', 'studiesController@index')->name('view');
-            Route::get('/edit/{id}', 'studiesController@edit')->name('edit');
-            Route::post('/update/{id}', 'studiesController@update')->name('update');
-            Route::get('/create', 'studiesController@create')->name('create');
-            Route::post('/store', 'studiesController@store')->name('store');
-            Route::delete('/delete/{id}', 'studiesController@destroy')->name('delete');
-        });
+
+    Route::prefix('studies')->name('studies.')->group(function () {
+        Route::get('/', [StudiesController::class, 'index'])->name('view');
+        Route::get('/edit/{id}', [StudiesController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [StudiesController::class, 'update'])->name('update');
+        Route::get('/create', [StudiesController::class, 'create'])->name('create');
+        Route::post('/store', [StudiesController::class, 'store'])->name('store');
+        Route::delete('/delete/{id}', [StudiesController::class, 'destroy'])->name('delete');
     });
-    //experiencia profesional
-    Route::group(['prefix'=>'experience/professional','namespace'=>'Admin'],function (){
-        Route::name('experience.professional.')->group(function (){
-            Route::get('/','professionalExperiencesController@index')->name('view');
-            Route::get('/edit/{id}','professionalExperiencesController@edit')->name('edit');
-            Route::get('/create','professionalExperiencesController@create')->name('create');
-            Route::post('/update/{id}', 'professionalExperiencesController@update')->name('update');
-            Route::post('/store', 'professionalExperiencesController@store')->name('store');
-            Route::delete('/delete/{id}', 'professionalExperiencesController@destroy')->name('delete');
-        });
+
+    Route::prefix('experience/professional')->name('experience.professional.')->group(function () {
+        Route::get('/', [ProfessionalExperiencesController::class, 'index'])->name('view');
+        Route::get('/edit/{id}', [ProfessionalExperiencesController::class, 'edit'])->name('edit');
+        Route::get('/create', [ProfessionalExperiencesController::class, 'create'])->name('create');
+        Route::post('/update/{id}', [ProfessionalExperiencesController::class, 'update'])->name('update');
+        Route::post('/store', [ProfessionalExperiencesController::class, 'store'])->name('store');
+        Route::delete('/delete/{id}', [ProfessionalExperiencesController::class, 'destroy'])->name('delete');
     });
-    //proyectos personales
-    Route::group(['prefix'=>'personal/project','namespace'=>'Admin'],function (){
-       Route::name('project.personal.')->group(function (){
-            Route::get('/','personalProjectsController@index')->name('view');
-            Route::get('/edit/{id}','personalProjectsController@edit')->name('edit');
-            Route::get('/create','personalProjectsController@create')->name('create');
-           Route::post('/update/{id}', 'personalProjectsController@update')->name('update');
-           Route::post('/store', 'personalProjectsController@store')->name('store');
-           Route::delete('/delete/{id}', 'personalProjectsController@destroy')->name('delete');
-        });
+
+    Route::prefix('personal/project')->name('project.personal.')->group(function () {
+        Route::get('/', [PersonalProjectsController::class, 'index'])->name('view');
+        Route::get('/edit/{id}', [PersonalProjectsController::class, 'edit'])->name('edit');
+        Route::get('/create', [PersonalProjectsController::class, 'create'])->name('create');
+        Route::post('/update/{id}', [PersonalProjectsController::class, 'update'])->name('update');
+        Route::post('/store', [PersonalProjectsController::class, 'store'])->name('store');
+        Route::delete('/delete/{id}', [PersonalProjectsController::class, 'destroy'])->name('delete');
     });
-    //mensajes
-    Route::group(['prefix'=>'message','namespace'=>'Admin'],function (){
-        Route::name('messages.')->group(function (){
-            Route::get('/','messagesController@index')->name('view');
-            Route::post('viewed/{id}','messagesController@updateStatusViewed')->name('viewed');
-            Route::delete('delete/{id}','messagesController@destroy')->name('delete');
-        });
+
+    Route::prefix('message')->name('messages.')->group(function () {
+        Route::get('/', [MessagesController::class, 'index'])->name('view');
+        Route::post('viewed/{id}', [MessagesController::class, 'updateStatusViewed'])->name('viewed');
+        Route::delete('delete/{id}', [MessagesController::class, 'destroy'])->name('delete');
     });
-    //mis contactos
-    Route::group(['prefix'=>'contacts','namespace'=>'Admin'],function (){
-        Route::name('contacts.')->group(function (){
-            Route::get('/','myContactsController@index')->name('view');
-            Route::post('contacts/store', 'myContactsController@store')->name('store');
-            Route::get('/edit/{id}','myContactsController@edit')->name('edit');
-            Route::get('/create','myContactsController@create')->name('create');
-            Route::post('/update/{id}', 'myContactsController@update')->name('update');
-            Route::delete('/delete/{id}', 'myContactsController@destroy')->name('delete');
+
+    Route::prefix('contacts')->name('contacts.')->group(function () {
+        Route::get('/', [MyContactsController::class, 'index'])->name('view');
+        Route::post('contacts/store', [MyContactsController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [MyContactsController::class, 'edit'])->name('edit');
+        Route::get('/create', [MyContactsController::class, 'create'])->name('create');
+        Route::post('/update/{id}', [MyContactsController::class, 'update'])->name('update');
+        Route::delete('/delete/{id}', [MyContactsController::class, 'destroy'])->name('delete');
+    });
+
+    Route::prefix('portfolio-categories')->name('portfolio-categories.')->group(function () {
+        Route::get('/', [PortfolioCategoriesController::class, 'index'])->name('view');
+        Route::post('contacts/store', [PortfolioCategoriesController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [PortfolioCategoriesController::class, 'edit'])->name('edit');
+        Route::get('/create', [PortfolioCategoriesController::class, 'create'])->name('create');
+        Route::post('/update/{id}', [PortfolioCategoriesController::class, 'update'])->name('update');
+        Route::delete('/delete/{id}', [PortfolioCategoriesController::class, 'destroy'])->name('delete');
+
+        Route::prefix('portfolio')->name('portfolio.')->group(function () {
+            Route::get('/{id}', [PortfolioController::class, 'index'])->name('view');
+            Route::post('/update/{id}', [PortfolioController::class, 'update'])->name('update');
+            Route::post('/store/{id}', [PortfolioController::class, 'store'])->name('store');
+            Route::delete('/delete/{id}', [PortfolioController::class, 'destroy'])->name('delete');
         });
     });
 
-    //mi categoria de porfatolios
-    Route::group(['prefix'=>'portfolio-categories','namespace'=>'Admin'],function (){
-        Route::name('portfolio-categories.')->group(function (){
-            Route::get('/','portfolioCategoriesController@index')->name('view');
-            Route::post('contacts/store', 'portfolioCategoriesController@store')->name('store');
-            Route::get('/edit/{id}','portfolioCategoriesController@edit')->name('edit');
-            Route::get('/create','portfolioCategoriesController@create')->name('create');
-            Route::post('/update/{id}', 'portfolioCategoriesController@update')->name('update');
-            Route::delete('/delete/{id}', 'portfolioCategoriesController@destroy')->name('delete');
-        });
-        Route::group(['prefix'=>'portfolio'],function (){
-            Route::name('portfolio-categories.portfolio.')->group(function () {
-                Route::get('/{id}','portfolioController@index')->name('view');
-                Route::post('/update/{id}', 'portfolioController@update')->name('update');
-                Route::post('/store/{id}', 'portfolioController@store')->name('store');
-                Route::delete('/delete/{id}', 'portfolioController@destroy')->name('delete');
-            });
+    Route::prefix('vitae')->name('users.vitae.')->group(function () {
+        Route::get('/', [HistoryCurriculumVitaeController::class, 'index'])->name('view');
+        Route::post('/update/{id}', [HistoryCurriculumVitaeController::class, 'update'])->name('update');
+        Route::post('/selected/{id}', [HistoryCurriculumVitaeController::class, 'selected'])->name('selected');
+        Route::post('/store', [HistoryCurriculumVitaeController::class, 'store'])->name('store');
+        Route::delete('/delete/{id}', [HistoryCurriculumVitaeController::class, 'destroy'])->name('delete');
+    });
+
+    Route::prefix('knowledges')->name('knowledges.')->group(function () {
+        Route::get('/', [KnowledgesController::class, 'index'])->name('view');
+        Route::get('/edit/{id}', [KnowledgesController::class, 'edit'])->name('edit');
+        Route::get('/show/{id}', [KnowledgesController::class, 'show'])->name('show');
+        Route::get('/create', [KnowledgesController::class, 'create'])->name('create');
+        Route::post('/update/{id}', [KnowledgesController::class, 'update'])->name('update');
+        Route::post('/store', [KnowledgesController::class, 'store'])->name('store');
+        Route::delete('/delete/{id}', [KnowledgesController::class, 'destroy'])->name('delete');
+
+        Route::prefix('abilities')->name('abilities.')->group(function () {
+            Route::get('/edit/{id}', [KnowledgesAbilitiesController::class, 'edit'])->name('edit');
+            Route::get('/create/{id}', [KnowledgesAbilitiesController::class, 'create'])->name('create');
+            Route::post('/update/{id}', [KnowledgesAbilitiesController::class, 'update'])->name('update');
+            Route::post('/store/{id}', [KnowledgesAbilitiesController::class, 'store'])->name('store');
+            Route::delete('/delete/{id}', [KnowledgesAbilitiesController::class, 'destroy'])->name('delete');
         });
     });
-    Route::group(['prefix'=>'vitae', 'namespace'=>'Admin'],function (){
-        Route::name('users.vitae.')->group(function () {
-            Route::get('/','historyCurriculumVitaeController@index')->name('view');
-            Route::post('/update/{id}', 'historyCurriculumVitaeController@update')->name('update');
-            Route::post('/selected/{id}', 'historyCurriculumVitaeController@selected')->name('selected');
-            Route::post('/store', 'historyCurriculumVitaeController@store')->name('store');
-            Route::delete('/delete/{id}', 'historyCurriculumVitaeController@destroy')->name('delete');
-        });
-    });
-    //mis conocimientos
-    Route::group(['prefix'=>'knowledges','namespace'=>'Admin'],function (){
-        Route::name('knowledges.')->group(function (){
-            Route::get('/','knowLedgesController@index')->name('view');
-            Route::get('/edit/{id}','knowLedgesController@edit')->name('edit');
-            Route::get('/show/{id}','knowLedgesController@show')->name('show');
-            Route::get('/create','knowLedgesController@create')->name('create');
-            Route::post('/update/{id}', 'knowLedgesController@update')->name('update');
-            Route::post('/store', 'knowLedgesController@store')->name('store');
-            Route::delete('/delete/{id}', 'knowLedgesController@destroy')->name('delete');
-        });
-        Route::group(['prefix'=>'abilities'],function (){
-            Route::name('knowledges.abilities.')->group(function (){
-                Route::get('/edit/{id}','knowLedgesAbilitiesController@edit')->name('edit');
-                Route::get('/create/{id}','knowLedgesAbilitiesController@create')->name('create');
-                Route::post('/update/{id}', 'knowLedgesAbilitiesController@update')->name('update');
-                Route::post('/store/{id}', 'knowLedgesAbilitiesController@store')->name('store');
-                Route::delete('/delete/{id}', 'knowLedgesAbilitiesController@destroy')->name('delete');
-            });
-        });
-    });
-});
-Route::group(['namespace'=>'Admin'],function (){
-    Route::post('message/send','messagesController@send')->name('messages.send');
 });
 
-Route::get('admin/home', 'HomeController@index')->name('home');
-/**Route::get('/uploads/cv/{id}', function ($id) {
-    $data = \App\Models\HistoryCurriculumVitae::find($id);
-    return Storage::url($data->path);
-});**/
+// Ruta externa para enviar mensaje
+Route::post('message/send', [MessagesController::class, 'send'])->name('messages.send');
+
+// Redirección si se accede directamente a /admin/home
+Route::get('admin/home', [HomeController::class, 'index'])->name('home');
