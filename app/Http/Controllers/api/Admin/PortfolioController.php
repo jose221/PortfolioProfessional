@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\api\admin;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Knowledge;
+use App\Models\Portfolio;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
-class KnowLedgesController extends Controller
+class PortfolioController extends Controller
 {
     public function index($id){
         try{
-            $items = Knowledge::where('user_id', $id)->get();
+            $items = Portfolio::where('portfolio_categories_id', $id)->get();
             return response()->json([
                 'message'=>'Datos encontrados',
                 'code'=>200,
@@ -30,7 +29,7 @@ class KnowLedgesController extends Controller
     }
     public function find($id){
         try {
-            $item = Knowledge::find($id);
+            $item = Portfolio::find($id);
             return response()->json([
                 'message'=>'Datos encontrados',
                 'code'=>200,
@@ -49,9 +48,8 @@ class KnowLedgesController extends Controller
     }
     public function edit($id, Request $request){
         try {
-            $item = Knowledge::find($id);
+            $item = Portfolio::find($id);
             $params = $request->all();
-            $params['icon_path'] = $this->uploadImage($request->icon_path, $request->file('icon_path'), $item->icon_path);
             $item->update($params);
             return response()->json([
                 'message'=>'Se ha actualizado correctamente',
@@ -72,8 +70,7 @@ class KnowLedgesController extends Controller
     public function create(Request $request){
         try {
             $params = $request->all();
-            $params['icon_path'] = $this->uploadImage($request->icon_path, $request->file('icon_path'));
-            $item = Knowledge::create($params);
+            $item = Portfolio::create($params);
             return response()->json([
                 'message'=>'Se ha creado correctamente',
                 'code'=>200,
@@ -92,7 +89,7 @@ class KnowLedgesController extends Controller
     }
     public function delete(Request $request){
         try {
-            Knowledge::destroy(json_decode($request->ids));
+            Portfolio::destroy(json_decode($request->ids));
             return response()->json([
                 'message'=>'Se ha actualizado correctamente',
                 'code'=>200,
@@ -108,20 +105,5 @@ class KnowLedgesController extends Controller
                 'response'=>'error'
             ]);
         }
-    }
-    private function uploadImage($image, $file="", $model = null){
-        if(isset($image)&&!empty($image)){
-            if($image != $model)
-            {
-                if(!empty($model)) {
-                    $path = explode("/", $model);
-                    Storage::delete("public/{$path[2]}");
-                }
-
-
-                return Storage::url($file->store('public'));
-            }
-        }
-        return $image;
     }
 }

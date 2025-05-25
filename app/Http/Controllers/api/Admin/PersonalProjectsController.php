@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\api\admin;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Study;
+use App\Models\personalProject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class StudiesController extends Controller
+class PersonalProjectsController extends Controller
 {
     public function index($id){
         try{
-            $items = Study::where('user_id', $id)->get();
+            $items = personalProject::where('user_id', $id)->get();
             return response()->json([
                 'message'=>'Datos encontrados',
                 'code'=>200,
@@ -30,7 +30,7 @@ class StudiesController extends Controller
     }
     public function find($id){
         try {
-            $item = Study::find($id);
+            $item = personalProject::find($id);
             return response()->json([
                 'message'=>'Datos encontrados',
                 'code'=>200,
@@ -49,8 +49,9 @@ class StudiesController extends Controller
     }
     public function edit($id, Request $request){
         try {
-            $item = Study::find($id);
+            $item = personalProject::find($id);
             $params = $request->all();
+            $params['image_path'] = $this->uploadImage($request->image_path, $request->file('image_path'), $item->image_path);
             $item->update($params);
             return response()->json([
                 'message'=>'Se ha actualizado correctamente',
@@ -72,7 +73,8 @@ class StudiesController extends Controller
     public function create(Request $request){
         try {
             $params = $request->all();
-            $item = Study::create($params);
+            $params['image_path'] = $this->uploadImage($request->image_path, $request->file('image_path'));
+            $item = personalProject::create($params);
             return response()->json([
                 'message'=>'Se ha creado correctamente',
                 'code'=>200,
@@ -91,7 +93,7 @@ class StudiesController extends Controller
     }
     public function delete(Request $request){
         try {
-            Study::destroy(json_decode($request->ids));
+            personalProject::destroy(json_decode($request->ids));
             return response()->json([
                 'message'=>'Se ha actualizado correctamente',
                 'code'=>200,
