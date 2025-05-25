@@ -15,7 +15,7 @@ use App\Http\Controllers\Admin\MyContactsController;
 use App\Http\Controllers\Admin\PortfolioCategoriesController;
 use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Admin\HistoryCurriculumVitaeController;
-use App\Http\Controllers\Admin\KnowledgesController;
+use App\Http\Controllers\Admin\KnowLedgesController;
 use App\Http\Controllers\Admin\KnowledgesAbilitiesController;
 
 Route::get('/', function () {
@@ -108,13 +108,13 @@ Route::prefix('admin')->middleware(['auth','api.access.admin'])->group(function 
     });
 
     Route::prefix('knowledges')->name('knowledges.')->group(function () {
-        Route::get('/', [KnowledgesController::class, 'index'])->name('view');
-        Route::get('/edit/{id}', [KnowledgesController::class, 'edit'])->name('edit');
-        Route::get('/show/{id}', [KnowledgesController::class, 'show'])->name('show');
-        Route::get('/create', [KnowledgesController::class, 'create'])->name('create');
-        Route::post('/update/{id}', [KnowledgesController::class, 'update'])->name('update');
-        Route::post('/store', [KnowledgesController::class, 'store'])->name('store');
-        Route::delete('/delete/{id}', [KnowledgesController::class, 'destroy'])->name('delete');
+        Route::get('/', [KnowLedgesController::class, 'index'])->name('view');
+        Route::get('/edit/{id}', [KnowLedgesController::class, 'edit'])->name('edit');
+        Route::get('/show/{id}', [KnowLedgesController::class, 'show'])->name('show');
+        Route::get('/create', [KnowLedgesController::class, 'create'])->name('create');
+        Route::post('/update/{id}', [KnowLedgesController::class, 'update'])->name('update');
+        Route::post('/store', [KnowLedgesController::class, 'store'])->name('store');
+        Route::delete('/delete/{id}', [KnowLedgesController::class, 'destroy'])->name('delete');
 
         Route::prefix('abilities')->name('abilities.')->group(function () {
             Route::get('/edit/{id}', [KnowledgesAbilitiesController::class, 'edit'])->name('edit');
