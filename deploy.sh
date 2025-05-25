@@ -28,6 +28,7 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
+
 # 4. Copiar public/
 echo "📂 Copiando public/ a public_html/..."
 cp -r "$PROJECT_DIR/public/"* "$PUBLIC_HTML/"
