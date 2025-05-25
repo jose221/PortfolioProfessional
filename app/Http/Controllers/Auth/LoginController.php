@@ -10,7 +10,6 @@ use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
@@ -67,22 +66,10 @@ class LoginController extends Controller
     {
         $this->validateLogin($request);
 
-        $user = $this->loginApi($request);
-        //return response()->json($user);
-        if(isset($user->token)){
-            $request->session()->put('auth-token', $user->token);
-
-            unset($user->token);
-        }
-
-
-        // If the class is using the ThrottlesLogins trait, we can automatically throttle
-        // the login attempts for this application. We'll key this by the username and
-        // the IP address of the client making these requests into this application.
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle...
         if (method_exists($this, 'hasTooManyLoginAttempts') &&
             $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
-
             return $this->sendLockoutResponse($request);
         }
 
@@ -90,15 +77,10 @@ class LoginController extends Controller
             if ($request->hasSession()) {
                 $request->session()->put('auth.password_confirmed_at', time());
             }
-
             return $this->sendLoginResponse($request);
         }
 
-        // If the login attempt was unsuccessful we will increment the number of attempts
-        // to login and redirect the user back to the login form. Of course, when this
-        // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
-
         return $this->sendFailedLoginResponse($request);
     }
 
@@ -217,11 +199,10 @@ class LoginController extends Controller
         if ($response = $this->loggedOut($request)) {
             return $response;
         }
-        $token = $request->session()->get('auth-token');
-        $this->logoutApi($token);
+
         return $request->wantsJson()
             ? new JsonResponse([], 204)
-            : redirect('/');
+            : redirect()->route('login');
     }
 
     /**
@@ -243,22 +224,5 @@ class LoginController extends Controller
     protected function guard()
     {
         return Auth::guard();
-    }
-    protected function loginApi(Request $request){
-        $URL = env('API_HOST', 'http://localhost:8080');
-        $client = Http::withoutVerifying()->post($URL."/api/admin/login", [
-            'email' => $request->email,
-            'password' => $request->password,
-        ]);
-        $response = json_decode($client->body());
-        return (isset($response->data)) ? $response->data : [];
-    }
-    protected function logoutApi($token){
-        $URL = env('API_HOST', 'http://localhost:8080');
-        $client = Http::withoutVerifying()->withHeaders([
-            'auth-token' => $token
-        ])->post($URL."/api/admin/logout");
-        $response = json_decode($client->body());
-        return (isset($response->data)) ? $response->data : [];
     }
 }
