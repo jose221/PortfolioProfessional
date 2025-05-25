@@ -2,17 +2,17 @@
 
 echo "🚀 Despliegue Laravel producción iniciado..."
 
-# Variables
-LARAVEL_DIR="$HOME/PortfolioProfessional/laravel"
+# Ajustado para estructura sin subcarpeta laravel/
+PROJECT_DIR="$HOME/PortfolioProfessional"
 PUBLIC_HTML="$HOME/public_html"
-ENV_FILE="$LARAVEL_DIR/.env"
+ENV_FILE="$PROJECT_DIR/.env"
 
-# 1. Instalar dependencias sin paquetes de desarrollo
+# 1. Composer install
 echo "📦 Ejecutando composer install..."
-cd "$LARAVEL_DIR"
+cd "$PROJECT_DIR"
 composer install --no-dev --optimize-autoloader
 
-# 2. Modificar APP_URL y API_HOST en el archivo .env
+# 2. Modificar .env
 echo "🔧 Actualizando APP_URL y API_HOST en .env..."
 sed -i.bak "s|^APP_URL=.*|APP_URL=http://162.0.215.50|g" "$ENV_FILE"
 if grep -q "^API_HOST=" "$ENV_FILE"; then
@@ -21,33 +21,31 @@ else
     echo "API_HOST=http://162.0.215.50" >> "$ENV_FILE"
 fi
 
-# 3. Generar cachés de Laravel
-echo "🧠 Ejecutando cache de configuración y rutas..."
+# 3. Cache
+echo "🧠 Cacheando configuración Laravel..."
 php artisan config:clear
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# 4. Copiar archivos públicos
-echo "📂 Copiando archivos de public/ a public_html/..."
-cp -r "$LARAVEL_DIR/public/"* "$PUBLIC_HTML/"
+# 4. Copiar public/
+echo "📂 Copiando public/ a public_html/..."
+cp -r "$PROJECT_DIR/public/"* "$PUBLIC_HTML/"
 
-# 5. Crear symlink para storage
-echo "🔗 Creando symlink storage..."
+# 5. Crear symlink
+echo "🔗 Enlazando storage/"
 rm -rf "$PUBLIC_HTML/storage"
-ln -s ../PortfolioProfessional/laravel/storage/app/public "$PUBLIC_HTML/storage"
+ln -s ../PortfolioProfessional/storage/app/public "$PUBLIC_HTML/storage"
 
-# 6. Modificar rutas de index.php
-echo "🛠 Modificando index.php en public_html..."
+# 6. Modificar index.php
+echo "🛠 Corrigiendo rutas en index.php..."
 INDEX="$PUBLIC_HTML/index.php"
-sed -i.bak "s|__DIR__.'/../vendor|__DIR__.'/../PortfolioProfessional/laravel/vendor|g" "$INDEX"
-sed -i.bak "s|__DIR__.'/../bootstrap|__DIR__.'/../PortfolioProfessional/laravel/bootstrap|g" "$INDEX"
+sed -i.bak "s|__DIR__.'/../vendor|__DIR__.'/../PortfolioProfessional/vendor|g" "$INDEX"
+sed -i.bak "s|__DIR__.'/../bootstrap|__DIR__.'/../PortfolioProfessional/bootstrap|g" "$INDEX"
 
-# 7. Asignar permisos necesarios
+# 7. Permisos
 echo "🔒 Ajustando permisos..."
-chmod -R 755 "$LARAVEL_DIR/storage"
-chmod -R 755 "$LARAVEL_DIR/bootstrap/cache"
+chmod -R 755 "$PROJECT_DIR/storage"
+chmod -R 755 "$PROJECT_DIR/bootstrap/cache"
 
-echo ""
-echo "✅ ¡Despliegue completado exitosamente!"
-echo "🌐 Ahora puedes acceder a: http://162.0.215.50"
+echo "✅ ¡Despliegue completado correctamente!"
