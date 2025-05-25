@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PortfolioCategory;
 use Illuminate\Http\Request;
 
-class portfolioCategoriesController extends Controller
+class PortfolioCategoriesController extends Controller
 {
     /**
      * Display a listing of the resource.

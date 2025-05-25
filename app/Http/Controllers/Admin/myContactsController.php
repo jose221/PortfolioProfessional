@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class myContactsController extends Controller
+class MyContactsController extends Controller
 {
     public function index(){
         try{

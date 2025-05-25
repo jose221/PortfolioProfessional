@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class historyCurriculumVitaeController extends Controller
+class HistoryCurriculumVitaeController extends Controller
 {
     /**
      * Display a listing of the resource.
