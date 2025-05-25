@@ -2,9 +2,9 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <script>
-        window.token = "{{session('auth-token')}}";
-        window.url_api = "{{env('API_HOST', 'http://localhost:8080')."/api"}}" || "http://localhost:8080/api";
-        window.url_image = "{{env('API_HOST', 'http://localhost:8080')}}" || "http://localhost:8080";
+        window.token = @json(session('auth-token'));
+        window.url_api = @json(config('services.api.url') . '/api');
+        window.url_image = @json(config('services.api.url'));
     </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
