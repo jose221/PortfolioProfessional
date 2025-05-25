@@ -4,7 +4,7 @@ echo "🚀 Despliegue Laravel producción iniciado..."
 
 # Ajustado para estructura sin subcarpeta laravel/
 PROJECT_DIR="$HOME/PortfolioProfessional"
-PUBLIC_HTML="$HOME/public_html"
+PUBLIC_HTML="$HOME/herandro.lat"
 ENV_FILE="$PROJECT_DIR/.env"
 
 # 1. Composer install
@@ -30,7 +30,7 @@ php artisan view:cache
 
 
 # 4. Copiar public/
-echo "📂 Copiando public/ a public_html/..."
+echo "📂 Copiando public/ a herandro.lat/..."
 cp -r "$PROJECT_DIR/public/"* "$PUBLIC_HTML/"
 
 # 5. Crear symlink
