@@ -14,11 +14,11 @@
 
     # 2. Modificar .env
     echo "🔧 Actualizando APP_URL y API_HOST en .env..."
-    sed -i.bak "s|^APP_URL=.*|APP_URL=http://162.0.215.50|g" "$ENV_FILE"
+    sed -i.bak "s|^APP_URL=.*|APP_URL=http://www.herandro.lat|g" "$ENV_FILE"
     if grep -q "^API_HOST=" "$ENV_FILE"; then
-        sed -i.bak "s|^API_HOST=.*|API_HOST=http://162.0.215.50|g" "$ENV_FILE"
+        sed -i.bak "s|^API_HOST=.*|API_HOST=http://www.herandro.lat|g" "$ENV_FILE"
     else
-        echo "API_HOST=http://162.0.215.50" >> "$ENV_FILE"
+        echo "API_HOST=http://www.herandro.lat" >> "$ENV_FILE"
     fi
 
     # 3. Cache
