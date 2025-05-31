@@ -245,7 +245,7 @@ class LoginController extends Controller
         return Auth::guard();
     }
     protected function loginApi(Request $request){
-        $URL = env('API_HOST', 'http://localhost:8080');
+        $URL = config('services.api.url', 'http://localhost:8080');
         $client = Http::withoutVerifying()->post($URL."/api/admin/login", [
             'email' => $request->email,
             'password' => $request->password,
@@ -254,7 +254,7 @@ class LoginController extends Controller
         return (isset($response->data)) ? $response->data : [];
     }
     protected function logoutApi($token){
-        $URL = env('API_HOST', 'http://localhost:8080');
+        $URL = config('services.api.url', 'http://localhost:8080');
         $client = Http::withoutVerifying()->withHeaders([
             'auth-token' => $token
         ])->post($URL."/api/admin/logout");
