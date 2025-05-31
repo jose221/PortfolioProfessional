@@ -32,5 +32,8 @@ return [
     'api' => [
         'url' => env('API_HOST', 'http://localhost:8080'),
     ],
+    'storage' => [
+        'url' => env('STORAGE_HOST', 'http://localhost:8080'),
+    ],
 
 ];

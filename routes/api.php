@@ -44,7 +44,7 @@ Route::prefix('admin')->group(function () {
     // 👤 User
     Route::get('/user', [UserController::class, 'index']);
     Route::get('/user/{id}', [UserController::class, 'find']);
-    Route::post('/user/{id}', [UserController::class, 'update']);
+    Route::put('/user/{id}', [UserController::class, 'update']);
 
     // 📇 Contacts
     Route::prefix('contacts')->group(function () {

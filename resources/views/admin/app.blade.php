@@ -4,7 +4,7 @@
     <script>
         window.token = @json(session('auth-token'));
         window.url_api = @json(config('services.api.url') . '/api');
-        window.url_image = @json(config('services.api.url'));
+        window.url_image = @json(config('services.storage.url'));
     </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
