@@ -23,14 +23,6 @@ chmod +x "$SCRIPT_NAME"
 echo "📦 Ejecutando composer install..."
 composer install --no-dev --optimize-autoloader
 
-# 2. Modificar .env
-echo "🔧 Actualizando APP_URL y API_HOST en .env..."
-sed -i.bak "s|^APP_URL=.*|APP_URL=https://www.herandro.lat|g" "$ENV_FILE"
-if grep -q "^API_HOST=" "$ENV_FILE"; then
-    sed -i.bak "s|^API_HOST=.*|API_HOST=https://api.herandro.lat|g" "$ENV_FILE"
-else
-    echo "API_HOST=https://api.herandro.lat" >> "$ENV_FILE"
-fi
 
 # 3. Cache de configuración
 echo "🧠 Cacheando configuración Laravel..."
