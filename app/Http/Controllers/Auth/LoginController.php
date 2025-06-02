@@ -72,13 +72,13 @@ class LoginController extends Controller
         $user = (isset($response->data)) ? $response->data : [];
         //return response()->json($user);
         if(isset($response->data->token)){
-            session(['auth-token' => $user->token]);
+            session(['auth-token' => $response->data->token]);
 
             unset($user->token);
         }
-        if ($user->code != 200) {
+        if ($response->code != 200) {
             return back()->withInput()->withErrors([
-                'email' => $user->message,
+                'email' => $response->message,
             ]);
         }
 
