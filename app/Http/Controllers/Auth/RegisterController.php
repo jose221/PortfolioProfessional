@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Providers\PortfolioApiProvider;
 use App\Providers\RouteServiceProvider;
 use App\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,6 +27,7 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
+    use PortfolioApiProvider;
 
     /**
      * Where to redirect users after registration.
@@ -64,12 +69,36 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $item = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'header_image_path'=>'https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg',
             'my_perfil'=>'https://www.ecured.cu/images/2/27/SILUETA_PERSONA.jpg'
         ]);
+
+        return $item;
+    }
+
+    protected function registerUser(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+
+        $response = $this->loginApi($request);
+        if(isset($response->data->token)){
+            $request->session()->put('auth-token', $response->data->token);
+        }
+        unset($user->token);
+
+        if ($response = $this->registered($request, $user)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new JsonResponse([], 201)
+            : redirect($this->redirectPath());
     }
 }

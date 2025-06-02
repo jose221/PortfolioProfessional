@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ApiAccessMiddleware;
 use Illuminate\Support\Facades\Route;
 
 // ✅ Importación de controladores
@@ -28,16 +29,15 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', [LoginController::class, 'login'])->name('login');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [RegisterController::class, 'register'])->name('register');
-    Route::get('/home', [HomeController::class, 'index'])->middleware(['auth','api.access.admin'])->name('home');
+    Route::post('/register', [RegisterController::class, 'registerUser'])->name('register');
 });
 
 // 🧩 Usuario
-Route::post('/update', [HomeController::class, 'update'])->middleware(['auth','api.access.admin'])->name('user.update');
+Route::post('/update', [HomeController::class, 'update'])->middleware([ApiAccessMiddleware::class])->name('user.update');
 
 // 🧩 Rutas protegidas del administrador
-Route::prefix('admin')->middleware(['auth','api.access.admin'])->group(function () {
-
+Route::prefix('admin')->middleware(['web', ApiAccessMiddleware::class])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('/', [UsersController::class, 'index'])->name('view');
     });

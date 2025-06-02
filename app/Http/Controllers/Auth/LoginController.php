@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
+use App\Providers\PortfolioApiProvider;
 
 class LoginController extends Controller
 {
@@ -25,7 +26,7 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
-
+    use PortfolioApiProvider;
 
     /**
      * Where to redirect users after login.
@@ -67,12 +68,18 @@ class LoginController extends Controller
     {
         $this->validateLogin($request);
 
-        $user = $this->loginApi($request);
+        $response = $this->loginApi($request);
+        $user = (isset($response->data)) ? $response->data : [];
         //return response()->json($user);
-        if(isset($user->token)){
-            $request->session()->put('auth-token', $user->token);
+        if(isset($response->data->token)){
+            session(['auth-token' => $user->token]);
 
             unset($user->token);
+        }
+        if ($user->code != 200) {
+            return back()->withInput()->withErrors([
+                'email' => $user->message,
+            ]);
         }
 
 
@@ -243,22 +250,5 @@ class LoginController extends Controller
     protected function guard()
     {
         return Auth::guard();
-    }
-    protected function loginApi(Request $request){
-        $URL = config('services.api.url', 'http://localhost:8080');
-        $client = Http::withoutVerifying()->post($URL."/api/admin/login", [
-            'email' => $request->email,
-            'password' => $request->password,
-        ]);
-        $response = json_decode($client->body());
-        return (isset($response->data)) ? $response->data : [];
-    }
-    protected function logoutApi($token){
-        $URL = config('services.api.url', 'http://localhost:8080');
-        $client = Http::withoutVerifying()->withHeaders([
-            'auth-token' => $token
-        ])->post($URL."/api/admin/logout");
-        $response = json_decode($client->body());
-        return (isset($response->data)) ? $response->data : [];
     }
 }
