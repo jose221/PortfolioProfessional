@@ -28,6 +28,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', [LoginController::class, 'login'])->name('login');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register'])->name('register');
     Route::get('/home', [HomeController::class, 'index'])->middleware(['auth','api.access.admin'])->name('home');
 });
 
