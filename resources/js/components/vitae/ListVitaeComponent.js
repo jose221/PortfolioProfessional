@@ -40,12 +40,15 @@ class ListVitaeComponent extends RComponent{
         this.state.data = res;
         this.dispatchStore(this.state)
     }
-    onSelectionModelChange = (params)=>{
+    onRowSelectionModelChange = (params)=>{
         this.state.ids = params;
         this.dispatchStore(this.state)
     }
-    onCellEditCommit = (params)=>{
-        if(params.value != "") this.handleEdit(`${primary_url}/${params.id}`, params);
+    processRowUpdate = (newRow, oldRow)=>{
+        if(newRow.archive_name !== oldRow.archive_name) {
+            this.handleEdit(`${primary_url}/${newRow.id}`, {id: newRow.id, value: newRow.archive_name, field: 'archive_name'});
+        }
+        return newRow;
     }
     handleDelete = async()=>{
         await this.onDelete(`${primary_url}/delete`, this.state.ids)
@@ -138,11 +141,15 @@ class ListVitaeComponent extends RComponent{
                             <DataGrid
                                 rows={this.state.data}
                                 columns={columns}
-                                pageSize={10}
-                                rowsPerPageOptions={[2]}
+                                initialState={{
+                                    pagination: {
+                                        paginationModel: { pageSize: 10 },
+                                    },
+                                }}
+                                pageSizeOptions={[10]}
                                 checkboxSelection
-                                onCellEditCommit={(params)=>this.onCellEditCommit(params)}
-                                onSelectionModelChange={(params)=> this.onSelectionModelChange(params)}
+                                processRowUpdate={this.processRowUpdate}
+                                onRowSelectionModelChange={this.onRowSelectionModelChange}
                                 onCellClick={(params, e)=> this.onCellClick(params,e)}
                             />
                         </div>

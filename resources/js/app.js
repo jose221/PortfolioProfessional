@@ -13,6 +13,7 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+// Import components - each component is responsible for rendering itself
 require('./components/Example');
 import FormComponent from './components/home/FormComponent';
 import ContactsComponent from './components/contacts/ContactsComponent';

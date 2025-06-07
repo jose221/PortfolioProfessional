@@ -33,13 +33,26 @@ class ListContactsComponent extends RComponent {
         this.dispatchStore(this.state)
         //let data = new User(res);
     }
-    onSelectionModelChange = (params)=>{
+    onRowSelectionModelChange = (params)=>{
         this.state.ids = params;
         this.dispatchStore(this.state)
         //this.setState({openModal : true});
     }
-    onCellEditCommit = (params)=>{
-        if(params.value != "") this.handleEdit(`${primary_url}/${params.id}`, params);
+    processRowUpdate = (newRow, oldRow)=>{
+        const editableFields = ['name_en', 'name_es', 'url_path', 'icon_path'];
+        const changedField = Object.keys(newRow).find(field =>
+            newRow[field] !== oldRow[field] &&
+            editableFields.includes(field)
+        );
+
+        if(changedField && newRow[changedField] !== '') {
+            this.handleEdit(`${primary_url}/${newRow.id}`, {
+                id: newRow.id,
+                value: newRow[changedField],
+                field: changedField
+            });
+        }
+        return newRow;
     }
     handleDelete = async()=>{
         await this.onDelete(`${primary_url}/delete`, this.state.ids)
@@ -99,11 +112,15 @@ class ListContactsComponent extends RComponent {
                             <DataGrid
                                 rows={this.state.data}
                                 columns={columns}
-                                pageSize={5}
-                                rowsPerPageOptions={[4]}
+                                initialState={{
+                                    pagination: {
+                                        paginationModel: { pageSize: 5 },
+                                    },
+                                }}
+                                pageSizeOptions={[5, 10]}
                                 checkboxSelection
-                                onCellEditCommit={(params)=>this.onCellEditCommit(params)}
-                                onSelectionModelChange={(params)=> this.onSelectionModelChange(params)}
+                                processRowUpdate={this.processRowUpdate}
+                                onRowSelectionModelChange={this.onRowSelectionModelChange}
                                 onCellClick={(params, e)=> this.onCellClick(params,e)}
                             />
                         </div>
