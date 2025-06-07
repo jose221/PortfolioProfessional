@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import ReactDOM from 'react-dom';
+import renderComponent from '../../utils/renderComponent';
 import RComponent from "../RComponent";
 //redux
 import TextField from "@mui/material/TextField";
@@ -102,5 +102,5 @@ let name_component = document.querySelector("login-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<LoginComponent {...props} />, name_component);
+    renderComponent(LoginComponent, name_component, props);
 }

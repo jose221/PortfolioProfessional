@@ -167,5 +167,5 @@ let name_component = document.querySelector("form-personal-projects-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<FormPersonalProjectsComponent {...props} />, name_component);
+    renderComponent(FormPersonalProjectsComponent, name_component, props);
 }

@@ -32,7 +32,7 @@ class ListUsersComponent extends RComponent {
         await this.onInit();
     }
     onInit = async ()=>{
-        let res = await this.getItems(`${primary_url}`)
+        let res = await this.getItems(`${primary_url}`,{}, true)
         this.state.data = res;
         this.dispatchStore(this.state)
         //let data = new User(res);
@@ -152,9 +152,9 @@ class ListUsersComponent extends RComponent {
     }
 }
 export default ListUsersComponent;
-let name_component = document.querySelector("list-users-component");
+let name_component = document.querySelector("list-users-omponent");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<ListUsersComponent {...props} />, name_component);
+    renderComponent(ListUsersComponent, name_component, props);
 }

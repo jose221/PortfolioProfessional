@@ -142,5 +142,5 @@ let name_component = document.querySelector("form-knowledges-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<FormKnowLedgesComponent {...props} />, name_component);
+    renderComponent(FormKnowLedgesComponent, name_component, props);
 }

@@ -152,5 +152,5 @@ let name_component = document.querySelector("form-vitae-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<FormVitaeComponent {...props} />, name_component);
+    renderComponent(FormVitaeComponent, name_component, props);
 }

@@ -20,11 +20,11 @@
         "lodash": "^4.17.21",
         "popper.js": "^1.16.1",
         "postcss": "^8.5.4",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0",
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.89.1",
-        "sass-loader": "^13.3.3"
+        "sass-loader": "^16.0.5"
     },
     "dependencies": {
         "@emotion/react": "^11.11.1",
@@ -38,7 +38,7 @@
         "draft-js": "^0.11.7",
         "react-dropzone": "^14.2.3",
         "react-redux": "^9.2.0",
-        "react-trix": "^0.0.1",
+        "react-trix": "^0.10.2",
         "redux": "^5.0.1",
         "styled-components": "^6.1.18",
         "suneditor": "^2.45.1",

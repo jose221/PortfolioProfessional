@@ -125,5 +125,5 @@ let name_component = document.querySelector("create-contacts-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<FormUsersComponent {...props} />, name_component);
+    renderComponent(FormUsersComponent, name_component, props);
 }

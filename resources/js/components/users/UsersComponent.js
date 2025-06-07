@@ -1,10 +1,11 @@
 import React, { Component, useState } from 'react';
-import ReactDOM from 'react-dom';
+import renderComponent from '../../utils/renderComponent';
 import RComponent from "../RComponent";
 //redux
 import { Provider } from "react-redux";
 import store from "../../redux/store/store";
-
+import ListUsersComponent from "./ListUsersComponent";
+import FormUsersComponent from "./FormUsersComponent";
 class UsersComponent extends RComponent {
     constructor(props) {
         super(props);
@@ -14,7 +15,8 @@ class UsersComponent extends RComponent {
         return (
             <Provider store={store}>
                 <div>
-                    <list-users-component data-id={this.props.id} />
+                    <ListUsersComponent data-id={this.props.id} />
+                    <FormUsersComponent data-user_id={this.props.id} />
                 </div>
             </Provider>
         )
@@ -25,5 +27,5 @@ let name_component = document.querySelector("users-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<UsersComponent {...props} />, name_component);
+    renderComponent(UsersComponent, name_component, props);
 }

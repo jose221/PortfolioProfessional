@@ -140,5 +140,5 @@ let name_component = document.querySelector("list-knowledge-ability-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<ListKnowledgeAbilityComponent {...props} />, name_component);
+    renderComponent(ListKnowledgeAbilityComponent, name_component, props);
 }

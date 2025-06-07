@@ -57,5 +57,5 @@ let name_component = document.querySelector("info-knowledge-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<InfoKnowLedgesComponent {...props} />, name_component);
+    renderComponent(InfoKnowLedgesComponent, name_component, props);
 }

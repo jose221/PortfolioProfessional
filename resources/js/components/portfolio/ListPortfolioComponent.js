@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import ReactDOM from 'react-dom';
+import renderComponent from '../../utils/renderComponent';
 import EditIcon from '@mui/icons-material/Edit';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -150,5 +150,5 @@ let name_component = document.querySelector("list-portfolio-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<ListPortfolioComponent {...props} />, name_component);
+    renderComponent(ListPortfolioComponent, name_component, props);
 }

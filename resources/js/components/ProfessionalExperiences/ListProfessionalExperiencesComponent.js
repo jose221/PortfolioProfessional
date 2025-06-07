@@ -3,7 +3,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import React, { Component, useState } from 'react';
-import ReactDOM from 'react-dom';
+import renderComponent from '../../utils/renderComponent';
 import RComponent from "../RComponent";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -131,5 +131,5 @@ let name_component = document.querySelector("list-professional-experiences-compo
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<ListProfessionalExperiencesComponent {...props} />, name_component);
+    renderComponent(ListProfessionalExperiencesComponent, name_component, props);
 }

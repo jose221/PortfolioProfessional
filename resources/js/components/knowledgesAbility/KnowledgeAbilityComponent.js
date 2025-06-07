@@ -1,8 +1,10 @@
 import React, { Component, useState } from 'react';
-import ReactDOM from 'react-dom';
+import renderComponent from '../../utils/renderComponent';
 import RComponent from "../RComponent";
 import {Provider} from "react-redux";
 import store from "../../redux/store/store";
+import ListKnowledgeAbilityComponent from "./ListKnowledgeAbilityComponent";
+import FormKnowledgeAbilityComponent from "./FormKnowledgeAbilityComponent";
 class KnowledgeAbilityComponent extends RComponent{
     constructor(props) {
         super(props);
@@ -12,8 +14,8 @@ class KnowledgeAbilityComponent extends RComponent{
         return (
             <Provider store={store}>
                 <div>
-                    <list-knowledge-ability-component data-id={this.props.id} />
-                    <form-knowledges-ability-component data-id={this.props.id} />
+                    <ListKnowledgeAbilityComponent data-id={this.props.id} />
+                    <FormKnowledgeAbilityComponent data-id={this.props.id} />
                 </div>
             </Provider>
         )
@@ -26,5 +28,5 @@ let name_component = document.querySelector("knowledge-ability-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<KnowledgeAbilityComponent {...props} />, name_component);
+    renderComponent(KnowledgeAbilityComponent, name_component, props);
 }

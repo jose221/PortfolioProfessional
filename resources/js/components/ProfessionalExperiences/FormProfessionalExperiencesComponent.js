@@ -222,5 +222,5 @@ let name_component = document.querySelector("form-professional-experiences-compo
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<FormProfessionalExperiencesComponent {...props} />, name_component);
+    renderComponent(FormProfessionalExperiencesComponent, name_component, props);
 }

@@ -1,9 +1,12 @@
 import React, { Component, useState } from 'react';
-import ReactDOM from 'react-dom';
+import renderComponent from '../../utils/renderComponent';
 import RComponent from "../RComponent";
 //redux
 import { Provider } from "react-redux";
 import store from "../../redux/store/store";
+import ListContactsComponent from "./ListContactComponent";
+import CreateContactsComponent from "./CreateContactsComponent";
+import ListContactComponent from "./ListContactComponent";
 
 class ContactsComponent extends RComponent {
     constructor(props) {
@@ -14,8 +17,8 @@ class ContactsComponent extends RComponent {
         return (
             <Provider store={store}>
                 <div>
-                    <list-contacts-component data-id={this.props.id} />
-                    <create-contacts-component data-user_id={this.props.id}></create-contacts-component>
+                    <ListContactComponent data-id={this.props.id} />
+                    <CreateContactsComponent data-user_id={this.props.id}></CreateContactsComponent>
                 </div>
             </Provider>
         )
@@ -26,5 +29,5 @@ let name_component = document.querySelector("contacts-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<ContactsComponent {...props} />, name_component);
+    renderComponent(ContactsComponent, name_component, props);
 }

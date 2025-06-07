@@ -127,31 +127,34 @@ export default class RComponent extends Component{
         this.setState({isLoading: true})
         let data = await DefaultService.find(url, params);
         data.updated_at = this.formatDateString(data.updated_at)
-        this.setState({isLoading: false})
-        this.dispatchStore(this.state)
+        this.state.isLoading = false;
+        this.dispatchStore(this.state);
         return data;
     }
-    async getItems(url, params = {}, showLoading=true){
-        if(showLoading) this.setState({isLoading: true})
+    async getItems(url, params = {}, showLoading=true) {
+        if(showLoading) this.setState({isLoading: true});
         let data = await DefaultService.all(url, params);
-        if(data.updated_at){
-            data.updated_at = this.formatDateString(data.updated_at)
+
+        if(data.updated_at) {
+            data.updated_at = this.formatDateString(data.updated_at);
         }
-        if(showLoading){
-            this.setState({isLoading: false})
-            this.dispatchStore(this.state)
+
+        if(showLoading) {
+            this.state.isLoading = false;
+            this.dispatchStore(this.state);
         }
+
         return data;
     }
+
 
     onUpdate = async (url, params) =>{
         //console.log(this.validData(this.state.data,))
         this.setState({isLoading: true})
         let response = await DefaultService.update(url, params)
-        console.log(response)
-        this.setState({isLoading: false})
-        this.setState({isSuccess: true});
-        this.setState({isSuccessMessage: response.message});
+        this.state.isLoading = false;
+        this.state.isSuccess = true;
+        this.state.isSuccessMessage = response.message;
         this.dispatchStore(this.state)
         return response;
     }
@@ -159,9 +162,9 @@ export default class RComponent extends Component{
         //console.log(this.validData(this.state.data,))
         this.setState({isLoading: true})
         let response = await DefaultService.create(url, params)
-        this.setState({isLoading: false})
-        this.setState({isSuccess: true});
-        this.setState({isSuccessMessage: response.message});
+        this.state.isLoading = false;
+        this.state.isSuccess = true;
+        this.state.isSuccessMessage = response.message;
         this.dispatchStore(this.state)
         return response;
     }
@@ -170,8 +173,8 @@ export default class RComponent extends Component{
             ids: params
         })
         if(showMessage){
-            this.setState({isSuccess: true});
-            this.setState({isSuccessMessage: response.message});
+            this.state.isSuccess = true;
+            this.state.isSuccessMessage = response.message;
             this.dispatchStore(this.state)
         }
         return response;
@@ -187,6 +190,7 @@ export default class RComponent extends Component{
         return isInvalid
     }
     dispatchStore(state){
+        console.log("actualizando...", state)
         store.dispatch(addTodo(state));
     }
     subscribeStore(callback = function (res){}, noSate=false){

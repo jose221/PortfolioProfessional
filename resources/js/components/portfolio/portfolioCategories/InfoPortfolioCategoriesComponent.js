@@ -59,5 +59,5 @@ console.log(name_component)
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<InfoPortfolioCategoriesComponent {...props} />, name_component);
+    renderComponent(InfoPortfolioCategoriesComponent, name_component, props);
 }

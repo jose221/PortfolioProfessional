@@ -1,8 +1,10 @@
 import React, { Component, useState } from 'react';
-import ReactDOM from 'react-dom';
+import renderComponent from '../../utils/renderComponent';
 import RComponent from "../RComponent";
 import {Provider} from "react-redux";
 import store from "../../redux/store/store";
+import ListPersonalProjectsComponent from "./ListPersonalProjectsComponent";
+import FormPersonalProjectsComponent from "./FormPersonalProjectsComponent";
 class PersonalProjectsComponent extends RComponent{
     constructor(props) {
         super(props);
@@ -12,8 +14,8 @@ class PersonalProjectsComponent extends RComponent{
         return (
             <Provider store={store}>
                 <div>
-                    <list-personal-projects-component data-id={this.props.id} />
-                    <form-personal-projects-component  data-user_id={this.props.id} />
+                    <ListPersonalProjectsComponent data-id={this.props.id} />
+                    <FormPersonalProjectsComponent  data-user_id={this.props.id} />
                 </div>
             </Provider>
         )
@@ -26,5 +28,5 @@ let name_component = document.querySelector("personal-projects-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<PersonalProjectsComponent {...props} />, name_component);
+    renderComponent(PersonalProjectsComponent, name_component, props);
 }

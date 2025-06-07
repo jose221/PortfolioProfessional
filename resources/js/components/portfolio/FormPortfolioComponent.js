@@ -161,5 +161,5 @@ let name_component = document.querySelector("form-portfolio-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<FormPortfolioComponent {...props} />, name_component);
+    renderComponent(FormPortfolioComponent, name_component, props);
 }

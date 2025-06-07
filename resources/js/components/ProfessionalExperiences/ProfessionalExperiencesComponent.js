@@ -1,8 +1,10 @@
 import React, { Component, useState } from 'react';
-import ReactDOM from 'react-dom';
+import renderComponent from '../../utils/renderComponent';
 import RComponent from "../RComponent";
 import {Provider} from "react-redux";
 import store from "../../redux/store/store";
+import ListProfessionalExperiencesComponent from "./ListProfessionalExperiencesComponent";
+import FormProfessionalExperiencesComponent from "./FormProfessionalExperiencesComponent";
 class ProfessionalExperiencesComponent extends RComponent{
     constructor(props) {
         super(props);
@@ -12,8 +14,8 @@ class ProfessionalExperiencesComponent extends RComponent{
         return (
             <Provider store={store}>
                 <div>
-                    <list-professional-experiences-component data-id={this.props.id} ></list-professional-experiences-component>
-                    <form-professional-experiences-component  data-user_id={this.props.id} />
+                    <ListProfessionalExperiencesComponent data-id={this.props.id} ></ListProfessionalExperiencesComponent>
+                    <FormProfessionalExperiencesComponent  data-user_id={this.props.id} />
                 </div>
             </Provider>
         )
@@ -26,5 +28,5 @@ let name_component = document.querySelector("professional-experiences-component"
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<ProfessionalExperiencesComponent {...props} />, name_component);
+    renderComponent(ProfessionalExperiencesComponent, name_component, props);
 }

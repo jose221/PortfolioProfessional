@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import renderComponent from '../../utils/renderComponent';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
@@ -299,5 +299,5 @@ const name_component = document.querySelector("form-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<FormComponent {...props} />, name_component);
+    renderComponent(FormComponent, name_component, props);
 }

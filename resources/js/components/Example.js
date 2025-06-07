@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Button from '@mui/material/Button';
+import renderComponent from '../utils/renderComponent';
 
 const Example = () => {
     return (
@@ -21,5 +21,5 @@ const Example = () => {
 export default Example;
 
 if (document.querySelector("example")) {
-    ReactDOM.render(<Example />, document.querySelector("example"));
+    renderComponent(Example, document.querySelector("example"));
 }

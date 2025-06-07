@@ -135,5 +135,5 @@ let name_component = document.querySelector("list-contacts-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    ReactDOM.render(<ListContactsComponent {...props} />, name_component);
+    renderComponent(ListContactsComponent, name_component, props);
 }
