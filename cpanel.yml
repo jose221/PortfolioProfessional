@@ -1,4 +1,7 @@
 deployment:
   task:
-    export DEPLOYPATH=/home/herawaeg/admin.herandro.tech/
-    rsync -a --exclude 'index.php' public/ $DEPLOYPATH
+    script: |
+      echo "📝 Inicio del deploy: $(date)" >> deploy.log
+      chmod +x deploy.sh
+      ./deploy.sh >> deploy.log 2>&1
+      echo "✅ Fin del deploy: $(date)" >> deploy.log
