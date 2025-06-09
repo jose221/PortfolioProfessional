@@ -14,8 +14,8 @@ class PortfolioComponent extends RComponent{
         return (
             <Provider store={store}>
                 <div>
-                    <ListPortfolioComponent data-id={this.props.id} data-user_id={this.props.user_id} />
-                    <FormPortfolioComponent data-id={this.props.id} data-user_id={this.props.user_id} />
+                    <ListPortfolioComponent id={this.props.id} user_id={this.props.user_id} />
+                    <FormPortfolioComponent id={this.props.id} user_id={this.props.user_id} />
                 </div>
             </Provider>
         )

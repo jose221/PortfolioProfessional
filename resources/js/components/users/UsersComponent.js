@@ -15,8 +15,8 @@ class UsersComponent extends RComponent {
         return (
             <Provider store={store}>
                 <div>
-                    <ListUsersComponent data-id={this.props.id} />
-                    <FormUsersComponent data-user_id={this.props.id} />
+                    <ListUsersComponent id={this.props.id} />
+                    <FormUsersComponent user_id={this.props.id} />
                 </div>
             </Provider>
         )

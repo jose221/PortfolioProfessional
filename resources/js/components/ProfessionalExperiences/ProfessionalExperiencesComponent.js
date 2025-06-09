@@ -14,8 +14,8 @@ class ProfessionalExperiencesComponent extends RComponent{
         return (
             <Provider store={store}>
                 <div>
-                    <ListProfessionalExperiencesComponent data-id={this.props.id} ></ListProfessionalExperiencesComponent>
-                    <FormProfessionalExperiencesComponent  data-user_id={this.props.id} />
+                    <ListProfessionalExperiencesComponent id={this.props.id} ></ListProfessionalExperiencesComponent>
+                    <FormProfessionalExperiencesComponent  user_id={this.props.id} />
                 </div>
             </Provider>
         )

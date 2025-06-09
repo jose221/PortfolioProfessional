@@ -54,8 +54,6 @@ class InfoPortfolioCategoriesComponent extends RComponent {
 }
 export default InfoPortfolioCategoriesComponent;
 let name_component = document.querySelector("info-portfolio-categories-component");
-console.log("3123123")
-console.log(name_component)
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);

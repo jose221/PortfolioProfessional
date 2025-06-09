@@ -14,8 +14,8 @@ class KnowledgeAbilityComponent extends RComponent{
         return (
             <Provider store={store}>
                 <div>
-                    <ListKnowledgeAbilityComponent data-id={this.props.id} />
-                    <FormKnowledgeAbilityComponent data-id={this.props.id} />
+                    <ListKnowledgeAbilityComponent id={this.props.id} />
+                    <FormKnowledgeAbilityComponent id={this.props.id} />
                 </div>
             </Provider>
         )

@@ -17,8 +17,8 @@ class ContactsComponent extends RComponent {
         return (
             <Provider store={store}>
                 <div>
-                    <ListContactComponent data-id={this.props.id} />
-                    <CreateContactsComponent data-user_id={this.props.id}></CreateContactsComponent>
+                    <ListContactComponent id={this.props.id} />
+                    <CreateContactsComponent user_id={this.props.id}></CreateContactsComponent>
                 </div>
             </Provider>
         )

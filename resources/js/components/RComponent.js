@@ -190,7 +190,8 @@ export default class RComponent extends Component{
         return isInvalid
     }
     dispatchStore(state){
-        console.log("actualizando...", state)
+        if(state?.user_id) state.user_id = parseInt(state.user_id);
+        if(state?.id) state.id = parseInt(state.id);
         store.dispatch(addTodo(state));
     }
     subscribeStore(callback = function (res){}, noSate=false){

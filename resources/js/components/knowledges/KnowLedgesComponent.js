@@ -14,8 +14,8 @@ class KnowLedgesComponent extends RComponent{
         return (
             <Provider store={store}>
                 <div>
-                    <ListKnowLedgesComponent data-id={this.props.id} />
-                    <FormKnowLedgesComponent data-user_id={this.props.id} />
+                    <ListKnowLedgesComponent id={this.props.id} />
+                    <FormKnowLedgesComponent user_id={this.props.id} />
                 </div>
             </Provider>
         )

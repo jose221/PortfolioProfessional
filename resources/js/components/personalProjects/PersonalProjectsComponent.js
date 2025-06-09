@@ -14,8 +14,8 @@ class PersonalProjectsComponent extends RComponent{
         return (
             <Provider store={store}>
                 <div>
-                    <ListPersonalProjectsComponent data-id={this.props.id} />
-                    <FormPersonalProjectsComponent  data-user_id={this.props.id} />
+                    <ListPersonalProjectsComponent id={this.props.id} />
+                    <FormPersonalProjectsComponent  user_id={this.props.id} />
                 </div>
             </Provider>
         )

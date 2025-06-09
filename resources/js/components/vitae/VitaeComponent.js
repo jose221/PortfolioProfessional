@@ -14,8 +14,8 @@ class VitaeComponent extends RComponent{
         return (
             <Provider store={store}>
                 <div>
-                    <ListVitaeComponent data-user_id={this.props.id} />
-                    <FormVitaeComponent data-user_id={this.props.id} />
+                    <ListVitaeComponent user_id={this.props.id} />
+                    <FormVitaeComponent user_id={this.props.id} />
                 </div>
             </Provider>
         )

@@ -14,8 +14,8 @@ class StudiesComponent extends RComponent{
         return (
             <Provider store={store}>
                 <div>
-                    <ListStudiesComponent data-user_id={this.props.id} />
-                    <FormStudiesComponent data-user_id={this.props.id} />
+                    <ListStudiesComponent user_id={this.props.id} />
+                    <FormStudiesComponent user_id={this.props.id} />
                 </div>
             </Provider>
         )

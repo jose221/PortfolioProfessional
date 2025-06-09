@@ -44,6 +44,7 @@ class FormPortfolioCategoriesComponent extends RComponent {
         const handleOpen = () => {
             this.state.form = new PortfolioCategory();
             this.state.form.user_id = this.props.user_id;
+            console.log("variables", this.state.form, this.props)
             this.state.openModal = true;
             this.dispatchStore(this.state)
         };
@@ -105,6 +106,16 @@ class FormPortfolioCategoriesComponent extends RComponent {
                                     />
                                     <FormHelperText error={this.isValid(this.state.form.description_en)}>Descripción de la categoria en inglés</FormHelperText>
                                 </div>
+                                <TextField
+                                    error={this.isValid(this.state.form.code)}
+                                    className="col-md-6 mt-3 p-1"
+                                    id="code"
+                                    label="Código"
+                                    value={this.state.form.code || ' '}
+                                    name="code"
+                                    onChange={this.handleChangeForm}
+                                    helperText="Escribe el código"
+                                />
                             </div>
                         </DialogContent>
                         <DialogActions>
