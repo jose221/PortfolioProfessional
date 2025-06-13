@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\RolesController;
 use App\Http\Middleware\ApiAccessMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -124,6 +125,10 @@ Route::prefix('admin')->middleware(['web', ApiAccessMiddleware::class])->group(f
             Route::post('/store/{id}', [KnowledgesAbilitiesController::class, 'store'])->name('store');
             Route::delete('/delete/{id}', [KnowledgesAbilitiesController::class, 'destroy'])->name('delete');
         });
+    });
+
+    Route::prefix('roles')->name('roles.')->group(function () {
+        Route::get('/', [RolesController::class, 'index'])->name('view');
     });
 });
 
