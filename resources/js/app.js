@@ -56,3 +56,4 @@ import UsersComponent from "./components/users/UsersComponent";
 import ListUsersComponent from "./components/users/ListUsersComponent";
 import LoginComponent from "./components/auth/LoginComponent";
 import RolesComponent from "./components/roles/RolesComponent";
+import ModulesComponent from "./components/modules/ModulesComponent";

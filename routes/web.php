@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ModulesController;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Middleware\ApiAccessMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -129,6 +130,9 @@ Route::prefix('admin')->middleware(['web', ApiAccessMiddleware::class])->group(f
 
     Route::prefix('roles')->name('roles.')->group(function () {
         Route::get('/', [RolesController::class, 'index'])->name('view');
+    });
+    Route::prefix('modules')->name('modules.')->group(function () {
+        Route::get('/', [ModulesController::class, 'index'])->name('view');
     });
 });
 
