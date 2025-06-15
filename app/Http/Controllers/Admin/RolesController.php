@@ -12,4 +12,8 @@ class RolesController extends Controller
         $items = User::all();
         return view('admin.roles.view',compact('items'));
     }
+
+    public function show(int $id){
+        return view('admin.roles.show', compact('id'));
+    }
 }

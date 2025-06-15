@@ -130,6 +130,7 @@ Route::prefix('admin')->middleware(['web', ApiAccessMiddleware::class])->group(f
 
     Route::prefix('roles')->name('roles.')->group(function () {
         Route::get('/', [RolesController::class, 'index'])->name('view');
+        Route::get('/{id}', [RolesController::class, 'show'])->name('show'); // Mejor usar 'show' como nombre
     });
     Route::prefix('modules')->name('modules.')->group(function () {
         Route::get('/', [ModulesController::class, 'index'])->name('view');
