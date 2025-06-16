@@ -15,7 +15,11 @@ class RoleComponent extends RComponent{
         await this.onInit();
     }
     onInit = async ()=>{
-        let res = await this.getItem(`${primary_url}/${this.props.roleId}`)
+        let res = await this.getItem(`${primary_url}`, {
+            params:{
+                id: this.props.roleId
+            }
+        })
         this.state.data = res;
         this.dispatchStore(this.state)
     }
@@ -55,7 +59,7 @@ class RoleComponent extends RComponent{
                 <Paper elevation={1} >
                     hola mundo
                 </Paper>
-                <ListModulesSectionComponent data-role-id={this.props.roleId}></ListModulesSectionComponent>
+                <ListModulesSectionComponent roleId={this.props.roleId}></ListModulesSectionComponent>
             </div>
         )
     }

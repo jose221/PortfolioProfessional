@@ -6,12 +6,14 @@ let header = {
     }
 }
 export class DefaultService{
-    static async find(url, params = {}, config = header){
+    static async find(url, params = {}, config = {}){
         let items = null;
         try {
-            params = {
-                ... header
+            if(config?.headers){
+                header.headers = Object.assign(header?.headers ?? {},config?.headers ?? {})
+                delete config?.headers
             }
+            params = Object.assign({}, params, header, config)
             items = await axios.get(url, params);
             items = items.data.data;
         }
@@ -20,12 +22,12 @@ export class DefaultService{
         }
         return items;
     }
-    static async all(url, params = {}, config = header){
+    static async all(url, params = {}, config = {}){
         let items = null;
         try {
-            params = {
-                ... header
-            }
+            header.headers = Object.assign(header?.headers ?? {},config?.headers ?? {})
+            delete config?.headers
+            params = Object.assign({}, params, header, config)
             items = await axios.get(url, params);
             items = items.data.data;
         }

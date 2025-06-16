@@ -131,9 +131,9 @@ export default class RComponent extends Component{
         this.dispatchStore(this.state);
         return data;
     }
-    async getItems(url, params = {}, showLoading=true) {
+    async getItems(url, params = {}, showLoading=true, config={}) {
         if(showLoading) this.setState({isLoading: true});
-        let data = await DefaultService.all(url, params);
+        let data = await DefaultService.all(url, params, config);
 
         if(data.updated_at) {
             data.updated_at = this.formatDateString(data.updated_at);

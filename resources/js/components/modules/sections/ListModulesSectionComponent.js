@@ -14,7 +14,18 @@ class ListModulesSectionComponent extends RComponent{
         await this.onInit();
     }
     onInit = async ()=>{
-        let res = await this.getItems(`${primary_url}`)
+        console.log(this.props)
+        let res = await this.getItems(`${primary_url}`,{
+            params:{
+                permissions:{
+                    role_id: this.props.roleId
+                }
+            }
+        }, true,{
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
         this.state.data = res;
         this.dispatchStore(this.state)
     }
