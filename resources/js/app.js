@@ -57,4 +57,4 @@ import ListUsersComponent from "./components/users/ListUsersComponent";
 import LoginComponent from "./components/auth/LoginComponent";
 import RolesComponent from "./components/roles/RolesComponent";
 import ModulesComponent from "./components/modules/ModulesComponent";
-import RoleComponent from "./components/roles/role/roleComponent";
+import RoleComponent from "./components/roles/role/RoleComponent";

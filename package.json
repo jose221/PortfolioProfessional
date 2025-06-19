@@ -36,6 +36,7 @@
         "@mui/x-date-pickers": "^8.5.1",
         "dayjs": "^1.11.9",
         "draft-js": "^0.11.7",
+        "qs": "^6.14.0",
         "react-dropzone": "^14.2.3",
         "react-redux": "^9.2.0",
         "react-trix": "^0.10.2",

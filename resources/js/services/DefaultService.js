@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'qs';
 let header = {
     headers: {
         'Content-Type': 'multipart/form-data',
@@ -14,6 +15,9 @@ export class DefaultService{
                 delete config?.headers
             }
             params = Object.assign({}, params, header, config)
+            params.paramsSerializer = {
+                serialize: (params) => qs.stringify(params, { arrayFormat: 'brackets' })
+            }
             items = await axios.get(url, params);
             items = items.data.data;
         }
@@ -28,6 +32,10 @@ export class DefaultService{
             header.headers = Object.assign(header?.headers ?? {},config?.headers ?? {})
             delete config?.headers
             params = Object.assign({}, params, header, config)
+            params.paramsSerializer = {
+                serialize: (params) => qs.stringify(params, { arrayFormat: 'brackets' })
+            }
+            console.log(params)
             items = await axios.get(url, params);
             items = items.data.data;
         }

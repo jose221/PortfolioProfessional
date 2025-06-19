@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import renderComponent from '../../../utils/renderComponent';
 import RComponent from "../../RComponent";
 import KnowLedge from "../../../models/KnowLedge";
-import {Paper} from "@mui/material";
+import {Chip, FormControlLabel, Paper, Switch} from "@mui/material";
 let primary_url = window.url_api+"/admin/modules/by-role";
 let title = "Información  los módulos por rol"
 class ListModulesSectionComponent extends RComponent{
@@ -61,9 +61,30 @@ class ListModulesSectionComponent extends RComponent{
     render(){
 
         return (
-            <div>
-                <Paper elevation={3} >
-                    hola mundo
+            <div className={'pt-2 h-100'}>
+                <Paper className={'p-3 mt-2'} elevation={2} >
+                    <div className={'d-flex justify-content-between align-items-center'}>
+                        <p className={'name-item-list'}> name_es | name_en </p>
+                        <Chip className={'key-item-list'}  color="primary" variant="outlined" label="key" />
+                    </div>
+                    <div className={'d-flex grid-grap-1 flex-wrap pt-2'}>
+                        <FormControlLabel control={<Switch defaultChecked />} label="Ver" />
+                        <FormControlLabel control={<Switch defaultChecked />} label="Crear" />
+                        <FormControlLabel control={<Switch defaultChecked />} label="Editar" />
+                        <FormControlLabel control={<Switch defaultChecked />} label="Eliminar" />
+                    </div>
+                </Paper>
+                <Paper className={'p-3 mt-2'} elevation={2} >
+                    <div className={'d-flex justify-content-between align-items-center'}>
+                        <p className={'name-item-list'}> name_es | name_en </p>
+                        <Chip className={'key-item-list'}  color="primary" variant="outlined" label="key" />
+                    </div>
+                    <div className={'d-flex grid-grap-1 flex-wrap pt-2'}>
+                        <FormControlLabel control={<Switch defaultChecked />} label="Ver" />
+                        <FormControlLabel control={<Switch defaultChecked />} label="Crear" />
+                        <FormControlLabel control={<Switch defaultChecked />} label="Editar" />
+                        <FormControlLabel control={<Switch defaultChecked />} label="Eliminar" />
+                    </div>
                 </Paper>
             </div>
         )

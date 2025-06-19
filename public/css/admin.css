@@ -729,3 +729,15 @@ body {
 .textarea-editor.error label {
   color: #d32f2f;
 }
+
+.name-item-list {
+  font-weight: 600;
+  margin-top: 0;
+  color: var(hsl(215, 15%, 12%), hsl(215, 15%, 10%));
+  margin-bottom: 0px;
+}
+
+.key-item-list {
+  color: rgb(17, 91, 232) !important;
+  background-color: rgba(17, 91, 232, 0.1) !important;
+}

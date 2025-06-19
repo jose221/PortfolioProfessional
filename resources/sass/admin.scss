@@ -745,3 +745,13 @@ $navbar-secondary-bg-color:#3a3f48;
         }
     }
 }
+.name-item-list{
+    font-weight: 600;
+    margin-top: 0;
+    color: var(hsl(215, 15%, 12%), hsl(215, 15%, 10%));
+    margin-bottom: 0px;
+}
+.key-item-list{
+    color: rgba(17, 91, 232, 1) !important;
+    background-color: rgba(17, 91, 232, 0.1) !important;
+}
