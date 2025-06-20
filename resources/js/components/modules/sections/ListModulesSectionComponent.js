@@ -4,6 +4,7 @@ import RComponent from "../../RComponent";
 import KnowLedge from "../../../models/KnowLedge";
 import {Chip, FormControlLabel, Paper, Switch} from "@mui/material";
 let primary_url = window.url_api+"/admin/modules/by-role";
+let permission_url = window.url_api+"/admin/permissions";
 let title = "Información  los módulos por rol"
 class ListModulesSectionComponent extends RComponent{
     constructor(props) {
@@ -28,13 +29,17 @@ class ListModulesSectionComponent extends RComponent{
         this.state.items = res;
         this.dispatchStore(this.state)
     }
-    handleSwitchChange = (idx, permissionType) => (event) => {
-        // Clona el array de items
-        const items = [...this.state.items];
-        // Cambia el valor específico del permiso para ese item
-        items[idx][permissionType] = event.target.checked;
-        // Actualiza el estado
-        this.setState({ items });
+    handleSwitchChange = (idx, idx2, permissionType) => (event) => {
+
+        const newRow = this.state.items[idx].Permissions[idx2];
+        newRow[permissionType] = event.target.checked;
+        this.state.items[idx].Permissions[idx2] = newRow;
+
+        this.handleEdit(`${permission_url}/${newRow.id}`, {
+            id: newRow.id,
+            value: newRow[permissionType],
+            field: permissionType
+        });
     };
 
     onRowSelectionModelChange = (params)=>{
@@ -62,7 +67,6 @@ class ListModulesSectionComponent extends RComponent{
     }
     openEdit = async(params)=>{
         this.state.form = new KnowLedge(params.row);
-
         this.state.openModal = true;
         this.dispatchStore(this.state)
     }
@@ -90,7 +94,7 @@ class ListModulesSectionComponent extends RComponent{
                                     control={
                                         <Switch
                                             checked={!!permission.can_read}
-                                            onChange={this.handleSwitchChange(idx, 'can_read')}
+                                            onChange={this.handleSwitchChange(idx, idx2, 'can_read')}
                                         />
                                     }
                                     label="Ver"
@@ -100,7 +104,7 @@ class ListModulesSectionComponent extends RComponent{
                                     control={
                                         <Switch
                                             checked={!!permission.can_create}
-                                            onChange={this.handleSwitchChange(idx, 'can_create')}
+                                            onChange={this.handleSwitchChange(idx, idx2, 'can_create')}
                                         />
                                     }
                                     label="Crear"
@@ -110,7 +114,7 @@ class ListModulesSectionComponent extends RComponent{
                                     control={
                                         <Switch
                                             checked={!!permission.can_update}
-                                            onChange={this.handleSwitchChange(idx, 'can_update')}
+                                            onChange={this.handleSwitchChange(idx, idx2, 'can_update')}
                                         />
                                     }
                                     label="Editar"
@@ -120,7 +124,7 @@ class ListModulesSectionComponent extends RComponent{
                                     control={
                                         <Switch
                                             checked={!!permission.can_delete}
-                                            onChange={this.handleSwitchChange(idx, 'can_delete')}
+                                            onChange={this.handleSwitchChange(idx, idx2, 'can_delete')}
                                         />
                                     }
                                     label="Eliminar"
