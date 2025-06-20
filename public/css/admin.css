@@ -735,9 +735,22 @@ body {
   margin-top: 0;
   color: var(hsl(215, 15%, 12%), hsl(215, 15%, 10%));
   margin-bottom: 0px;
+  font-size: 1.1em !important;
 }
 
 .key-item-list {
   color: rgb(17, 91, 232) !important;
   background-color: rgba(17, 91, 232, 0.1) !important;
+  font-size: 0.9em !important;
+}
+
+.permission-item-list {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+.permission-item-list span {
+  font-size: 0.85em !important;
+}
+
+.subsection {
+  margin-top: 15px;
 }

@@ -12,8 +12,12 @@ import AddIcon from '@mui/icons-material/Add';
 import Fab from "@mui/material/Fab";
 import TextField from "@mui/material/TextField";
 import Role from "../../../models/Role";
+import {Autocomplete, FormControlLabel, Switch} from "@mui/material";
 
 let primary_url = window.url_api+"/admin/roles";
+const modules = [
+    { label: 'Administrador', id: 1 }
+];
 class FormModulesSectionComponent extends RComponent {
     constructor(props) {
         super(props);
@@ -58,8 +62,46 @@ class FormModulesSectionComponent extends RComponent {
                     <DialogTitle>{"Mis nuevo rol"}</DialogTitle>
                     <form encType="multipart/form-data" noValidate={true} onSubmit={this.handleSubmit}>
                         <DialogContent>
-                            <div className="row">
-
+                            <div className="w-100">
+                                <div>
+                                    <p>Módulos disponibles: 3</p>
+                                </div>
+                                <Autocomplete
+                                    disablePortal
+                                    options={modules}
+                                    getOptionLabel={(option) => option.label}
+                                    value={modules.find(r => r.id === this.state.form.module_id) || null}
+                                    onChange={(event, newValue) => {
+                                        this.setState(state => ({
+                                            ...state,
+                                            form: {
+                                                ...state.form,
+                                                module_id: newValue ? newValue.id : ''
+                                            }
+                                        }));
+                                    }}
+                                    className="col-md-12 mt-3 p-1"
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            className="w-100"
+                                            id="role_id"
+                                            name="role_id"
+                                            helperText="Módulo a agregar"
+                                            label="Módulos a otorgar permisos"
+                                            error={this.isValid(this.state.form.role_id)}
+                                        />
+                                    )}
+                                />
+                            </div>
+                            <div className={'subsection'}>
+                                <p className={'name-item-list'}>Permisos</p>
+                                <div className={'d-flex grid-grap-1 flex-wrap pt-2'}>
+                                    <FormControlLabel className={'permission-item-list'} control={<Switch defaultChecked />} label="Ver" />
+                                    <FormControlLabel className={'permission-item-list'} control={<Switch defaultChecked />} label="Crear" />
+                                    <FormControlLabel className={'permission-item-list'} control={<Switch defaultChecked />} label="Editar" />
+                                    <FormControlLabel className={'permission-item-list'} control={<Switch defaultChecked />} label="Eliminar" />
+                                </div>
                             </div>
                         </DialogContent>
                         <DialogActions>

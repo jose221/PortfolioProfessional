@@ -14,7 +14,6 @@ class ListModulesSectionComponent extends RComponent{
         await this.onInit();
     }
     onInit = async ()=>{
-        console.log(this.props)
         let res = await this.getItems(`${primary_url}`,{
             params:{
                 permissions:{
@@ -26,9 +25,18 @@ class ListModulesSectionComponent extends RComponent{
                 'Content-Type': 'application/json'
             },
         })
-        this.state.data = res;
+        this.state.items = res;
         this.dispatchStore(this.state)
     }
+    handleSwitchChange = (idx, permissionType) => (event) => {
+        // Clona el array de items
+        const items = [...this.state.items];
+        // Cambia el valor específico del permiso para ese item
+        items[idx][permissionType] = event.target.checked;
+        // Actualiza el estado
+        this.setState({ items });
+    };
+
     onRowSelectionModelChange = (params)=>{
         this.state.ids = params;
         this.dispatchStore(this.state)
@@ -61,31 +69,67 @@ class ListModulesSectionComponent extends RComponent{
     render(){
 
         return (
-            <div className={'pt-2 h-100'}>
-                <Paper className={'p-3 mt-2'} elevation={2} >
-                    <div className={'d-flex justify-content-between align-items-center'}>
-                        <p className={'name-item-list'}> name_es | name_en </p>
-                        <Chip className={'key-item-list'}  color="primary" variant="outlined" label="key" />
-                    </div>
-                    <div className={'d-flex grid-grap-1 flex-wrap pt-2'}>
-                        <FormControlLabel control={<Switch defaultChecked />} label="Ver" />
-                        <FormControlLabel control={<Switch defaultChecked />} label="Crear" />
-                        <FormControlLabel control={<Switch defaultChecked />} label="Editar" />
-                        <FormControlLabel control={<Switch defaultChecked />} label="Eliminar" />
-                    </div>
-                </Paper>
-                <Paper className={'p-3 mt-2'} elevation={2} >
-                    <div className={'d-flex justify-content-between align-items-center'}>
-                        <p className={'name-item-list'}> name_es | name_en </p>
-                        <Chip className={'key-item-list'}  color="primary" variant="outlined" label="key" />
-                    </div>
-                    <div className={'d-flex grid-grap-1 flex-wrap pt-2'}>
-                        <FormControlLabel control={<Switch defaultChecked />} label="Ver" />
-                        <FormControlLabel control={<Switch defaultChecked />} label="Crear" />
-                        <FormControlLabel control={<Switch defaultChecked />} label="Editar" />
-                        <FormControlLabel control={<Switch defaultChecked />} label="Eliminar" />
-                    </div>
-                </Paper>
+            <div className={'pt-2 h-100 mb-2'}>
+                {(this.state.items ?? []).map((item, idx) => (
+                    <Paper className={'p-3 mt-3'} elevation={2} key={idx}>
+                        <div className={'d-flex justify-content-between align-items-center'}>
+                          <p className={'name-item-list'}>
+                            {item.name_es} | {item.name_en}
+                          </p>
+                          <Chip
+                            className={'key-item-list'}
+                            color="primary"
+                            variant="outlined"
+                            label={item.key}
+                          />
+                        </div>
+                        {(item.Permissions ?? []).map((permission,idx2)=>(
+                            <div className={'d-flex grid-grap-1 flex-wrap pt-2'} key={permission.id ?? idx2}>
+                                <FormControlLabel
+                                    className={'permission-item-list'}
+                                    control={
+                                        <Switch
+                                            checked={!!permission.can_read}
+                                            onChange={this.handleSwitchChange(idx, 'can_read')}
+                                        />
+                                    }
+                                    label="Ver"
+                                />
+                                <FormControlLabel
+                                    className={'permission-item-list'}
+                                    control={
+                                        <Switch
+                                            checked={!!permission.can_create}
+                                            onChange={this.handleSwitchChange(idx, 'can_create')}
+                                        />
+                                    }
+                                    label="Crear"
+                                />
+                                <FormControlLabel
+                                    className={'permission-item-list'}
+                                    control={
+                                        <Switch
+                                            checked={!!permission.can_update}
+                                            onChange={this.handleSwitchChange(idx, 'can_update')}
+                                        />
+                                    }
+                                    label="Editar"
+                                />
+                                <FormControlLabel
+                                    className={'permission-item-list'}
+                                    control={
+                                        <Switch
+                                            checked={!!permission.can_delete}
+                                            onChange={this.handleSwitchChange(idx, 'can_delete')}
+                                        />
+                                    }
+                                    label="Eliminar"
+                                />
+                            </div>
+                        ))}
+                    </Paper>
+                ))}
+
             </div>
         )
     }

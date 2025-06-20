@@ -6,6 +6,7 @@ export default class RComponent extends Component{
     state = {
         ids:[],
         data:{},
+        items:[],
         isLoading: false,
         isSuccess: false,
         openEdit:false,

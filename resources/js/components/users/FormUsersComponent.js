@@ -99,16 +99,27 @@ class FormUsersComponent extends RComponent {
                                 <Autocomplete
                                     disablePortal
                                     options={roles}
+                                    getOptionLabel={(option) => option.label}
+                                    value={roles.find(r => r.id === this.state.form.role_id) || null}
+                                    onChange={(event, newValue) => {
+                                        this.setState(state => ({
+                                            ...state,
+                                            form: {
+                                                ...state.form,
+                                                role_id: newValue ? newValue.id : ''
+                                            }
+                                        }));
+                                    }}
                                     className="col-md-6 mt-3 p-1"
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
                                             className="w-100"
                                             id="role_id"
+                                            name="role_id"
                                             helperText="Rol que pertenece el usuario"
                                             label="Rol del usuario"
                                             error={this.isValid(this.state.form.role_id)}
-                                            onChange={this.handleChangeForm}
                                         />
                                     )}
                                 />
