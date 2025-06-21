@@ -22,7 +22,7 @@ class RoleComponent extends RComponent{
                 id: this.props.roleId
             }
         })
-        this.state.role= res[0];
+        this.state.role= res;
         this.dispatchStore(this.state)
     }
     onRowSelectionModelChange = (params)=>{
@@ -60,8 +60,7 @@ class RoleComponent extends RComponent{
             <div>
                 <h3>{capitalizeText(this.state.role?.name_es)} | {capitalizeText(this.state.role?.name_en)}</h3>
                 <h5>{capitalizeFirstLetter(this.state.role?.description_es)} | {capitalizeFirstLetter(this.state.role?.description_en)}</h5>
-                <ListModulesSectionComponent role={this.state.role} roleId={this.props.roleId}></ListModulesSectionComponent>
-                <FormModulesSectionComponent />
+                <ListModulesSectionComponent role={this.state.role} roleId={this.props.roleId} />
             </div>
         )
     }

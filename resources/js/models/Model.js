@@ -15,11 +15,11 @@ export default class Model {
             if(this.required.find(element => element == key)){
                 switch (typeof value){
                     case 'number':
-                        if(value <= 0) isValid = false;
+                        if(this.casts[key] !== 'boolean'){
+                            if(value <= 0) isValid = false;
+                        }
                     case 'string':
                         if(value == "" || value == null || value == " ") isValid = false;
-                    case "boolean":
-                        if(value == false) isValid = false;
                 }
             }
         }
@@ -29,26 +29,37 @@ export default class Model {
         return ( (new Date(date) !== "Invalid Date" && !isNaN(new Date(date))));
     }
     getItem(){
+        this.formatCasts()
         return this.item;
     }
-    formatCasts(){
-        if(this.casts){
+    formatCasts() {
+        if (this.casts) {
             for (const [key, value] of Object.entries(this.casts)) {
                 switch (value) {
                     case 'array':
-                         if(typeof (this[key]) == 'string'){
-                             this[key] = JSON.parse(this[key]);
-
-                             this[key] = this[key].map((item)=>{
-                                 return JSON.parse(item);
-                             });
-                         }
-                         else this[key];
-                        console.log(this[key])
+                        if (typeof this[key] === 'string') {
+                            this[key] = JSON.parse(this[key]);
+                            this[key] = this[key].map(item => JSON.parse(item));
+                        }
                         break;
                     case 'object':
-                        this[key] = (typeof (this[key]) == 'string') ? JSON.parse(this[key]) : this[key];
+                        this[key] = (typeof this[key] === 'string') ? JSON.parse(this[key]) : this[key];
                         break;
+                    case 'boolean':
+                        this[key] = this[key] ? ((this[key]) === 'true' || this[key] === '1' || this[key] === true) ? 1 : 0 : 0;
+                        break;
+
+                    case 'number':
+                        this[key] = (typeof this[key] === 'number')
+                            ? this[key]
+                            : Number(this[key]);
+                        break;
+                    case 'string':
+                        this[key] = (typeof this[key] === 'string')
+                            ? this[key]
+                            : String(this[key]);
+                        break;
+                    // agrega más tipos si lo necesitas
                 }
             }
             window.item = this;
@@ -63,7 +74,6 @@ export default class Model {
                         data[key] = JSON.stringify(data[key].map((item)=>{
                             return JSON.stringify(item);
                         }));
-                        console.log(data[key])
                         break;
                     case 'object':
                         data[key] = JSON.stringify(data[key]);

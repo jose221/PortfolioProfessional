@@ -161,7 +161,6 @@ export default class RComponent extends Component{
     }
     onCreate = async (url, params) =>{
         //console.log(this.validData(this.state.data,))
-        this.setState({isLoading: true})
         let response = await DefaultService.create(url, params)
         this.state.isLoading = false;
         this.state.isSuccess = true;
@@ -207,6 +206,5 @@ export default class RComponent extends Component{
     goToHref = async(url)=>{
         window.location.href=url;
     }
-
 
 }

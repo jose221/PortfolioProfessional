@@ -3,6 +3,7 @@ import renderComponent from '../../../utils/renderComponent';
 import RComponent from "../../RComponent";
 import KnowLedge from "../../../models/KnowLedge";
 import {Chip, FormControlLabel, Paper, Switch} from "@mui/material";
+import FormModulesSectionComponent from "./FormModulesSectionComponent";
 let primary_url = window.url_api+"/admin/modules/by-role";
 let permission_url = window.url_api+"/admin/permissions";
 let title = "Información  los módulos por rol"
@@ -73,67 +74,70 @@ class ListModulesSectionComponent extends RComponent{
     render(){
 
         return (
-            <div className={'pt-2 h-100 mb-2'}>
-                {(this.state.items ?? []).map((item, idx) => (
-                    <Paper className={'p-3 mt-3'} elevation={2} key={idx}>
-                        <div className={'d-flex justify-content-between align-items-center'}>
-                          <p className={'name-item-list'}>
-                            {item.name_es} | {item.name_en}
-                          </p>
-                          <Chip
-                            className={'key-item-list'}
-                            color="primary"
-                            variant="outlined"
-                            label={item.key}
-                          />
-                        </div>
-                        {(item.Permissions ?? []).map((permission,idx2)=>(
-                            <div className={'d-flex grid-grap-1 flex-wrap pt-2'} key={permission.id ?? idx2}>
-                                <FormControlLabel
-                                    className={'permission-item-list'}
-                                    control={
-                                        <Switch
-                                            checked={!!permission.can_read}
-                                            onChange={this.handleSwitchChange(idx, idx2, 'can_read')}
-                                        />
-                                    }
-                                    label="Ver"
-                                />
-                                <FormControlLabel
-                                    className={'permission-item-list'}
-                                    control={
-                                        <Switch
-                                            checked={!!permission.can_create}
-                                            onChange={this.handleSwitchChange(idx, idx2, 'can_create')}
-                                        />
-                                    }
-                                    label="Crear"
-                                />
-                                <FormControlLabel
-                                    className={'permission-item-list'}
-                                    control={
-                                        <Switch
-                                            checked={!!permission.can_update}
-                                            onChange={this.handleSwitchChange(idx, idx2, 'can_update')}
-                                        />
-                                    }
-                                    label="Editar"
-                                />
-                                <FormControlLabel
-                                    className={'permission-item-list'}
-                                    control={
-                                        <Switch
-                                            checked={!!permission.can_delete}
-                                            onChange={this.handleSwitchChange(idx, idx2, 'can_delete')}
-                                        />
-                                    }
-                                    label="Eliminar"
+            <div>
+                <div className={'pt-2 h-100 mb-2'}>
+                    {(this.state.items ?? []).map((item, idx) => (
+                        <Paper className={'p-3 mt-3'} elevation={2} key={idx}>
+                            <div className={'d-flex justify-content-between align-items-center'}>
+                                <p className={'name-item-list'}>
+                                    {item.name_es} | {item.name_en}
+                                </p>
+                                <Chip
+                                    className={'key-item-list'}
+                                    color="primary"
+                                    variant="outlined"
+                                    label={item.key}
                                 />
                             </div>
-                        ))}
-                    </Paper>
-                ))}
+                            {(item.Permissions ?? []).map((permission,idx2)=>(
+                                <div className={'d-flex grid-grap-1 flex-wrap pt-2'} key={permission.id ?? idx2}>
+                                    <FormControlLabel
+                                        className={'permission-item-list'}
+                                        control={
+                                            <Switch
+                                                checked={!!permission.can_read}
+                                                onChange={this.handleSwitchChange(idx, idx2, 'can_read')}
+                                            />
+                                        }
+                                        label="Ver"
+                                    />
+                                    <FormControlLabel
+                                        className={'permission-item-list'}
+                                        control={
+                                            <Switch
+                                                checked={!!permission.can_create}
+                                                onChange={this.handleSwitchChange(idx, idx2, 'can_create')}
+                                            />
+                                        }
+                                        label="Crear"
+                                    />
+                                    <FormControlLabel
+                                        className={'permission-item-list'}
+                                        control={
+                                            <Switch
+                                                checked={!!permission.can_update}
+                                                onChange={this.handleSwitchChange(idx, idx2, 'can_update')}
+                                            />
+                                        }
+                                        label="Editar"
+                                    />
+                                    <FormControlLabel
+                                        className={'permission-item-list'}
+                                        control={
+                                            <Switch
+                                                checked={!!permission.can_delete}
+                                                onChange={this.handleSwitchChange(idx, idx2, 'can_delete')}
+                                            />
+                                        }
+                                        label="Eliminar"
+                                    />
+                                </div>
+                            ))}
+                        </Paper>
+                    ))}
 
+                </div>
+                <FormModulesSectionComponent modules={this.state.items} role={this.state.role} roleId={this.props.roleId} />
             </div>
         )
     }

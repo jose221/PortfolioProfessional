@@ -11,10 +11,14 @@ import ReactDOM from "react-dom";
 import AddIcon from '@mui/icons-material/Add';
 import Fab from "@mui/material/Fab";
 import TextField from "@mui/material/TextField";
-import Role from "../../../models/Role";
+import Permission from "../../../models/Permission";
 import {Autocomplete, FormControlLabel, Switch} from "@mui/material";
+import renderComponent from "../../../utils/renderComponent";
+import {sleep} from "../../../utils/tools";
 
 let primary_url = window.url_api+"/admin/roles";
+let permissions_url = window.url_api+"/admin/permissions";
+let modules_url = window.url_api+"/admin/modules";
 const modules = [
     { label: 'Administrador', id: 1 }
 ];
@@ -22,30 +26,62 @@ class FormModulesSectionComponent extends RComponent {
     constructor(props) {
         super(props);
     }
+    async getModules(){
+        let res = await this.getItems(`${modules_url}`,{
+            params:{
+                permissions:{
+                    role_id: this.props.roleId
+                }
+            }
+        }, true,{
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        let idsModules = this.props.modules.map(r => r.id);
+        res = res.filter(r =>
+            {
+                return !(idsModules ?? []).includes(r.id)
+            }
+        );
+
+        this.state.totalModules = res.length;
+        this.state.modules = res;
+
+        this.dispatchStore(this.state)
+    }
+    async onInit(){
+        await sleep(1000)
+        this.getModules()
+    }
     async componentDidMount() {
         this.subscribeStore()
+        this.onInit()
     }
     handleSubmit = async (e) =>{
         e.preventDefault();
-        console.log(this.state.form)
+        this.state.form = new Permission(this.state.form)
         if(this.state.form.validData()){
-            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form);
-            else await this.onCreate(`${primary_url}`, this.state.form)
+            if(this.state.form?.id) await this.onUpdate(`${permissions_url}/${this.state.form?.id}`, this.state.form);
+            else await this.onCreate(`${permissions_url}`, this.state.form.getItem())
             this.state.openModal = false;
-            this.state.data = await this.getItems(`${primary_url}`)
             this.dispatchStore(this.state)
-            //window.location.reload();
+            window.location.reload();
         }
     }
+    handleSwitchChange = (permissionType) => (event) => {
+        this.state.form[permissionType] = event.target.checked;
+        this.dispatchStore(this.state)
+    };
     render(){
-
         const handleClose = () => {
             this.state.openModal = false;
             this.dispatchStore(this.state)
         };
         const handleOpen = () => {
-            this.state.form = new Role();
-            //this.state.form.user_id = this.props.user_id;
+            this.state.form = new Permission();
+            this.state.form.role_id = Number.parseInt(this.props.roleId ?? 0);
+            this.onInit()
             this.state.openModal = true;
             this.dispatchStore(this.state)
         };
@@ -59,49 +95,89 @@ class FormModulesSectionComponent extends RComponent {
                     onClose={handleClose}
                     aria-describedby="alert-dialog-slide-description"
                 >
-                    <DialogTitle>{"Mis nuevo rol"}</DialogTitle>
+                    <DialogTitle>{"Permisos para el módulo"}</DialogTitle>
                     <form encType="multipart/form-data" noValidate={true} onSubmit={this.handleSubmit}>
                         <DialogContent>
                             <div className="w-100">
                                 <div>
-                                    <p>Módulos disponibles: 3</p>
+                                    <p>Módulos disponibles: {this.state.totalModules}</p>
                                 </div>
-                                <Autocomplete
-                                    disablePortal
-                                    options={modules}
-                                    getOptionLabel={(option) => option.label}
-                                    value={modules.find(r => r.id === this.state.form.module_id) || null}
-                                    onChange={(event, newValue) => {
-                                        this.setState(state => ({
-                                            ...state,
-                                            form: {
-                                                ...state.form,
-                                                module_id: newValue ? newValue.id : ''
-                                            }
-                                        }));
-                                    }}
-                                    className="col-md-12 mt-3 p-1"
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            className="w-100"
-                                            id="role_id"
-                                            name="role_id"
-                                            helperText="Módulo a agregar"
-                                            label="Módulos a otorgar permisos"
-                                            error={this.isValid(this.state.form.role_id)}
-                                        />
-                                    )}
-                                />
-                            </div>
-                            <div className={'subsection'}>
-                                <p className={'name-item-list'}>Permisos</p>
-                                <div className={'d-flex grid-grap-1 flex-wrap pt-2'}>
-                                    <FormControlLabel className={'permission-item-list'} control={<Switch defaultChecked />} label="Ver" />
-                                    <FormControlLabel className={'permission-item-list'} control={<Switch defaultChecked />} label="Crear" />
-                                    <FormControlLabel className={'permission-item-list'} control={<Switch defaultChecked />} label="Editar" />
-                                    <FormControlLabel className={'permission-item-list'} control={<Switch defaultChecked />} label="Eliminar" />
-                                </div>
+
+                                {(this.state.totalModules) ?
+                                    <div>
+                                    <Autocomplete
+                                        disablePortal
+                                        options={(this.state?.modules ?? [])}
+                                        getOptionLabel={(option) => `${option.name_es} | ${option.name_en}`}
+                                        value={(this.state?.modules ?? []).find(r => r.id === this.state.form.module_id) || null}
+                                        onChange={(event, newValue) => {
+                                            this.setState(state => ({
+                                                ...state,
+                                                form: {
+                                                    ...state.form,
+                                                    module_id: newValue ? newValue.id : ''
+                                                }
+                                            }));
+                                        }}
+                                        className="col-md-12 mt-3 p-1"
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                className="w-100"
+                                                id="role_id"
+                                                name="role_id"
+                                                helperText="Módulo a agregar"
+                                                label="Módulos a otorgar permisos"
+                                                error={this.isValid(this.state.form.role_id)}
+                                            />
+                                        )}
+                                    />
+                                    <div className={'subsection'}>
+                                        <p className={'name-item-list'}>Permisos</p>
+                                        <div className={'d-flex grid-grap-1 flex-wrap pt-2'}>
+                                            <FormControlLabel
+                                                className={'permission-item-list'}
+                                                control={
+                                                    <Switch
+                                                        checked={!!this.state.form.can_read}
+                                                        onChange={this.handleSwitchChange('can_read')}
+                                                    />
+                                                }
+                                                label="Ver"
+                                            />
+                                            <FormControlLabel
+                                                className={'permission-item-list'}
+                                                control={
+                                                    <Switch
+                                                        checked={!!this.state.form.can_create}
+                                                        onChange={this.handleSwitchChange('can_create')}
+                                                    />
+                                                }
+                                                label="Crear"
+                                            />
+                                            <FormControlLabel
+                                                className={'permission-item-list'}
+                                                control={
+                                                    <Switch
+                                                        checked={!!this.state.form.can_update}
+                                                        onChange={this.handleSwitchChange('can_update')}
+                                                    />
+                                                }
+                                                label="Editar"
+                                            />
+                                            <FormControlLabel
+                                                className={'permission-item-list'}
+                                                control={
+                                                    <Switch
+                                                        checked={!!this.state.form.can_delete}
+                                                        onChange={this.handleSwitchChange('can_delete')}
+                                                    />
+                                                }
+                                                label="Eliminar"
+                                            />
+                                        </div>
+                                    </div>
+                                </div> : 'No hay módulos disponibles'}
                             </div>
                         </DialogContent>
                         <DialogActions>

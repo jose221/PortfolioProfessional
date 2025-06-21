@@ -112,8 +112,7 @@ export class DefaultService{
 
     static formData(params, simple_form = false){
         const data = new FormData();
-
-        for ( var key in params ) {
+        for ( var key in this.parseParams(params) ) {
             if(Array.isArray(params[key]) && !simple_form){
                 data.append(key, JSON.stringify(params[key].map((item)=>{
                     return JSON.stringify(item);
@@ -122,5 +121,19 @@ export class DefaultService{
             else data.append(key, params[key]);
         }
         return data;
+    }
+
+    static parseParams(params){
+        const result = {};
+        Object.keys(params).forEach(key => {
+            if (params[key] === true || params[key] === "true") {
+                result[key] = 1;
+            } else if (params[key] === false || params[key] === "false") {
+                result[key] = 0;
+            } else {
+                result[key] = params[key];
+            }
+        });
+        return result;
     }
 }
