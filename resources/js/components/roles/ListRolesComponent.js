@@ -71,6 +71,15 @@ class ListRolesComponent extends RComponent{
                     <EditIcon />
                 </IconButton>,
             },
+            {
+                field: 'Permisos',
+                type: 'edit',
+                width: 60,
+                sortable: false, editable: false,
+                renderCell: (params) =><IconButton onClick={()=>this.goToHref(`/admin/roles/${params.id}`)} color="success">
+                    <RemoveRedEyeIcon />
+                </IconButton>,
+            },
             { field: 'id', headerName: 'ID', width: 70 },
             {field: 'key', headerName: 'Key', width: 200, type: 'string', description: 'Identificador del rol', sortable: true, editable: true},
             {field: 'name_es', headerName: 'Nombre en español', width: 200, type: 'string', description: 'Nombre en español', sortable: true, editable: true},
