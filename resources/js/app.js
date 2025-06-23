@@ -58,3 +58,4 @@ import LoginComponent from "./components/auth/LoginComponent";
 import RolesComponent from "./components/roles/RolesComponent";
 import ModulesComponent from "./components/modules/ModulesComponent";
 import RoleComponent from "./components/roles/role/RoleComponent";
+import TokenPublicAPIUserComponent from "./components/TokenPublicAPIUser/TokenPublicAPIUserComponent";

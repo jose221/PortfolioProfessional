@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ModulesController;
 use App\Http\Controllers\Admin\RolesController;
+use App\Http\Controllers\Admin\TokenPublicAPIUserController;
 use App\Http\Middleware\ApiAccessMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -134,6 +135,10 @@ Route::prefix('admin')->middleware(['web', ApiAccessMiddleware::class])->group(f
     });
     Route::prefix('modules')->name('modules.')->group(function () {
         Route::get('/', [ModulesController::class, 'index'])->name('view');
+    });
+
+    Route::prefix('token-public-api-user')->name('token_public_api_user.')->group(function () {
+        Route::get('/', [TokenPublicAPIUserController::class, 'index'])->name('view');
     });
 });
 
