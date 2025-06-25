@@ -12,6 +12,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Fab from "@mui/material/Fab";
 import TextField from "@mui/material/TextField";
 import Module from "../../models/Module";
+import {FormControlLabel, Switch} from "@mui/material";
 
 let primary_url = window.url_api+"/admin/modules";
 class FormModulesComponent extends RComponent {
@@ -21,6 +22,10 @@ class FormModulesComponent extends RComponent {
     async componentDidMount() {
         this.subscribeStore()
     }
+    handleSwitchChange = (attributeForm) => (event) => {
+        this.state.form[attributeForm] = event.target.checked;
+        this.dispatchStore(this.state)
+    };
     handleSubmit = async (e) =>{
         e.preventDefault();
         console.log(this.state.form)
@@ -59,6 +64,26 @@ class FormModulesComponent extends RComponent {
                     <form encType="multipart/form-data" noValidate={true} onSubmit={this.handleSubmit}>
                         <DialogContent>
                             <div className="row">
+                                <TextField
+                                    error={this.isValid(this.state.form.path)}
+                                    className="col-md-8 mt-3 p-1"
+                                    id="path"
+                                    label="Path"
+                                    value={this.state.form.path || ' '}
+                                    name="path"
+                                    onChange={this.handleChangeForm}
+                                    helperText="Escribe la ruta que pertenece el módulo"
+                                />
+                                <TextField
+                                    error={this.isValid(this.state.form.tag)}
+                                    className="col-md-4 mt-3 p-1"
+                                    id="tag"
+                                    label="Etiqueta"
+                                    value={this.state.form.tag || ' '}
+                                    name="tag"
+                                    onChange={this.handleChangeForm}
+                                    helperText="Escribe la etiqueta que pertenece el módulo"
+                                />
                                 <TextField
                                     error={this.isValid(this.state.form.key)}
                                     className="col-md-6 mt-3 p-1"
@@ -110,6 +135,16 @@ class FormModulesComponent extends RComponent {
                                     helperText="Escribe la descripción en español"
                                 />
                             </div>
+                            <FormControlLabel
+                                className={'permission-item-list'}
+                                control={
+                                    <Switch
+                                        checked={!!this.state.form.hidden}
+                                        onChange={this.handleSwitchChange('hidden')}
+                                    />
+                                }
+                                label="Oculto"
+                            />
                         </DialogContent>
                         <DialogActions>
                             <Button type="button" onClick={handleClose}>Cerrar</Button>

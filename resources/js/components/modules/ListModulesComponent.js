@@ -38,7 +38,7 @@ class ListModulesComponent extends RComponent{
     processRowUpdate = (newRow, oldRow)=>{
         const changedField = Object.keys(newRow).find(field =>
             newRow[field] !== oldRow[field] &&
-            ['key', 'name_es', 'name_en', 'description_es', 'description_en'].includes(field)
+            ['hidden', 'key', 'tag', 'name_es', 'name_en', 'description_es', 'description_en', 'path'].includes(field)
         );
 
         if(changedField && newRow[changedField] !== '') {
@@ -72,11 +72,14 @@ class ListModulesComponent extends RComponent{
                 </IconButton>,
             },
             { field: 'id', headerName: 'ID', width: 70 },
+            {field: 'hidden', headerName: 'Oculto', width: 70, type: 'boolean', description: '¿Está visible?', sortable: true, editable: true},
             {field: 'key', headerName: 'Key', width: 200, type: 'string', description: 'Identificador del modulo', sortable: true, editable: true},
+            {field: 'tag', headerName: 'Etiqueta', width: 200, type: 'string', description: 'Etiqueta que pertenece', sortable: true, editable: true},
             {field: 'name_es', headerName: 'Nombre en español', width: 200, type: 'string', description: 'Nombre en español', sortable: true, editable: true},
             {field: 'name_en', headerName: 'Nombre en inglés', width: 200, type: 'string', description: 'Nombre en inglés', sortable: true, editable: true},
             {field: 'description_es', headerName: 'Descripción en español', width: 200, type: 'string', description: 'Descripción en español', sortable: true, editable: true},
             {field: 'description_en', headerName: 'Escuela en inglés', width: 200, type: 'string', description: 'Escuela en inglés', sortable: true, editable: true},
+            {field: 'path', headerName: 'Ruta', width: 200, type: 'string', description: 'Ruta base del módulo', sortable: true, editable: true},
         ];
         return (
             <div>
