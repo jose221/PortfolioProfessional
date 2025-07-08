@@ -46,8 +46,8 @@ echo "php artisan config:clear..."
 php artisan config:clear
 echo "php artisan config:cache..."
 php artisan config:cache
-echo "php artisan route:cache..."
-php artisan route:cache
+#echo "php artisan route:cache..."
+#php artisan route:cache
 echo "php artisan view:cache..."
 php artisan view:cache
 
