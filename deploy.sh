@@ -37,8 +37,8 @@ echo "🔐 Asegurando permisos de ejecución para $SCRIPT_NAME..."
 chmod +x "$SCRIPT_NAME"
 
 # 1. Composer install
-echo "📦 Ejecutando composer install..."
-composer install --no-dev --optimize-autoloader
+#echo "📦 Ejecutando composer install..."
+#composer install --no-dev --optimize-autoloader
 
 # 3. Cache de configuración
 echo "🧠 Cacheando configuración Laravel..."
