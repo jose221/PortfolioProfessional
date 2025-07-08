@@ -4,12 +4,16 @@
 set -e  # Detener el script si ocurre un error
 
 echo "🚀 Despliegue Laravel producción iniciado..."
-
+echo "home... $HOME"
 # Directorios base
 PROJECT_DIR="$HOME/PortfolioProfessional"
 PUBLIC_HTML="$HOME/public_html"
 ENV_FILE="$PROJECT_DIR/.env"
 SCRIPT_NAME="$(basename "$0")"
+
+echo "PROJECT_DIR .... $PROJECT_DIR"
+echo "PUBLIC_HTML .... $PUBLIC_HTML"
+echo "ENV_FILE .... $ENV_FILE"
 
 # Verificar que los directorios existen
 echo "🔍 Verificando directorios..."
