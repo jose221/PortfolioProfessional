@@ -213,4 +213,264 @@ install_dependencies() {
 
     # Verificar que composer.lock existe para reproducibilidad
     if [[ ! -f "composer.lock" ]]; then
-        log "WARN" "⚠️  composer.lock no encontrado, se generará uno
+        log "WARN" "⚠️  composer.lock no encontrado, se generará uno nuevo"
+    fi
+
+    composer install --no-dev --optimize-autoloader --no-interaction || error_exit "Error en composer install"
+
+    log "SUCCESS" "✅ Dependencias instaladas"
+}
+
+# Función para limpiar y cachear Laravel
+optimize_laravel() {
+    log "INFO" "🧠 Optimizando configuración Laravel..."
+
+    cd "$PROJECT_DIR" || error_exit "No se pudo acceder al directorio del proyecto"
+
+    # Generar nuevos cachés
+    php artisan config:cache || error_exit "Error generando config cache"
+    php artisan route:cache || error_exit "Error generando route cache"
+    php artisan view:cache || error_exit "Error generando view cache"
+
+    log "SUCCESS" "✅ Laravel optimizado"
+}
+
+# Función para desplegar archivos públicos
+deploy_public_files() {
+    log "INFO" "📂 Desplegando archivos públicos..."
+
+    # Mostrar estadísticas del directorio public antes de copiar
+    local public_source="$PROJECT_DIR/public"
+    local file_count=$(find "$public_source" -type f | wc -l)
+    local dir_size=$(du -sh "$public_source" 2>/dev/null | cut -f1)
+
+    log "INFO" "📊 Copiando desde $public_source: $file_count archivos, $dir_size"
+
+    # Copiar archivos públicos
+    cp -r "$PROJECT_DIR/public/"* "$PUBLIC_HTML/" || error_exit "Error copiando archivos públicos"
+
+    # Verificar que los archivos se copiaron correctamente
+    local copied_count=$(find "$PUBLIC_HTML" -type f | wc -l)
+    log "INFO" "📋 Archivos copiados: $copied_count"
+
+    # Mostrar algunos archivos importantes
+    log "INFO" "📁 Archivos principales en $PUBLIC_HTML:"
+    for file in index.php .htaccess; do
+        if [[ -f "$PUBLIC_HTML/$file" ]]; then
+            log "INFO" "   ✅ $file"
+        else
+            log "WARN" "   ❌ $file (no encontrado)"
+        fi
+    done
+
+    log "SUCCESS" "✅ Archivos públicos desplegados"
+}
+
+# Función para configurar .htaccess
+setup_htaccess() {
+    log "INFO" "📄 Configurando .htaccess..."
+
+    local htaccess_file="$PUBLIC_HTML/.htaccess"
+
+    if [[ ! -f "$htaccess_file" ]]; then
+        log "INFO" "📝 Creando .htaccess personalizado..."
+        cat > "$htaccess_file" << 'EOF'
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Manejo de HTTPS (opcional, descomenta si tienes SSL)
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Redirige todas las peticiones al index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+
+    # Seguridad adicional
+    Options -MultiViews -Indexes
+
+    # Prevenir acceso a archivos sensibles
+    <FilesMatch "\.(env|log|sql|md|json|lock)$">
+        Order Allow,Deny
+        Deny from all
+    </FilesMatch>
+
+    # Prevenir acceso a directorios sensibles
+    RedirectMatch 403 ^/\.git
+    RedirectMatch 403 ^/vendor
+    RedirectMatch 403 ^/node_modules
+</IfModule>
+EOF
+        log "SUCCESS" "✅ .htaccess creado"
+    else
+        log "INFO" "ℹ️  .htaccess ya existe, verificando contenido..."
+        if grep -q "RewriteEngine On" "$htaccess_file"; then
+            log "SUCCESS" "✅ .htaccess válido encontrado"
+        else
+            log "WARN" "⚠️  .htaccess existe pero podría no ser válido"
+        fi
+    fi
+}
+
+# Función para configurar storage symlink
+setup_storage_link() {
+    log "INFO" "🔗 Configurando enlace de storage..."
+
+    local storage_path="$PUBLIC_HTML/storage"
+    local target_path="../PortfolioProfessional/storage/app/public"
+
+    # Remover enlace existente si existe
+    if [[ -L "$storage_path" ]] || [[ -d "$storage_path" ]]; then
+        log "INFO" "🗑️  Removiendo enlace/directorio storage existente..."
+        rm -rf "$storage_path"
+    fi
+
+    # Verificar que el directorio objetivo existe
+    local target_abs="$PROJECT_DIR/storage/app/public"
+    if [[ ! -d "$target_abs" ]]; then
+        log "INFO" "📁 Creando directorio storage/app/public..."
+        mkdir -p "$target_abs" || error_exit "Error creando directorio storage"
+    fi
+
+    # Crear nuevo enlace simbólico
+    ln -s "$target_path" "$storage_path" || error_exit "Error creando enlace simbólico de storage"
+
+    # Verificar que el enlace funciona
+    if [[ -L "$storage_path" ]]; then
+        log "SUCCESS" "✅ Enlace de storage configurado correctamente"
+    else
+        error_exit "El enlace de storage no se creó correctamente"
+    fi
+}
+
+# Función para corregir rutas en index.php
+fix_index_paths() {
+    log "INFO" "🛠 Corrigiendo rutas en index.php..."
+
+    local index_file="$PUBLIC_HTML/index.php"
+
+    if [[ ! -f "$index_file" ]]; then
+        error_exit "index.php no encontrado en $PUBLIC_HTML"
+    fi
+
+    # Crear backup del index original
+    cp "$index_file" "$index_file.backup"
+
+    # Mostrar rutas antes de modificar
+    log "INFO" "📋 Rutas actuales en index.php:"
+    grep -E "(vendor|bootstrap)" "$index_file" | head -5 | while read -r line; do
+        log "INFO" "   $line"
+    done
+
+    # Corregir rutas
+    sed -i.tmp "s|__DIR__\.'/../vendor|__DIR__\.'/../PortfolioProfessional/vendor|g" "$index_file"
+    sed -i.tmp "s|__DIR__\.'/../bootstrap|__DIR__\.'/../PortfolioProfessional/bootstrap|g" "$index_file"
+
+    # Mostrar rutas después de modificar
+    log "INFO" "📋 Rutas corregidas en index.php:"
+    grep -E "(vendor|bootstrap)" "$index_file" | head -5 | while read -r line; do
+        log "INFO" "   $line"
+    done
+
+    # Remover archivos temporales
+    rm -f "$index_file.tmp"
+
+    log "SUCCESS" "✅ Rutas corregidas en index.php"
+}
+
+# Función para configurar permisos
+set_permissions() {
+    log "INFO" "🔒 Configurando permisos..."
+
+    # Permisos para directorios de Laravel
+    chmod -R 755 "$PROJECT_DIR/storage" || error_exit "Error configurando permisos de storage"
+    chmod -R 755 "$PROJECT_DIR/bootstrap/cache" || error_exit "Error configurando permisos de bootstrap/cache"
+
+    # Permisos para archivos públicos
+    find "$PUBLIC_HTML" -type f -exec chmod 644 {} \; || error_exit "Error configurando permisos de archivos públicos"
+    find "$PUBLIC_HTML" -type d -exec chmod 755 {} \; || error_exit "Error configurando permisos de directorios públicos"
+
+    # Asegurar que el script mantenga permisos de ejecución
+    chmod +x "$SCRIPT_NAME" 2>/dev/null || true
+
+    log "SUCCESS" "✅ Permisos configurados"
+}
+
+# Función para verificar el despliegue
+verify_deployment() {
+    log "INFO" "🔍 Verificando despliegue..."
+
+    # Verificar archivos críticos
+    local critical_files=("$PUBLIC_HTML/index.php" "$PUBLIC_HTML/.htaccess")
+
+    for file in "${critical_files[@]}"; do
+        if [[ ! -f "$file" ]]; then
+            error_exit "Archivo crítico no encontrado: $file"
+        fi
+    done
+
+    # Verificar enlace de storage
+    if [[ ! -L "$PUBLIC_HTML/storage" ]]; then
+        error_exit "Enlace de storage no encontrado"
+    fi
+
+    # Verificar que index.php tiene las rutas correctas
+    if ! grep -q "PortfolioProfessional/vendor" "$PUBLIC_HTML/index.php"; then
+        error_exit "Las rutas en index.php no se corrigieron correctamente"
+    fi
+
+    # Mostrar resumen final
+    local final_count=$(find "$PUBLIC_HTML" -type f | wc -l)
+    local final_size=$(du -sh "$PUBLIC_HTML" 2>/dev/null | cut -f1)
+
+    log "INFO" "📊 Resumen del despliegue:"
+    log "INFO" "   📁 Directorio: $PUBLIC_HTML"
+    log "INFO" "   📄 Archivos: $final_count"
+    log "INFO" "   💾 Tamaño: $final_size"
+
+    log "SUCCESS" "✅ Despliegue verificado correctamente"
+}
+
+# Función para limpiar archivos temporales
+cleanup() {
+    log "INFO" "🧹 Limpiando archivos temporales..."
+
+    # Remover backups temporales de más de 7 días
+    find /tmp -name "deploy-backup-*" -type d -mtime +7 -exec rm -rf {} \; 2>/dev/null || true
+    find /tmp -name "deploy-*.log" -type f -mtime +7 -exec rm -f {} \; 2>/dev/null || true
+
+    log "SUCCESS" "✅ Limpieza completada"
+}
+
+# Función principal
+main() {
+    log "INFO" "🚀 Iniciando despliegue Laravel producción..."
+    log "INFO" "📝 Log del despliegue: $LOG_FILE"
+
+    check_requirements
+    check_project_structure
+    validate_public_html
+    clear_cache_before_deploy
+    create_backup
+    update_code
+    install_dependencies
+    optimize_laravel
+    deploy_public_files
+    setup_htaccess
+    setup_storage_link
+    fix_index_paths
+    set_permissions
+    verify_deployment
+    cleanup
+
+    log "SUCCESS" "✅ ¡Despliegue completado exitosamente!"
+    log "INFO" "📊 Backup disponible en: $BACKUP_DIR"
+    log "INFO" "📋 Log completo en: $LOG_FILE"
+}
+
+# Manejo de señales para limpieza
+trap 'error_exit "Despliegue interrumpido por señal"' INT TERM
+
+# Ejecutar función principal
+main "$@"
