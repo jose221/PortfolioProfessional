@@ -175,6 +175,16 @@ class FormModulesSectionComponent extends RComponent {
                                                 }
                                                 label="Eliminar"
                                             />
+                                            <FormControlLabel
+                                                className={'permission-item-list'}
+                                                control={
+                                                    <Switch
+                                                        checked={!!this.state.form.is_page}
+                                                        onChange={this.handleSwitchChange('is_page')}
+                                                    />
+                                                }
+                                                label="¿Estará en el panel?"
+                                            />
                                         </div>
                                     </div>
                                 </div> : 'No hay módulos disponibles'}

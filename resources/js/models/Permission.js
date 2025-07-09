@@ -6,7 +6,8 @@ export default class Permission extends Model{
         can_create:"boolean",
         can_read:"boolean",
         can_update:"boolean",
-        can_delete:"boolean"
+        can_delete:"boolean",
+        is_page:"boolean"
     };
     constructor(attributes = {
         id : 0,
@@ -15,7 +16,8 @@ export default class Permission extends Model{
         can_update : false,
         can_delete : false,
         role_id : 0,
-        module_id: 0
+        module_id: 0,
+        is_page: false
     }) {
         super(attributes)
     }
