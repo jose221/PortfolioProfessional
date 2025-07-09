@@ -7,7 +7,7 @@ echo "🚀 Despliegue Laravel producción iniciado..."
 # Directorios base
 PROJECT_DIR="$HOME/PortfolioProfessional"
 #PUBLIC_HTML="$HOME/herandro.lat"
-PUBLIC_HTML="$HOME/public_html"
+PUBLIC_HTML="$HOME/herandro.lat"
 ENV_FILE="$PROJECT_DIR/.env"
 SCRIPT_NAME="$(basename "$0")"
 
