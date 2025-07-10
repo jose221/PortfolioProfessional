@@ -72,6 +72,7 @@ class LoginController extends Controller
         $user = (isset($response->data)) ? $response->data : [];
         //return response()->json($user);
         if(isset($response->data->token)){
+            session(['user' => $response->data]);
             session(['auth-token' => $response->data->token]);
 
             unset($user->token);
@@ -226,6 +227,7 @@ class LoginController extends Controller
         }
         $token = $request->session()->get('auth-token');
         $this->logoutApi($token);
+        $request->session()->forget('user');
         return $request->wantsJson()
             ? new JsonResponse([], 204)
             : redirect('/');

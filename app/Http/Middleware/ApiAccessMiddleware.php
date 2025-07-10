@@ -45,6 +45,8 @@ class ApiAccessMiddleware
             'token' => $token
         ]);
         $response = json_decode($client->body());
+        // Cambiar esta línea - guardar solo los datos del usuario
+
         return (isset($response->data->access)) ? $response->data->access : false;
     }
 }
