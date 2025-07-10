@@ -47,6 +47,9 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "classmap": [
+        ],
+        "files": [
+            "app/Helpers/ArrayHelper.php"
         ]
     },
     "autoload-dev": {

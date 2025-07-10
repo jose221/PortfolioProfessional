@@ -1,4 +1,6 @@
-<pre>probando{{ print_r(Session::all(), true) }}</pre>
+@php
+use App\Helpers\ArrayHelper
+@endphp
 
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -85,103 +87,23 @@
                 <!-- sidebar-search  -->
                 <div class="sidebar-menu">
                     <ul>
-                        <li class="header-menu">
-                            <span>General</span>
-                        </li>
-                        <li class="">
-                            <a href="{{route('users.view')}}">
-                                <i class="fa fa-chart-line"></i>
-                                <span>Usuarios</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="{{route('home')}}">
-                                <i class="fa fa-tachometer-alt"></i>
-                                <span>Mi información</span>
-                                <!--<span class="badge badge-pill badge-warning">New</span>-->
-                            </a>
-                            <!--<div class="sidebar-submenu">
-                                <ul>
-                                    <li>
-                                        <a href="#">Dashboard 1
-                                            <span class="badge badge-pill badge-success">Pro</span>
+                        @if(!empty(session()->get('user')))
+                            @foreach (ArrayHelper::groupBy(ArrayHelper::filter(session()->get('user')->modules, function ($module){
+                                    return !empty($module->path) && $module->Permissions[0]->is_page && $module->Permissions[0]->can_read;
+                                }), 'tag') as $tag => $modules)
+                                <li class="header-menu">
+                                    <span>{{ $tag }}</span>
+                                </li>
+                                @foreach($modules as $module)
+                                    <li class="">
+                                        <a href="{{ $module->path }}">
+                                            <i class="fa fa-chart-line"></i>
+                                            <span>{{ $module->name_es }}</span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="#">Dashboard 2</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Dashboard 3</a>
-                                    </li>
-                                </ul>
-                            </div>-->
-                        </li>
-                        <li class="">
-                            <a href="{{route('contacts.view')}}">
-                                <i class="fa fa-chart-line"></i>
-                                <span>Mis contactos</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="{{route('studies.view')}}">
-                                <i class="fa fa-globe"></i>
-                                <span>Mis estudios</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('knowledges.view')}}">
-                                <i class="fa fa-book"></i>
-                                <span>Mis conocimientos</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('project.personal.view')}}">
-                                <i class="fa fa-book"></i>
-                                <span>Mis proyectos personales</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('experience.professional.view')}}">
-                                <i class="fa fa-book"></i>
-                                <span>Mi experiencia profesional</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('portfolio-categories.view')}}">
-                                <i class="fa fa-book"></i>
-                                <span>Mi portafolio</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('users.vitae.view')}}">
-                                <i class="fa fa-book"></i>
-                                <span>Mi CV</span>
-                            </a>
-                        </li>
-                    <!--
-                    <li class="">
-                        <a href="{{'contacts.view'}}">
-                            <i class="fa fa-chart-line"></i>
-                            <span>Charts</span>
-                        </a>
-                        <div class="sidebar-submenu">
-                            <ul>
-                                <li>
-                                    <a href="#">Pie chart</a>
-                                </li>
-                                <li>
-                                    <a href="#">Line chart</a>
-                                </li>
-                                <li>
-                                    <a href="#">Bar chart</a>
-                                </li>
-                                <li>
-                                    <a href="#">Histogram</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    -->
+                                @endforeach
+                            @endforeach
+                        @endif
                         <li class="header-menu">
                             <span>Extra</span>
                         </li>
