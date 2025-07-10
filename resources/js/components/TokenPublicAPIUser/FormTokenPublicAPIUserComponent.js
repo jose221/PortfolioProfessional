@@ -22,6 +22,7 @@ class FormTokenPublicAPIUserComponent extends RComponent {
     }
     handleSubmit = async (e) =>{
         e.preventDefault();
+        this.state.form.user_id = this.props.user_id;
         if(this.state.form.validData()){
             if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form);
             else await this.onCreate(`${primary_url}`, this.state.form)
@@ -38,6 +39,7 @@ class FormTokenPublicAPIUserComponent extends RComponent {
             this.dispatchStore(this.state)
         };
         const handleOpen = () => {
+            console.log( this.props)
             this.state.form = new TokenPublicAPIUser();
             this.state.form.user_id = this.props.user_id;
             this.state.openModal = true;

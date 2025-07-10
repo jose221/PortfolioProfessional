@@ -64,7 +64,7 @@ use App\Helpers\ArrayHelper
           <span class="user-name">
             <strong>{{ Auth::user()->name }}</strong>
           </span>
-                        <span class="user-role">Administrator</span>
+                        <span class="user-role">{{ session()->get('user')->Role->name_es }}</span>
                         <span class="user-status">
             <!--<i class="fa fa-circle"></i>
             <span>Online</span>-->
@@ -112,27 +112,6 @@ use App\Helpers\ArrayHelper
                                 <i class="fa fa-book"></i>
                                 <span>pagina principal</span>
                                 <span class="badge badge-pill badge-primary">Beta</span>
-                            </a>
-                        </li>
-                        <li class="header-menu">
-                            <span>Administración</span>
-                        </li>
-                        <li class="">
-                            <a href="{{route('users.view')}}">
-                                <i class="fa fa-chart-line"></i>
-                                <span>Usuarios</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="{{route('roles.view')}}">
-                                <i class="fa fa-chart-line"></i>
-                                <span>Roles</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="{{route('modules.view')}}">
-                                <i class="fa fa-chart-line"></i>
-                                <span>Módulos</span>
                             </a>
                         </li>
                     </ul>
