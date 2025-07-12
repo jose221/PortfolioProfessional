@@ -169,12 +169,10 @@ export default class RComponent extends Component{
         return response;
     }
     onDelete = async (url, params, showMessage=true) =>{
+        const mParams = this.mapParamsToNumericArray(params);
+
         let response = await DefaultService.delete(url, {
-            ids: params
-        }, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            ids: mParams
         })
         if(showMessage){
             this.state.isSuccess = true;
@@ -210,5 +208,68 @@ export default class RComponent extends Component{
     goToHref = async(url)=>{
         window.location.href=url;
     }
+    /**
+     * Mapea y valida distintos tipos de input para obtener un array simple de números.
+     * @param {Array|Object|any} params - Array, objeto o arreglo de objetos.
+     * @param {String} [key] - Clave a buscar dentro de objetos para extraer el array de ids.
+     * @returns {Number[]} Un array simple de números.
+     */
+    mapParamsToNumericArray(params, key = 'ids') {
+        if (!params || typeof params !== 'object') return [];
+
+        // Normalizar la colección si el valor es Set o Array
+        function getNormalized(val) {
+            if (Array.isArray(val)) return val;
+            if (val instanceof Set) return Array.from(val);
+            return [];
+        }
+
+        // Si es directamente un objeto con la clave
+        if (!Array.isArray(params) && params[key]) {
+            const values = getNormalized(params[key]);
+            if (values.every(item => typeof item === 'number')) return values;
+            if (values.every(item => typeof item === 'string')) {
+                const parsed = values.map(Number).filter(num => !isNaN(num));
+                return parsed.length === values.length ? parsed : [];
+            }
+            return [];
+        }
+
+        // Si params es un array
+        if (Array.isArray(params)) {
+            // Array de números puros
+            if (params.every(item => typeof item === 'number')) return params;
+
+            // Array de strings numéricas
+            if (params.every(item => typeof item === 'string')) {
+                const numArray = params.map(Number).filter(num => !isNaN(num));
+                return numArray.length === params.length ? numArray : [];
+            }
+
+            // Array de objetos con la key, aceptando Array o Set
+            if (params.every(item =>
+                typeof item === 'object' &&
+                !Array.isArray(item) &&
+                item !== null &&
+                item[key] &&
+                (Array.isArray(item[key]) || item[key] instanceof Set)
+            )) {
+                for (const obj of params) {
+                    const values = getNormalized(obj[key]);
+                    if (values.every(id => typeof id === 'number')) return values;
+                    if (values.every(id => typeof id === 'string')) {
+                        const parsed = values.map(Number).filter(num => !isNaN(num));
+                        return parsed.length === values.length ? parsed : [];
+                    }
+                }
+            }
+        }
+
+        // No cumple con nada
+        return [];
+    }
+
+
+
 
 }
