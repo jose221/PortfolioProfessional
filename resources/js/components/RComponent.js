@@ -183,11 +183,13 @@ export default class RComponent extends Component{
     }
     isValid(data, required=true){
         let  isInvalid = false;
-        if(data != undefined){
-            data = data.toString();
-            if(required && (!data || data.trim() == "" || data == null || data == '<p><br></p>')) isInvalid = true;
-        }else{
-            isInvalid = true;
+        if(required){
+            if (data != undefined) {
+                data = data.toString();
+                if (required && (!data || data.trim() == "" || data == null || data == '<p><br></p>')) isInvalid = true;
+            } else {
+                isInvalid = true;
+            }
         }
         return isInvalid
     }

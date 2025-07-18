@@ -15,7 +15,6 @@ require('./bootstrap');
 
 // Import components - each component is responsible for rendering itself
 require('./components/Example');
-import FormComponent from './components/home/FormComponent';
 import ContactsComponent from './components/contacts/ContactsComponent';
 import ListContactsComponent from './components/contacts/ListContactComponent';
 import CreateContactsComponent from "./components/contacts/CreateContactsComponent";
@@ -59,3 +58,4 @@ import RolesComponent from "./components/roles/RolesComponent";
 import ModulesComponent from "./components/modules/ModulesComponent";
 import RoleComponent from "./components/roles/role/RoleComponent";
 import TokenPublicAPIUserComponent from "./components/TokenPublicAPIUser/TokenPublicAPIUserComponent";
+import FormHomeComponent from "./components/home/FormComponent";

@@ -1,50 +1,53 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-
-import DialogContent from '@mui/material/DialogContent';
-
-import DialogTitle from '@mui/material/DialogTitle';
+import React from "react";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import Collapse from '@mui/material/Collapse';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import TextField from '@mui/material/TextField';
+import PersonIcon from '@mui/icons-material/Person';
 import RComponent from "../RComponent";
-import ReactDOM from "react-dom";
-import AddIcon from '@mui/icons-material/Add';
-import Fab from "@mui/material/Fab";
-import TextField from "@mui/material/TextField";
-import Role from "../../models/Role";
+import User from "../../models/User";
 
-let primary_url = window.url_api+"/admin/roles";
-class FormRolesComponent extends RComponent {
+let primary_url = window.url_api + "/admin/users";
+
+class FormComponent extends RComponent {
     constructor(props) {
         super(props);
-    }
-    async componentDidMount() {
-        this.subscribeStore()
-    }
-    handleSubmit = async (e) =>{
-        e.preventDefault();
-        console.log(this.state.form)
-        if(this.state.form.validData()){
-            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form);
-            else await this.onCreate(`${primary_url}`, this.state.form)
-            this.state.openModal = false;
-            this.state.data = await this.getItems(`${primary_url}`)
-            this.dispatchStore(this.state)
-            //window.location.reload();
+        this.state = {
+            ...this.state,   // hereda el estado base de RComponent
+            form: {},
         }
     }
-    render(){
 
-        const handleClose = () => {
-            this.state.openModal = false;
-            this.dispatchStore(this.state)
-        };
-        const handleOpen = () => {
-            this.state.form = new Role();
-            //this.state.form.user_id = this.props.user_id;
-            this.state.openModal = true;
-            this.dispatchStore(this.state)
-        };
+    async componentDidMount() {
+        this.subscribeStore();
+        await this.onInit();
+    }
+
+    onInit = async () => {
+        let res = await this.getItem(`${primary_url}/${this.props.id}`);
+        let data = new User(res);
+        this.state.form = data;
+        this.dispatchStore(this.state);
+    };
+
+    handleSubmit = async (e) => {
+        e.preventDefault();
+        if(this.state.form?.HistoryCurriculumVitae) delete this.state.form?.HistoryCurriculumVitae;
+        if(this.state.form.validData()){
+            await this.onUpdate(`${primary_url}/${this.props.id}`, this.state.form);
+            this.state.isSuccess = true;
+            this.dispatchStore(this.state);
+        }
+    };
+
+    successHandleClose = () => {
+        this.state.isSuccess = false;
+        this.dispatchStore(this.state);
+    }
+
+    render() {
         return (
             <div>
                 <Dialog
@@ -128,10 +131,13 @@ class FormRolesComponent extends RComponent {
         );
     }
 }
-export default FormRolesComponent;
-let name_component = document.querySelector("form-roles-component");
+
+export default FormComponent;
+
+// Renderizado desde un elemento personalizado, igual que tus otros formularios
+let name_component = document.querySelector("form-component");
 if (name_component) {
     const propsContainer = name_component;
     const props = Object.assign({}, propsContainer.dataset);
-    renderComponent(FormRolesComponent, name_component, props);
+    renderComponent(FormComponent, name_component, props);
 }

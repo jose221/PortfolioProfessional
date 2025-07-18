@@ -15,7 +15,8 @@ import KnowLedge from "../../models/KnowLedge";
 import ProfessionalExperience from "../../models/ProfessionalExperience";
 import SunEditor from "suneditor-react";
 import FormHelperText from "@mui/material/FormHelperText";
-import {Autocomplete} from "@mui/material";
+import {Autocomplete, FormControlLabel, Switch} from "@mui/material";
+import Alert from "@mui/material/Alert";
 let primary_url = window.url_api+"/admin/professional-experience";
 class FormProfessionalExperiencesComponent extends RComponent {
     constructor(props) {
@@ -27,7 +28,7 @@ class FormProfessionalExperiencesComponent extends RComponent {
     handleSubmit = async (e) =>{
         e.preventDefault();
         if(this.state.form.validData()){
-            let params = this.state.form;
+            let params = this.state.form.item;
             if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, params);
             else await this.onCreate(`${primary_url}`, params)
 
@@ -37,7 +38,12 @@ class FormProfessionalExperiencesComponent extends RComponent {
             this.dispatchStore(this.state)
             //window.location.reload();
         }
+        this.dispatchStore(this.state)
     }
+    handleSwitchChange = (permissionType) => (event) => {
+        this.state.form[permissionType] = event.target.checked;
+        this.dispatchStore(this.state)
+    };
     render() {
 
         const handleClose = () => {
@@ -65,36 +71,36 @@ class FormProfessionalExperiencesComponent extends RComponent {
                         <DialogContent>
                             <div className="row">
                                 <TextField
-                                    error={this.isValid(this.state.form.company)}
+                                    error={this.state.form?.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('company')}
                                     className="col-md-12 mt-3 p-1"
                                     id="company"
                                     label="Nombre de la empresa"
                                     value={this.state.form.company || ' '}
                                     name="company"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe el nombre de la empresa"
+                                    helperText={this.state.form.errorMessages?.company}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.country_es)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('country_es')}
                                     className="col-md-6 mt-3 p-1"
                                     id="country_es"
                                     label="País en español"
                                     value={this.state.form.country_es || ' '}
                                     name="country_es"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe el país en español"
+                                    helperText={this.state.form.errorMessages?.country_es}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.country_en)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('country_en')}
                                     className="col-md-6 mt-3 p-1"
                                     id="country_en"
                                     label="País en inglés"
                                     value={this.state.form.country_en || ' '}
                                     name="country_en"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe el país en inglés"
+                                    helperText={this.state.form.errorMessages?.country_en}
                                 />
-                                <div className={(!this.isValid(this.state.form.description_es)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error'}>
+                                <div className={(this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_es') && this.state.form.errorMessages?.description_en) ? 'col-md-6 mt-3 p-1 textarea-editor error':'col-md-6 mt-3 p-1 textarea-editor'}>
                                     <label>Descripción en español</label>
                                     <SunEditor lang="es"
                                                id="outlined-error"
@@ -104,9 +110,9 @@ class FormProfessionalExperiencesComponent extends RComponent {
                                                onChange={(e)=>this.handleChangeForm({target:{name: 'description_es', value:e}})}
                                                setContents={this.state.form.description_es || ''}
                                     />
-                                    <FormHelperText error={this.isValid(this.state.form.description_es)}>Descripción de tu experiencia en español</FormHelperText>
+                                    <FormHelperText error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_es') && this.state.form.errorMessages?.description_es}>{this.state.form.errorMessages?.description_es}</FormHelperText>
                                 </div>
-                                <div className={(!this.isValid(this.state.form.description_en)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error'}>
+                                <div className={(this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_en') && this.state.form.errorMessages?.description_en) ? 'col-md-6 mt-3 p-1 textarea-editor error':'col-md-6 mt-3 p-1 textarea-editor'}>
                                     <label>Descripción en inglés</label>
                                     <SunEditor lang="es"
                                                id="outlined-error"
@@ -116,51 +122,37 @@ class FormProfessionalExperiencesComponent extends RComponent {
                                                onChange={(e)=>this.handleChangeForm({target:{name: 'description_en', value:e}})}
                                                setContents={this.state.form.description_en || ''}
                                     />
-                                    <FormHelperText error={this.isValid(this.state.form.description_en)}>Descripción de tu experiencia en inglés</FormHelperText>
+                                    <FormHelperText error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_en') && this.state.form.errorMessages?.description_en}>{this.state.form.errorMessages?.description_en}</FormHelperText>
                                 </div>
                                 <TextField
-                                    error={this.isValid(this.state.form.job_en)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('job_en')}
                                     className="col-md-6 mt-3 p-1"
                                     id="job_en"
                                     label="Posición en inglés"
                                     value={this.state.form.job_en || ' '}
                                     name="job_en"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe la posición en inglés"
+                                    helperText={this.state.form.errorMessages?.job_en}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.job_es)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('job_es')}
                                     className="col-md-6 mt-3 p-1"
                                     id="job_es"
                                     label="Posición en español"
                                     value={this.state.form.job_es || ' '}
                                     name="job_es"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe la posición en español"
+                                    helperText={this.state.form.errorMessages?.job_es}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.date_start)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('date_start')}
                                     className="col-md-6 mt-3 p-1"
                                     id="date_start"
                                     label="Fecha de inicio"
                                     value={this.state.form.date_start || ' '}
                                     name="date_start"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe la fecha de inicio"
-                                    type="date"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                                <TextField
-                                    error={this.isValid(this.state.form.date_end)}
-                                    className="col-md-6 mt-3 p-1"
-                                    id="date_end"
-                                    label="Fecha de fin"
-                                    value={this.state.form.date_end || ' '}
-                                    name="date_end"
-                                    onChange={this.handleChangeForm}
-                                    helperText="Escribe la fecha de fin"
+                                    helperText={this.state.form.errorMessages?.date_start}
                                     type="date"
                                     InputLabelProps={{
                                         shrink: true,
@@ -180,11 +172,41 @@ class FormProfessionalExperiencesComponent extends RComponent {
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            label="filterSelectedOptions"
-                                            placeholder="Favorites"
+                                            label="Portafolio"
+                                            placeholder="Selecciona las caráctetisticas de tu experiencia profesional"
                                         />
                                     )}
                                 />
+                            </div>
+                            <div
+                                className="col-md-6 mt-3 p-1 row"
+                            >
+                                <FormControlLabel
+                                    className={'permission-item-list w-100'}
+                                    control={
+                                        <Switch
+                                            checked={!!this.state.form.still_working}
+                                            onChange={this.handleSwitchChange('still_working')}
+                                        />
+                                    }
+                                    label="¿Aún trabaja?"
+                                />
+                                {!this.state.form.still_working && (
+                                    <TextField
+                                        className="mt-3 p-1 w-100"
+                                        error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('date_end')}
+                                        id="date_end"
+                                        label="Fecha de fin"
+                                        value={this.state.form.date_end || ' '}
+                                        name="date_end"
+                                        onChange={this.handleChangeForm}
+                                        helperText={this.state.form.errorMessages?.date_end}
+                                        type="date"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                )}
                             </div>
                             <div className="row">
                                 <div className="col-md-3 ">

@@ -27,12 +27,14 @@ class FormKnowLedgesComponent extends RComponent {
         e.preventDefault();
         console.log(this.state.form)
         if(this.state.form.validData()){
-            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form);
-            else await this.onCreate(`${primary_url}`, this.state.form)
+            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form.item);
+            else await this.onCreate(`${primary_url}`, this.state.form.item)
             this.state.openModal = false;
             this.state.data = await this.getItems(`${primary_url}`)
             this.dispatchStore(this.state)
             //window.location.reload();
+        }else{
+            this.dispatchStore(this.state)
         }
     }
     render() {
@@ -62,26 +64,26 @@ class FormKnowLedgesComponent extends RComponent {
                         <DialogContent>
                             <div className="row">
                                 <TextField
-                                    error={this.isValid(this.state.form.title_es)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('title_es')}
                                     className="col-md-6 mt-3 p-1"
                                     id="title_es"
                                     label="Titulo en español"
                                     value={this.state.form.title_es || ' '}
                                     name="title_es"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe el titulo en español"
+                                    helperText={this.state.form.errorMessages?.title_es}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.title_en)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('title_en')}
                                     className="col-md-6 mt-3 p-1"
                                     id="title_en"
                                     label="Titulo en inglés"
                                     value={this.state.form.title_en || ' '}
                                     name="title_en"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe el titulo en inglés"
+                                    helperText={this.state.form.errorMessages?.title_en}
                                 />
-                                <div className={(!this.isValid(this.state.form.description_es)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error'}>
+                                <div className={(this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_es')) ? 'col-md-6 mt-3 p-1 textarea-editor error':'col-md-6 mt-3 p-1 textarea-editor'}>
                                     <label>Descripción en español</label>
                                     <SunEditor lang="es"
                                                id="outlined-error"
@@ -91,9 +93,9 @@ class FormKnowLedgesComponent extends RComponent {
                                                onChange={(e)=>this.handleChangeForm({target:{name: 'description_es', value:e}})}
                                                setContents={this.state.form.description_es || ''}
                                     />
-                                    <FormHelperText error={this.isValid(this.state.form.description_es)}>Descripción de tus conocimientos en español</FormHelperText>
+                                    <FormHelperText error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_es') && this.state.form.errorMessages?.description_es}>{this.state.form.errorMessages?.description_es}</FormHelperText>
                                 </div>
-                                <div className={(!this.isValid(this.state.form.description_en)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error'}>
+                                <div className={(this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_en')) ? 'col-md-6 mt-3 p-1 textarea-editor error':'col-md-6 mt-3 p-1 textarea-editor'}>
                                     <label>Descripción en inglés</label>
                                     <SunEditor lang="es"
                                                id="outlined-error"
@@ -103,7 +105,7 @@ class FormKnowLedgesComponent extends RComponent {
                                                onChange={(e)=>this.handleChangeForm({target:{name: 'description_en', value:e}})}
                                                setContents={this.state.form.description_en || ''}
                                     />
-                                    <FormHelperText error={this.isValid(this.state.form.description_en)}>Descripción de tus conocimientos en inglés</FormHelperText>
+                                    <FormHelperText error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_en') && this.state.form.errorMessages?.description_en}>{this.state.form.errorMessages?.description_en}</FormHelperText>
                                 </div>
                             </div>
                             <div className="row">
