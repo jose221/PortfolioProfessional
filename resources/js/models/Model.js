@@ -17,9 +17,6 @@ export default class Model {
         this.item = attr;
 
     }
-    getRequired(){
-        return this.required;
-    }
     updateItem(){
         for (const key of this.attributes) {
             if(this[key] === undefined){
@@ -160,24 +157,6 @@ export default class Model {
             }
             window.item = this;
         }
-    }
-    convertStringCasts(){
-        let data = this;
-        if(this.casts){
-            for (const [key, value] of Object.entries(this.casts)) {
-                switch (value) {
-                    case 'array':
-                        data[key] = JSON.stringify(data[key].map((item)=>{
-                            return JSON.stringify(item);
-                        }));
-                        break;
-                    case 'object':
-                        data[key] = JSON.stringify(data[key]);
-                        break;
-                }
-            }
-        }
-        return data;
     }
     isValidAttribute(key, required=this.required && this.required.find(element => element == key)){
         this.updateItem()
