@@ -14,6 +14,7 @@ import React from "react";
 import KnowLedgeAbility from "../../models/KnowLedgeAbility";
 import EditIcon from "@mui/icons-material/Edit";
 import Collapse from "@mui/material/Collapse";
+import InfoKnowLedgesComponent from "../knowledges/InfoKnowLedgesComponent";
 let primary_url = window.url_api+"/admin/knowledges-abilities";
 class ListKnowledgeAbilityComponent extends RComponent {
     constructor(props) {
@@ -98,7 +99,7 @@ class ListKnowledgeAbilityComponent extends RComponent {
                 </Snackbar>
                 <div className="row">
                     <div className="col-md-4">
-                        <info-knowledge-component data-id={this.props.id} />
+                        <InfoKnowLedgesComponent id={this.props.id} />
                     </div>
                     <div className="col-md-8">
                         <Card className="container">

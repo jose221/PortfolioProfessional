@@ -4,6 +4,7 @@ import store from "../redux/store/store";
 import addTodo from "../redux/actions/add-todo";
 export default class RComponent extends Component{
     state = {
+        currentLang: "es",
         ids:[],
         data:{},
         items:[],

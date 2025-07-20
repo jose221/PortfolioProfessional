@@ -5,7 +5,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import Card from "@mui/material/Card";
 import ReactDOM from "react-dom";
 import Typography from '@mui/material/Typography';
-
+import {sleep} from "../../utils/tools";
+import DOMPurify from 'dompurify';
 let primary_url = window.url_api+"/admin/knowledges";
 
 class InfoKnowLedgesComponent extends RComponent {
@@ -17,11 +18,17 @@ class InfoKnowLedgesComponent extends RComponent {
         this.subscribeStore();
         await this.onInit();
     }
+    changeLang(){
+        console.log(this.state.currentLang)
+        if(this.state.currentLang === "es") this.state.currentLang = "en"
+        else this.state.currentLang = "es"
+        this.dispatchStore(this.state)
+    }
 
     onInit = async () => {
+        await sleep(100)
         let res = await this.getItems(`${primary_url}/${this.props.id}`)
         this.state.information = res;
-        console.log(res)
         this.dispatchStore(this.state)
     }
 
@@ -33,15 +40,18 @@ class InfoKnowLedgesComponent extends RComponent {
                     <CardContent className="pb-1">
                         <div className="justify-card-column">
                             <div>
-                                <button type="button" className="btn btn-light btn-sm float-right" >
-                                    Ver en Inglés
+                                <button type="button" className="btn btn-light btn-sm float-right"  onClick={()=>this.changeLang()}>
+                                    Ver en {this.state.currentLang === 'es' ? 'Inglés' : 'Español'}
                                 </button>
                                 <div className="mt-1">
-                                    <p className="info-title">{this.state.information.title_es}</p>
+                                    <p className="info-title">{this.state.information['title_'+this.state.currentLang]}</p>
 
-                                    <p className="info-description">
-                                        {this.state.information.description_es}
+                                    <p className="info-description"
+                                       dangerouslySetInnerHTML={{
+                                           __html: DOMPurify.sanitize(this.state.information['description_'+this.state.currentLang])
+                                       }}>
                                     </p>
+
                                 </div>
                             </div>
 

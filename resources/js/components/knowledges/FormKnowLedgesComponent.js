@@ -25,7 +25,6 @@ class FormKnowLedgesComponent extends RComponent {
     }
     handleSubmit = async (e) =>{
         e.preventDefault();
-        console.log(this.state.form)
         if(this.state.form.validData()){
             if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form.item);
             else await this.onCreate(`${primary_url}`, this.state.form.item)
