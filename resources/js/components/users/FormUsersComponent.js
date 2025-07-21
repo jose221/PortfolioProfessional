@@ -13,30 +13,41 @@ import Fab from "@mui/material/Fab";
 import TextField from "@mui/material/TextField";
 import MyContact from "../../models/MyContact";
 import {Autocomplete} from "@mui/material";
+import User from "../../models/User";
+import {sleep} from "../../utils/tools";
 
 let primary_url = window.url_api+"/admin/user";
-const roles = [
-    { label: 'Administrador', id: 1 }
-];
+let register_url = window.url_api+"/admin/register";
+let role_url = window.url_api+"/admin/roles";
+
 class FormUsersComponent extends RComponent {
     constructor(props) {
         super(props);
     }
     async componentDidMount() {
-        this.state.form = new MyContact();
-        this.state.form.user_id = this.props.user_id;
-        this.dispatchStore(this.state)
         this.subscribeStore()
+        await sleep(1000)
+        this.getRoles()
+    }
+    async getRoles(){
+        let roles_user = await this.getItems(`${role_url}`);
+        this.state.roles = roles_user;
+        console.log(roles_user)
+        this.dispatchStore(this.state)
     }
     handleSubmit = async (e) =>{
         e.preventDefault();
         console.log(this.state.form)
         if(this.state.form.validData()){
-            await this.onCreate(`${primary_url}`, this.state.form)
+            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form.item);
+            else await this.onCreate(`${register_url}`, this.state.form.item)
             this.state.openModal = false;
-            this.state.data = await this.getItems(`${primary_url}`)
+            let res = await this.getItems(`${primary_url}`,{}, true)
+            this.state.data = res;
             this.dispatchStore(this.state)
             //window.location.reload();
+        }else{
+            this.dispatchStore(this.state)
         }
     }
     render() {
@@ -46,6 +57,7 @@ class FormUsersComponent extends RComponent {
             this.dispatchStore(this.state)
         };
         const handleOpen = () => {
+            this.state.form = new User();
             this.state.openModal = true;
             this.dispatchStore(this.state)
         };
@@ -64,28 +76,28 @@ class FormUsersComponent extends RComponent {
                         <DialogContent>
                             <div className="row">
                                 <TextField
-                                    error={this.isValid(this.state.form.name)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('name')}
                                     className="col-md-6 mt-3 p-1"
                                     id="name"
                                     label="Nombre completo"
                                     value={this.state.form.name || ' '}
                                     name="name"
                                     onChange={this.handleChangeForm}
-                                    helperText="Nombre completo del usuario"
+                                    helperText={this.state.form.errorMessages?.name}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.email)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('email')}
                                     className="col-md-6 mt-3 p-1"
                                     id="email"
                                     label="Correo eléctronico"
                                     value={this.state.form.email || ' '}
                                     name="email"
                                     onChange={this.handleChangeForm}
-                                    helperText="Correo del usuario"
+                                    helperText={this.state.form.errorMessages?.email}
                                 />
                                 {!this.state.form.id && (
                                     <TextField
-                                        error={this.isValid(this.state.form.password)}
+                                        error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('password')}
                                         className="col-md-6 mt-3 p-1"
                                         id="password"
                                         label="Contraseña"
@@ -93,21 +105,21 @@ class FormUsersComponent extends RComponent {
                                         name="password"
                                         type={'password'}
                                         onChange={this.handleChangeForm}
-                                        helperText="Contraseña del usuario, la contraseña por default es: password123"
+                                        helperText={this.state.form.errorMessages?.password ?? 'Contraseña del usuario, la contraseña por default es: password123'}
                                     />
                                 )}
                                 <Autocomplete
                                     disablePortal
-                                    options={roles}
-                                    getOptionLabel={(option) => option.label}
-                                    value={roles.find(r => r.id === this.state.form.role_id) || null}
+                                    options={(this.state?.roles ?? [])}
+                                    getOptionLabel={(option) => `${option.name_es} | ${option.name_es}(${option.key})`}
+                                    value={(this.state?.roles ?? []).find(r => r.id === this.state.form.role_id) || null}
                                     onChange={(event, newValue) => {
                                         this.setState(state => ({
                                             ...state,
-                                            form: {
-                                                ...state.form,
+                                            form: new User({
+                                                ...state.form.item,
                                                 role_id: newValue ? newValue.id : ''
-                                            }
+                                            })
                                         }));
                                     }}
                                     className="col-md-6 mt-3 p-1"
@@ -117,9 +129,9 @@ class FormUsersComponent extends RComponent {
                                             className="w-100"
                                             id="role_id"
                                             name="role_id"
-                                            helperText="Rol que pertenece el usuario"
+                                            helperText={this.state.form.errorMessages?.role_id ?? 'Rol que pertenece el usuario'}
                                             label="Rol del usuario"
-                                            error={this.isValid(this.state.form.role_id)}
+                                            error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('role_id')}
                                         />
                                     )}
                                 />
@@ -127,7 +139,7 @@ class FormUsersComponent extends RComponent {
                         </DialogContent>
                         <DialogActions>
                             <Button type="button" onClick={handleClose}>Cerrar</Button>
-                            <Button type="submit" onClick={handleClose}>Guardar</Button>
+                            <Button type="submit">Guardar</Button>
                         </DialogActions>
                     </form>
                 </Dialog>

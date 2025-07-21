@@ -5,9 +5,14 @@ export default class User extends Model{
         "name",
         "email"
     ];
+    attributeLabel = {
+        name: "El nombre",
+        email: "El email",
+    }
     constructor(attributes = {
                     id : 0,
                     name : "",
+                    email : "",
                     age : 0,
                     date_birthday : "",
                     nationality_es : "",
@@ -27,8 +32,8 @@ export default class User extends Model{
                     avatar : "",
                     header_text_es : "",
                     header_text_en : "",
+                    password: "password123"
                 }) {
-        console.log("los atributos son: ", attributes)
         super(attributes)
     }
 }

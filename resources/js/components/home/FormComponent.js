@@ -46,7 +46,7 @@ class FormHomeComponent extends RComponent {
         e.preventDefault();
         if(this.state.form?.HistoryCurriculumVitae) delete this.state.form?.HistoryCurriculumVitae;
         if(this.state.form.validData()){
-            await this.onUpdate(`${primary_url}/${this.props.id}`, this.state.form);
+            await this.onUpdate(`${primary_url}/${this.props.id}`, this.state.form.item);
             this.state.isSuccess = true;
             this.dispatchStore(this.state);
         }

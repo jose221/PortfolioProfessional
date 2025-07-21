@@ -18,6 +18,7 @@ import Avatar from "@mui/material/Avatar";
 import {green} from "@mui/material/colors";
 import EditIcon from "@mui/icons-material/Edit";
 import KnowLedge from "../../models/KnowLedge";
+import User from "../../models/User";
 let primary_url = window.url_api+"/admin/user";
 class ListUsersComponent extends RComponent {
     constructor(props) {
@@ -63,7 +64,7 @@ class ListUsersComponent extends RComponent {
         await this.onInit();
     }
     openEdit = async(params)=>{
-        this.state.form = params.row;
+        this.state.form = new User(params.row);
 
         this.state.openModal = true;
         this.dispatchStore(this.state)
