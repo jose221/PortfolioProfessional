@@ -31,7 +31,7 @@ class ListPortfolioComponent extends RComponent{
         await this.onInit();
     }
     onInit = async ()=>{
-        let res = await this.getItems(`${primary_url}`)
+        let res = await this.getItems(`${primary_url}?portfolio_categories_id=${this.props.id}`)
         this.state.data = res;
         this.dispatchStore(this.state)
     }

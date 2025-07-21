@@ -23,14 +23,15 @@ class FormStudiesComponent extends RComponent {
     }
     handleSubmit = async (e) =>{
         e.preventDefault();
-        console.log(this.state.form)
         if(this.state.form.validData()){
-            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form);
-            else await this.onCreate(`${primary_url}`, this.state.form)
+            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form.item);
+            else await this.onCreate(`${primary_url}`, this.state.form.item)
             this.state.openModal = false;
             this.state.data = await this.getItems(`${primary_url}`)
             this.dispatchStore(this.state)
             //window.location.reload();
+        }else{
+            this.dispatchStore(this.state)
         }
     }
     render(){
@@ -60,54 +61,54 @@ class FormStudiesComponent extends RComponent {
                         <DialogContent>
                             <div className="row">
                                 <TextField
-                                    error={this.isValid(this.state.form.folio)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('folio')}
                                     className="col-md-6 mt-3 p-1"
                                     id="folio"
                                     label="Folio"
                                     value={this.state.form.folio || ' '}
                                     name="folio"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe el folio o la cedula profesional"
+                                    helperText={this.state.form.errorMessages?.folio}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.caerrer_es)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('caerrer_es')}
                                     className="col-md-6 mt-3 p-1"
                                     id="caerrer_es"
                                     label="Nombre de la carrera en español"
                                     value={this.state.form.caerrer_es || ' '}
                                     name="caerrer_es"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe el nombre de la carrera en español"
+                                    helperText={this.state.form.errorMessages?.caerrer_es}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.caerrer_en)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('caerrer_en')}
                                     className="col-md-6 mt-3 p-1"
                                     id="caerrer_en"
                                     label="Nombre de la carrera en inglés"
                                     value={this.state.form.caerrer_en || ' '}
                                     name="caerrer_en"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe el nombre de la carrera en inglés"
+                                    helperText={this.state.form.errorMessages?.caerrer_en}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.school_en)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('school_en')}
                                     className="col-md-6 mt-3 p-1"
                                     id="school_en"
                                     label="Escuela en inglés"
                                     value={this.state.form.school_en || ' '}
                                     name="school_en"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe la escuela en inglés"
+                                    helperText={this.state.form.errorMessages?.school_en}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.school_es)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('school_es')}
                                     className="col-md-6 mt-3 p-1"
                                     id="school_es"
                                     label="Escuela en español"
                                     value={this.state.form.school_es || ' '}
                                     name="school_es"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe la escuela en español"
+                                    helperText={this.state.form.errorMessages?.school_es}
                                 />
                             </div>
                         </DialogContent>

@@ -27,14 +27,15 @@ class FormPortfolioComponent extends RComponent {
     }
     handleSubmit = async (e) =>{
         e.preventDefault();
-        console.log(this.state.form)
         if(this.state.form.validData()){
-            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form);
-            else await this.onCreate(`${primary_url}`, this.state.form)
+            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form.item);
+            else await this.onCreate(`${primary_url}`, this.state.form.item)
             this.state.openModal = false;
-            this.state.data = await this.getItems(`${primary_url}`)
+            this.state.data = await this.getItems(`${primary_url}?portfolio_categories_id=${this.props.id}`)
             this.dispatchStore(this.state)
             //window.location.reload();
+        }else{
+            this.dispatchStore(this.state)
         }
     }
     render() {
@@ -45,7 +46,8 @@ class FormPortfolioComponent extends RComponent {
         };
         const handleOpen = () => {
             this.state.form = new Portfolio();
-            this.state.form.user_id = this.props.user_id;
+            this.state.form.portfolio_categories_id = this.props.id;
+            //this.state.form.user_id = this.props.user_id;
             this.state.openModal = true;
             this.dispatchStore(this.state)
         };
@@ -64,46 +66,47 @@ class FormPortfolioComponent extends RComponent {
                         <DialogContent>
                             <div className="row">
                                 <TextField
-                                    error={this.isValid(this.state.form.code)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('code')}
                                     className="col-md-6 mt-3 p-1"
                                     id="code"
                                     label="Código"
                                     value={this.state.form.code || ' '}
                                     name="code"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe el código del portafolio"
+                                    helperText={this.state.form.errorMessages?.code}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.knowledge_level)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('knowledge_level')}
                                     className="col-md-6 mt-3 p-1"
                                     id="knowledge_level"
                                     label="nivel de conocimientos"
-                                    value={this.state.form.knowledge_level || ' '}
+                                    value={this.state.form.knowledge_level || 0}
                                     name="knowledge_level"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe el nivel de conocimientos"
+                                    helperText={this.state.form.errorMessages?.knowledge_level ?? "Selecciona el nivel de conocimiento del 1 al 100"}
+                                    type="number"
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.title_es)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('title_es')}
                                     className="col-md-6 mt-3 p-1"
                                     id="title_es"
                                     label="Titulo en español"
                                     value={this.state.form.title_es || ' '}
                                     name="title_es"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe el titulo en español"
+                                    helperText={this.state.form.errorMessages?.title_es}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.title_en)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('title_en')}
                                     className="col-md-6 mt-3 p-1"
                                     id="title_en"
                                     label="Titulo en inglés"
                                     value={this.state.form.title_en || ' '}
                                     name="title_en"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe el titulo en inglés"
+                                    helperText={this.state.form.errorMessages?.title_en}
                                 />
-                                <div className={(!this.isValid(this.state.form.description_es)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error'}>
+                                <div className={(this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_es')) ? 'col-md-6 mt-3 p-1 textarea-editor error':'col-md-6 mt-3 p-1 textarea-editor'}>
                                     <label>Descripción en español</label>
                                     <SunEditor lang="es"
                                                id="outlined-error"
@@ -113,9 +116,9 @@ class FormPortfolioComponent extends RComponent {
                                                onChange={(e)=>this.handleChangeForm({target:{name: 'description_es', value:e}})}
                                                setContents={this.state.form.description_es || ''}
                                     />
-                                    <FormHelperText error={this.isValid(this.state.form.description_es)}>Descripción de tu portafolio en español</FormHelperText>
+                                    <FormHelperText error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_es') && this.state.form.errorMessages?.description_es}>{this.state.form.errorMessages?.description_es}</FormHelperText>
                                 </div>
-                                <div className={(!this.isValid(this.state.form.description_en)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error'}>
+                                <div className={(this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_en')) ? 'col-md-6 mt-3 p-1 textarea-editor error':'col-md-6 mt-3 p-1 textarea-editor'}>
                                     <label>Descripción en inglés</label>
                                     <SunEditor lang="es"
                                                id="outlined-error"
@@ -125,17 +128,18 @@ class FormPortfolioComponent extends RComponent {
                                                onChange={(e)=>this.handleChangeForm({target:{name: 'description_en', value:e}})}
                                                setContents={this.state.form.description_en || ''}
                                     />
-                                    <FormHelperText error={this.isValid(this.state.form.description_en)}>Descripción de tu portafolio en inglés</FormHelperText>
+                                    <FormHelperText error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_en') && this.state.form.errorMessages?.description_en}>{this.state.form.errorMessages?.description_en}</FormHelperText>
                                 </div>
                                 <TextField
-                                    error={this.isValid(this.state.form.years_experience)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('years_experience')}
                                     className="col-md-6 mt-3 p-1"
                                     id="years_experience"
                                     label="Años de experiencia"
-                                    value={this.state.form.years_experience || ' '}
+                                    value={this.state.form.years_experience || 0}
                                     name="years_experience"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe los años de experiencia"
+                                    helperText={this.state.form.errorMessages?.years_experience}
+                                    type="number"
                                 />
                             </div>
                         </DialogContent>
