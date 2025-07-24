@@ -4,6 +4,7 @@ import RComponent from "../../RComponent";
 import KnowLedge from "../../../models/KnowLedge";
 import {Chip, FormControlLabel, Paper, Switch} from "@mui/material";
 import FormModulesSectionComponent from "./FormModulesSectionComponent";
+import Module from "../../../models/Module";
 let primary_url = window.url_api+"/admin/modules/by-role";
 let permission_url = window.url_api+"/admin/permissions";
 let title = "Información  los módulos por rol"
@@ -52,7 +53,7 @@ class ListModulesSectionComponent extends RComponent{
         await this.onInit();
     }
     openEdit = async(params)=>{
-        this.state.form = new KnowLedge(params.row);
+        this.state.form = new Module(params.row);
         this.state.openModal = true;
         this.dispatchStore(this.state)
     }

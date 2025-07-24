@@ -60,10 +60,9 @@ class FormModulesSectionComponent extends RComponent {
     }
     handleSubmit = async (e) =>{
         e.preventDefault();
-        this.state.form = new Permission(this.state.form)
         if(this.state.form.validData()){
-            if(this.state.form?.id) await this.onUpdate(`${permissions_url}/${this.state.form?.id}`, this.state.form);
-            else await this.onCreate(`${permissions_url}`, this.state.form.getItem())
+            if(this.state.form?.id) await this.onUpdate(`${permissions_url}/${this.state.form?.id}`, this.state.form.item);
+            else await this.onCreate(`${permissions_url}`, this.state.form.item)
             this.state.openModal = false;
             this.dispatchStore(this.state)
             window.location.reload();
