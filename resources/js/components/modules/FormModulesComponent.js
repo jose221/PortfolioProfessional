@@ -28,14 +28,15 @@ class FormModulesComponent extends RComponent {
     };
     handleSubmit = async (e) =>{
         e.preventDefault();
-        console.log(this.state.form)
         if(this.state.form.validData()){
-            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form);
-            else await this.onCreate(`${primary_url}`, this.state.form)
+            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form.item);
+            else await this.onCreate(`${primary_url}`, this.state.form.item)
             this.state.openModal = false;
             this.state.data = await this.getItems(`${primary_url}`)
             this.dispatchStore(this.state)
             //window.location.reload();
+        }else{
+            this.dispatchStore(this.state)
         }
     }
     render(){
@@ -65,6 +66,7 @@ class FormModulesComponent extends RComponent {
                         <DialogContent>
                             <div className="row">
                                 <TextField
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('path')}
                                     error={this.isValid(this.state.form.path)}
                                     className="col-md-8 mt-3 p-1"
                                     id="path"
@@ -72,67 +74,67 @@ class FormModulesComponent extends RComponent {
                                     value={this.state.form.path || ' '}
                                     name="path"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe la ruta que pertenece el módulo"
+                                    helperText={this.state.form.errorMessages?.path}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.tag)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('tag')}
                                     className="col-md-4 mt-3 p-1"
                                     id="tag"
                                     label="Etiqueta"
                                     value={this.state.form.tag || ' '}
                                     name="tag"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe la etiqueta que pertenece el módulo"
+                                    helperText={this.state.form.errorMessages?.tag}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.key)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('key')}
                                     className="col-md-6 mt-3 p-1"
                                     id="key"
                                     label="Key"
                                     value={this.state.form.key || ' '}
                                     name="key"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe el identificador del Módulo"
+                                    helperText={this.state.form.errorMessages?.key}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.name_es)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('name_es')}
                                     className="col-md-6 mt-3 p-1"
                                     id="name_es"
                                     label="Nombre del Módulo en español"
                                     value={this.state.form.name_es || ' '}
                                     name="name_es"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe el nombre del Módulo en español"
+                                    helperText={this.state.form.errorMessages?.name_es}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.name_en)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('name_en')}
                                     className="col-md-6 mt-3 p-1"
                                     id="name_en"
                                     label="Nombre del Módulo en inglés"
                                     value={this.state.form.name_en || ' '}
                                     name="name_en"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe el nombre del Módulo en inglés"
+                                    helperText={this.state.form.errorMessages?.name_en}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.description_en)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_en')}
                                     className="col-md-6 mt-3 p-1"
                                     id="description_en"
                                     label="Descripción en inglés"
                                     value={this.state.form.description_en || ' '}
                                     name="description_en"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe la descripción en inglés"
+                                    helperText={this.state.form.errorMessages?.description_en}
                                 />
                                 <TextField
-                                    error={this.isValid(this.state.form.description_es)}
+                                    error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_es')}
                                     className="col-md-6 mt-3 p-1"
                                     id="description_es"
                                     label="Descripción en español"
                                     value={this.state.form.description_es || ' '}
                                     name="description_es"
                                     onChange={this.handleChangeForm}
-                                    helperText="Escribe la descripción en español"
+                                    helperText={this.state.form.errorMessages?.description_es}
                                 />
                             </div>
                             <FormControlLabel

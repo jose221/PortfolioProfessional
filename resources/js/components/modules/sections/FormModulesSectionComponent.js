@@ -66,6 +66,8 @@ class FormModulesSectionComponent extends RComponent {
             this.state.openModal = false;
             this.dispatchStore(this.state)
             window.location.reload();
+        }else{
+            this.dispatchStore(this.state)
         }
     }
     handleSwitchChange = (permissionType) => (event) => {

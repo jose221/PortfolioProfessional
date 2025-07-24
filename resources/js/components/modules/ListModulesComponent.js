@@ -13,9 +13,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import  { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Avatar from '@mui/material/Avatar';
-import { deepOrange, green } from '@mui/material/colors';
-import KnowLedge from "../../models/KnowLedge";
+import Module from "../../models/Module";
 let primary_url = window.url_api+"/admin/modules";
 let title = "Información  los módulos"
 class ListModulesComponent extends RComponent{
@@ -55,7 +53,7 @@ class ListModulesComponent extends RComponent{
         await this.onInit();
     }
     openEdit = async(params)=>{
-        this.state.form = new KnowLedge(params.row);
+        this.state.form = new Module(params.row);
 
         this.state.openModal = true;
         this.dispatchStore(this.state)
