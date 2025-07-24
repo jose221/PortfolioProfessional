@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CertificationsController;
 use App\Http\Controllers\Admin\ModulesController;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\TokenPublicAPIUserController;
@@ -139,6 +140,10 @@ Route::prefix('admin')->middleware(['web', ApiAccessMiddleware::class])->group(f
 
     Route::prefix('token-public-api-user')->name('token_public_api_user.')->group(function () {
         Route::get('/', [TokenPublicAPIUserController::class, 'index'])->name('view');
+    });
+
+    Route::prefix('certifications')->name('certifications.')->group(function () {
+        Route::get('/', [CertificationsController::class, 'index'])->name('view');
     });
 });
 

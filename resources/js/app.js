@@ -59,3 +59,6 @@ import ModulesComponent from "./components/modules/ModulesComponent";
 import RoleComponent from "./components/roles/role/RoleComponent";
 import TokenPublicAPIUserComponent from "./components/TokenPublicAPIUser/TokenPublicAPIUserComponent";
 import FormHomeComponent from "./components/home/FormComponent";
+import CertificationsComponent from "./components/certifications/CertificationsComponent";
+import FormCertificationsComponent from "./components/certifications/FormCertificationsComponent";
+import ListCertificationsComponent from "./components/certifications/ListCertificationsComponent";
