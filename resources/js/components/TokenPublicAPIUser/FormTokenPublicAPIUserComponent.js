@@ -24,12 +24,14 @@ class FormTokenPublicAPIUserComponent extends RComponent {
         e.preventDefault();
         this.state.form.user_id = this.props.user_id;
         if(this.state.form.validData()){
-            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form);
-            else await this.onCreate(`${primary_url}`, this.state.form)
+            if(this.state.form?.id) await this.onUpdate(`${primary_url}/${this.state.form?.id}`, this.state.form.item);
+            else await this.onCreate(`${primary_url}`, this.state.form.item)
             this.state.openModal = false;
             this.state.data = await this.getItems(`${primary_url}`)
             this.dispatchStore(this.state)
             //window.location.reload();
+        }else{
+            this.dispatchStore(this.state)
         }
     }
     render(){
