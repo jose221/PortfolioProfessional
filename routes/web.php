@@ -106,10 +106,7 @@ Route::prefix('admin')->middleware(['web', ApiAccessMiddleware::class])->group(f
 
     Route::prefix('vitae')->name('users.vitae.')->group(function () {
         Route::get('/', [HistoryCurriculumVitaeController::class, 'index'])->name('view');
-        Route::post('/update/{id}', [HistoryCurriculumVitaeController::class, 'update'])->name('update');
-        Route::post('/selected/{id}', [HistoryCurriculumVitaeController::class, 'selected'])->name('selected');
-        Route::post('/store', [HistoryCurriculumVitaeController::class, 'store'])->name('store');
-        Route::delete('/delete/{id}', [HistoryCurriculumVitaeController::class, 'destroy'])->name('delete');
+        Route::get('/{id}', [HistoryCurriculumVitaeController::class, 'info'])->name('info');
     });
 
     Route::prefix('knowledges')->name('knowledges.')->group(function () {
