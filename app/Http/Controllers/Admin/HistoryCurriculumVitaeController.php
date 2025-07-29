@@ -44,4 +44,8 @@ class HistoryCurriculumVitaeController extends Controller
         return view('admin.history_curriculum_vitae.info', compact('id'));
     }
 
+    public function editor(){
+        return view('admin.history_curriculum_vitae.editor');
+    }
+
 }

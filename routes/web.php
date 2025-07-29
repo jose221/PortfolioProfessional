@@ -106,7 +106,8 @@ Route::prefix('admin')->middleware(['web', ApiAccessMiddleware::class])->group(f
 
     Route::prefix('vitae')->name('users.vitae.')->group(function () {
         Route::get('/', [HistoryCurriculumVitaeController::class, 'index'])->name('view');
-        Route::get('/{id}', [HistoryCurriculumVitaeController::class, 'info'])->name('info');
+        Route::get('/info/{id}', [HistoryCurriculumVitaeController::class, 'info'])->name('info');
+        Route::get('/editor', [HistoryCurriculumVitaeController::class, 'editor'])->name('editor');
     });
 
     Route::prefix('knowledges')->name('knowledges.')->group(function () {
