@@ -57,7 +57,7 @@ const getIconForType = (type) => {
     }
 };
 
-export const CVContact = ({ data = {} }) => {
+export const CVContact = ({ data = {}, lang = 'es' }) => {
     const {
         connectors: { connect, drag },
         selected,
@@ -67,14 +67,15 @@ export const CVContact = ({ data = {} }) => {
     }));
 
     const {
-        email = "email@ejemplo.com",
-        phone = "+1 (555) 123-4567",
-        location = "Ciudad, País",
-        linkedin = "linkedin.com/in/usuario",
-        website = "www.sitio-web.com",
-        github = "github.com/usuario"
+        email = "",
+        phone = "",
+        location = "",
+        linkedin = "",
+        website = "",
+        github = ""
     } = data;
 
+    // Create array of contact items that have actual values
     const contactItems = [
         { type: 'email', value: email, key: 'email' },
         { type: 'phone', value: phone, key: 'phone' },
@@ -82,19 +83,25 @@ export const CVContact = ({ data = {} }) => {
         { type: 'linkedin', value: linkedin, key: 'linkedin' },
         { type: 'website', value: website, key: 'website' },
         { type: 'github', value: github, key: 'github' }
-    ];
+    ].filter(item => item.value && item.value.trim() !== "");
+
+    // Don't render if no contact information
+    if (contactItems.length === 0) {
+        return null;
+    }
 
     return (
         <ContactContainer
             ref={(ref) => connect(drag(ref))}
             sx={{
                 outline: selected ? '2px solid #667eea' : 'none',
-                outlineOffset: '4px'
+                outlineOffset: '4px',
+                cursor: selected ? 'move' : 'default'
             }}
         >
             <Grid container spacing={2}>
                 {contactItems.map((item, index) => (
-                    <Grid item xs={12} sm={6} key={index}>
+                    <Grid item xs={12} sm={6} md={4} key={item.key}>
                         <ContactItem>
                             {getIconForType(item.type)}
                             <ContactText
@@ -121,12 +128,12 @@ CVContact.craft = {
     displayName: 'CV Contact',
     props: {
         data: {
-            email: "email@ejemplo.com",
-            phone: "+1 (555) 123-4567",
-            location: "Ciudad, País",
-            linkedin: "linkedin.com/in/usuario",
-            website: "www.sitio-web.com",
-            github: "github.com/usuario"
+            email: "",
+            phone: "",
+            location: "",
+            linkedin: "",
+            website: "",
+            github: ""
         }
     },
     rules: {

@@ -84,7 +84,7 @@ const SkillName = styled(Typography)(({ theme }) => ({
     }
 }));
 
-export const CVSkills = ({ title = "Habilidades", data = {} }) => {
+export const CVSkills = ({ title = "Habilidades", data = {}, lang = 'es' }) => {
     const {
         connectors: { connect, drag },
         selected,
@@ -95,47 +95,57 @@ export const CVSkills = ({ title = "Habilidades", data = {} }) => {
 
     const { technical = [], soft = [] } = data;
 
-    const handleAddTechnicalCategory = () => {
+    // Don't render if no skills data
+    if ((!technical || technical.length === 0) && (!soft || soft.length === 0)) {
+        return null;
+    }
+
+    const addSkillCategory = () => {
         setProp((props) => {
-            const newCategory = {
-                category: "Nueva Categoría",
-                items: ["Habilidad 1", "Habilidad 2"]
-            };
-            props.data.technical = [...(props.data.technical || []), newCategory];
+            props.data.technical.push({
+                category: lang === 'es' ? 'Nueva Categoría' : 'New Category',
+                items: [
+                    {
+                        name: lang === 'es' ? 'Nueva Habilidad' : 'New Skill',
+                        level: 50,
+                        years: 0
+                    }
+                ]
+            });
         });
     };
 
-    const handleAddSoftSkill = () => {
+    const removeSkillCategory = (categoryIndex) => {
         setProp((props) => {
-            props.data.soft = [...(props.data.soft || []), "Nueva Habilidad Blanda"];
+            props.data.technical.splice(categoryIndex, 1);
         });
     };
 
-    const handleDeleteTechnicalCategory = (index) => {
+    const updateCategoryTitle = (categoryIndex, value) => {
         setProp((props) => {
-            props.data.technical = props.data.technical.filter((_, i) => i !== index);
+            props.data.technical[categoryIndex].category = value;
         });
     };
 
-    const handleDeleteSoftSkill = (index) => {
+    const addSkillToCategory = (categoryIndex) => {
         setProp((props) => {
-            props.data.soft = props.data.soft.filter((_, i) => i !== index);
+            props.data.technical[categoryIndex].items.push({
+                name: lang === 'es' ? 'Nueva Habilidad' : 'New Skill',
+                level: 50,
+                years: 0
+            });
         });
     };
 
-    const updateTechnicalCategory = (categoryIndex, field, value) => {
+    const removeSkillFromCategory = (categoryIndex, skillIndex) => {
         setProp((props) => {
-            if (props.data.technical[categoryIndex]) {
-                props.data.technical[categoryIndex][field] = value;
-            }
+            props.data.technical[categoryIndex].items.splice(skillIndex, 1);
         });
     };
 
-    const updateSoftSkill = (skillIndex, value) => {
+    const updateSkill = (categoryIndex, skillIndex, field, value) => {
         setProp((props) => {
-            if (props.data.soft[skillIndex] !== undefined) {
-                props.data.soft[skillIndex] = value;
-            }
+            props.data.technical[categoryIndex].items[skillIndex][field] = value;
         });
     };
 
@@ -144,194 +154,154 @@ export const CVSkills = ({ title = "Habilidades", data = {} }) => {
             ref={(ref) => connect(drag(ref))}
             sx={{
                 outline: selected ? '2px solid #667eea' : 'none',
-                outlineOffset: '4px'
+                outlineOffset: '4px',
+                cursor: selected ? 'move' : 'default'
             }}
         >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <SectionTitle
-                    contentEditable
-                    suppressContentEditableWarning
-                    onBlur={(e) => {
-                        setProp((props) => {
-                            props.title = e.target.innerText;
-                        });
-                    }}
-                    sx={{
-                        '&:focus': {
-                            outline: '1px dashed #667eea',
-                            backgroundColor: 'rgba(102, 126, 234, 0.05)',
-                            padding: '4px 8px',
-                            borderRadius: '4px'
-                        }
-                    }}
-                >
-                    {title}
-                </SectionTitle>
-            </Box>
+            <SectionTitle
+                contentEditable
+                suppressContentEditableWarning
+                onBlur={(e) => {
+                    setProp((props) => {
+                        props.title = e.target.innerText;
+                    });
+                }}
+                sx={{
+                    '&:focus': {
+                        outline: '1px dashed #667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.05)',
+                        padding: '4px 8px',
+                        borderRadius: '4px'
+                    }
+                }}
+            >
+                {title}
+            </SectionTitle>
 
-            <Grid container spacing={3}>
-                {/* Technical Skills */}
-                <Grid item xs={12} md={8}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <Typography variant="h6" sx={{ color: '#495057', fontWeight: 600 }}>
-                            Habilidades Técnicas
-                        </Typography>
-                        {selected && (
-                            <IconButton
-                                onClick={handleAddTechnicalCategory}
-                                color="primary"
-                                size="small"
-                                sx={{ 
-                                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                                    '&:hover': { backgroundColor: 'rgba(102, 126, 234, 0.2)' }
-                                }}
-                            >
-                                <AddIcon />
-                            </IconButton>
-                        )}
-                    </Box>
+            {/* Technical Skills */}
+            {technical && technical.length > 0 && (
+                <Grid container spacing={2}>
+                    {technical.map((category, categoryIndex) => (
+                        <Grid item xs={12} md={6} key={categoryIndex}>
+                            <SkillCategory elevation={0}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                                    <CategoryTitle
+                                        contentEditable
+                                        suppressContentEditableWarning
+                                        onBlur={(e) => updateCategoryTitle(categoryIndex, e.target.innerText)}
+                                    >
+                                        {category.category}
+                                    </CategoryTitle>
+                                    
+                                    {selected && (
+                                        <Box>
+                                            <IconButton
+                                                size="small"
+                                                onClick={() => addSkillToCategory(categoryIndex)}
+                                                sx={{ color: '#667eea', mr: 1 }}
+                                            >
+                                                <AddIcon fontSize="small" />
+                                            </IconButton>
+                                            <IconButton
+                                                size="small"
+                                                onClick={() => removeSkillCategory(categoryIndex)}
+                                                sx={{ color: '#dc3545' }}
+                                            >
+                                                <DeleteIcon fontSize="small" />
+                                            </IconButton>
+                                        </Box>
+                                    )}
+                                </Box>
 
-                    {technical && technical.length > 0 ? technical.map((category, categoryIndex) => (
-                        <SkillCategory key={categoryIndex} elevation={0}>
-                            {selected && (
-                                <IconButton
-                                    onClick={() => handleDeleteTechnicalCategory(categoryIndex)}
-                                    size="small"
-                                    sx={{
-                                        position: 'absolute',
-                                        top: 8,
-                                        right: 8,
-                                        color: '#dc3545'
-                                    }}
-                                >
-                                    <DeleteIcon fontSize="small" />
-                                </IconButton>
-                            )}
-
-                            <CategoryTitle
-                                contentEditable
-                                suppressContentEditableWarning
-                                onBlur={(e) => {
-                                    updateTechnicalCategory(categoryIndex, 'category', e.target.innerText);
-                                }}
-                            >
-                                {category.category}
-                            </CategoryTitle>
-
-                            <Box>
-                                {category.items?.map((skill, skillIndex) => (
-                                    <SkillChip
-                                        key={skillIndex}
-                                        label={
-                                            <span
+                                {category.items && category.items.map((skill, skillIndex) => (
+                                    <Box key={skillIndex} sx={{ mb: 2 }}>
+                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                                            <SkillName
                                                 contentEditable
                                                 suppressContentEditableWarning
-                                                onBlur={(e) => {
-                                                    setProp((props) => {
-                                                        if (props.data.technical[categoryIndex]?.items[skillIndex] !== undefined) {
-                                                            props.data.technical[categoryIndex].items[skillIndex] = e.target.innerText;
-                                                        }
-                                                    });
-                                                }}
-                                                style={{ cursor: 'text' }}
+                                                onBlur={(e) => updateSkill(categoryIndex, skillIndex, 'name', e.target.innerText)}
                                             >
-                                                {skill}
-                                            </span>
-                                        }
-                                        variant="outlined"
-                                        size="small"
-                                        color="primary"
-                                    />
+                                                {skill.name}
+                                            </SkillName>
+                                            
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                {skill.years > 0 && (
+                                                    <Typography variant="caption" sx={{ color: '#6c757d' }}>
+                                                        {skill.years} {lang === 'es' ? 'años' : 'years'}
+                                                    </Typography>
+                                                )}
+                                                
+                                                {selected && (
+                                                    <IconButton
+                                                        size="small"
+                                                        onClick={() => removeSkillFromCategory(categoryIndex, skillIndex)}
+                                                        sx={{ color: '#dc3545' }}
+                                                    >
+                                                        <DeleteIcon fontSize="small" />
+                                                    </IconButton>
+                                                )}
+                                            </Box>
+                                        </Box>
+                                        
+                                        {skill.level > 0 && (
+                                            <LinearProgress
+                                                variant="determinate"
+                                                value={skill.level || 50}
+                                                sx={{
+                                                    height: 6,
+                                                    borderRadius: 3,
+                                                    backgroundColor: '#e9ecef',
+                                                    '& .MuiLinearProgress-bar': {
+                                                        backgroundColor: '#667eea',
+                                                        borderRadius: 3
+                                                    }
+                                                }}
+                                            />
+                                        )}
+                                    </Box>
                                 ))}
-                            </Box>
-                        </SkillCategory>
-                    )) : (
-                        <Paper
-                            sx={{
-                                p: 2,
-                                textAlign: 'center',
-                                backgroundColor: '#f8f9fa',
-                                border: '2px dashed #dee2e6'
-                            }}
-                        >
-                            <Typography variant="body2" color="text.secondary">
-                                No hay habilidades técnicas. Haz clic en "+" para agregar.
-                            </Typography>
-                        </Paper>
-                    )}
+                            </SkillCategory>
+                        </Grid>
+                    ))}
                 </Grid>
+            )}
 
-                {/* Soft Skills */}
-                <Grid item xs={12} md={4}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <Typography variant="h6" sx={{ color: '#495057', fontWeight: 600 }}>
-                            Habilidades Blandas
-                        </Typography>
-                        {selected && (
-                            <IconButton
-                                onClick={handleAddSoftSkill}
+            {/* Soft Skills (if any) */}
+            {soft && soft.length > 0 && (
+                <SkillCategory elevation={0} sx={{ mt: 2 }}>
+                    <CategoryTitle>
+                        {lang === 'es' ? 'Habilidades Blandas' : 'Soft Skills'}
+                    </CategoryTitle>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                        {soft.map((skill, index) => (
+                            <SkillChip
+                                key={index}
+                                label={typeof skill === 'object' ? skill.name : skill}
+                                variant="outlined"
                                 color="secondary"
                                 size="small"
-                                sx={{ 
-                                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
-                                    '&:hover': { backgroundColor: 'rgba(255, 107, 107, 0.2)' }
-                                }}
-                            >
-                                <AddIcon />
-                            </IconButton>
-                        )}
+                            />
+                        ))}
                     </Box>
+                </SkillCategory>
+            )}
 
-                    <SkillCategory elevation={0}>
-                        {soft && soft.length > 0 ? soft.map((skill, skillIndex) => (
-                            <SoftSkillItem key={skillIndex}>
-                                <SkillName
-                                    contentEditable
-                                    suppressContentEditableWarning
-                                    onBlur={(e) => {
-                                        updateSoftSkill(skillIndex, e.target.innerText);
-                                    }}
-                                >
-                                    {skill}
-                                </SkillName>
-                                
-                                {selected && (
-                                    <IconButton
-                                        onClick={() => handleDeleteSoftSkill(skillIndex)}
-                                        size="small"
-                                        sx={{ color: '#dc3545', ml: 1 }}
-                                    >
-                                        <DeleteIcon fontSize="small" />
-                                    </IconButton>
-                                )}
-                            </SoftSkillItem>
-                        )) : (
-                            <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', p: 2 }}>
-                                No hay habilidades blandas. Haz clic en "+" para agregar.
-                            </Typography>
-                        )}
-                    </SkillCategory>
-                </Grid>
-            </Grid>
-
-            {/* Empty State */}
-            {(!technical || technical.length === 0) && (!soft || soft.length === 0) && (
-                <Paper
-                    sx={{
-                        p: 4,
-                        textAlign: 'center',
-                        backgroundColor: '#f8f9fa',
-                        border: '2px dashed #dee2e6'
-                    }}
-                >
-                    <SkillsIcon sx={{ fontSize: 48, color: '#adb5bd', mb: 2 }} />
-                    <Typography variant="h6" color="text.secondary" gutterBottom>
-                        No hay habilidades agregadas
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Haz clic en los botones "+" para agregar tus habilidades técnicas y blandas
-                    </Typography>
-                </Paper>
+            {/* Add Category Button */}
+            {selected && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                    <IconButton
+                        onClick={addSkillCategory}
+                        sx={{
+                            backgroundColor: '#667eea',
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: '#5a6fd8'
+                            }
+                        }}
+                    >
+                        <AddIcon />
+                    </IconButton>
+                </Box>
             )}
         </SkillsContainer>
     );

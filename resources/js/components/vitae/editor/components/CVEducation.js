@@ -103,7 +103,7 @@ const CourseworkContainer = styled(Box)(({ theme }) => ({
     }
 }));
 
-export const CVEducation = ({ title = "Educación", data = [] }) => {
+export const CVEducation = ({ title = "Educación", data = [], lang = 'es' }) => {
     const {
         connectors: { connect, drag },
         selected,
@@ -112,34 +112,35 @@ export const CVEducation = ({ title = "Educación", data = [] }) => {
         selected: state.events.selected
     }));
 
-    const handleAddEducation = () => {
+    // Don't render if no education data
+    if (!data || !Array.isArray(data) || data.length === 0) {
+        return null;
+    }
+
+    const addEducation = () => {
         setProp((props) => {
-            const newEducation = {
+            props.data.push({
                 id: Date.now(),
-                degree: "Título/Grado",
-                institution: "Nombre de la Institución",
-                location: "Ubicación",
-                graduationDate: "Fecha de Graduación",
-                gpa: "Promedio",
-                honors: "Honores/Distinciones",
-                coursework: ["Materia relevante 1", "Materia relevante 2"]
-            };
-            props.data = [...(props.data || []), newEducation];
+                degree: lang === 'es' ? 'Nuevo Título' : 'New Degree',
+                institution: lang === 'es' ? 'Nueva Institución' : 'New Institution',
+                location: '',
+                graduationDate: '',
+                gpa: '',
+                coursework: '',
+                honors: ''
+            });
         });
     };
 
-    const handleDeleteEducation = (educationId) => {
+    const removeEducation = (index) => {
         setProp((props) => {
-            props.data = props.data.filter(edu => edu.id !== educationId);
+            props.data.splice(index, 1);
         });
     };
 
-    const updateEducationField = (educationId, field, value) => {
+    const updateEducation = (index, field, value) => {
         setProp((props) => {
-            const educationIndex = props.data.findIndex(edu => edu.id === educationId);
-            if (educationIndex !== -1) {
-                props.data[educationIndex][field] = value;
-            }
+            props.data[index][field] = value;
         });
     };
 
@@ -148,202 +149,152 @@ export const CVEducation = ({ title = "Educación", data = [] }) => {
             ref={(ref) => connect(drag(ref))}
             sx={{
                 outline: selected ? '2px solid #667eea' : 'none',
-                outlineOffset: '4px'
+                outlineOffset: '4px',
+                cursor: selected ? 'move' : 'default'
             }}
         >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <SectionTitle
-                    contentEditable
-                    suppressContentEditableWarning
-                    onBlur={(e) => {
-                        setProp((props) => {
-                            props.title = e.target.innerText;
-                        });
-                    }}
-                    sx={{
-                        '&:focus': {
-                            outline: '1px dashed #667eea',
-                            backgroundColor: 'rgba(102, 126, 234, 0.05)',
-                            padding: '4px 8px',
-                            borderRadius: '4px'
-                        }
-                    }}
-                >
-                    {title}
-                </SectionTitle>
-                
-                {selected && (
-                    <IconButton
-                        onClick={handleAddEducation}
-                        color="primary"
-                        size="small"
-                        sx={{ 
-                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                            '&:hover': { backgroundColor: 'rgba(102, 126, 234, 0.2)' }
-                        }}
-                    >
-                        <AddIcon />
-                    </IconButton>
-                )}
-            </Box>
+            <SectionTitle
+                contentEditable
+                suppressContentEditableWarning
+                onBlur={(e) => {
+                    setProp((props) => {
+                        props.title = e.target.innerText;
+                    });
+                }}
+                sx={{
+                    '&:focus': {
+                        outline: '1px dashed #667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.05)',
+                        padding: '4px 8px',
+                        borderRadius: '4px'
+                    }
+                }}
+            >
+                {title}
+            </SectionTitle>
 
-            {data && data.length > 0 ? data.map((education) => (
-                <EducationItem key={education.id} elevation={1}>
-                    {selected && (
-                        <IconButton
-                            onClick={() => handleDeleteEducation(education.id)}
-                            size="small"
-                            sx={{
-                                position: 'absolute',
-                                top: 8,
-                                right: 8,
-                                color: '#dc3545'
-                            }}
-                        >
-                            <DeleteIcon fontSize="small" />
-                        </IconButton>
-                    )}
-
+            {data.map((education, index) => (
+                <EducationItem key={education.id || index} elevation={1}>
                     <DegreeHeader>
-                        <Box sx={{ flex: 1 }}>
+                        <Box>
                             <DegreeTitle
                                 contentEditable
                                 suppressContentEditableWarning
-                                onBlur={(e) => {
-                                    updateEducationField(education.id, 'degree', e.target.innerText);
-                                }}
+                                onBlur={(e) => updateEducation(index, 'degree', e.target.innerText)}
                             >
-                                {education.degree}
+                                {education.degree || (lang === 'es' ? 'Título' : 'Degree')}
                             </DegreeTitle>
                             
                             <InstitutionInfo>
+                                <SchoolIcon sx={{ color: '#667eea', fontSize: '1.1rem' }} />
                                 <InstitutionName
                                     contentEditable
                                     suppressContentEditableWarning
-                                    onBlur={(e) => {
-                                        updateEducationField(education.id, 'institution', e.target.innerText);
-                                    }}
+                                    onBlur={(e) => updateEducation(index, 'institution', e.target.innerText)}
                                 >
-                                    {education.institution}
+                                    {education.institution || (lang === 'es' ? 'Institución' : 'Institution')}
                                 </InstitutionName>
                                 
-                                <Typography variant="body2" color="text.secondary">
-                                    •
-                                </Typography>
+                                {education.location && (
+                                    <Typography variant="body2" sx={{ color: '#6c757d' }}>
+                                        • {education.location}
+                                    </Typography>
+                                )}
                                 
-                                <Typography
-                                    variant="body2"
-                                    color="text.secondary"
-                                    contentEditable
-                                    suppressContentEditableWarning
-                                    onBlur={(e) => {
-                                        updateEducationField(education.id, 'location', e.target.innerText);
-                                    }}
-                                    sx={{ cursor: 'text' }}
-                                >
-                                    {education.location}
-                                </Typography>
-                            </InstitutionInfo>
-
-                            {/* GPA and Honors */}
-                            <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
+                                {education.graduationDate && (
+                                    <Typography variant="body2" sx={{ color: '#6c757d' }}>
+                                        • {education.graduationDate}
+                                    </Typography>
+                                )}
+                                
                                 {education.gpa && (
-                                    <Typography
-                                        variant="body2"
-                                        sx={{ color: '#28a745', fontWeight: 500 }}
-                                        contentEditable
-                                        suppressContentEditableWarning
-                                        onBlur={(e) => {
-                                            updateEducationField(education.id, 'gpa', e.target.innerText);
+                                    <Chip
+                                        label={`GPA: ${education.gpa}`}
+                                        size="small"
+                                        variant="outlined"
+                                        sx={{
+                                            fontSize: '0.75rem',
+                                            height: '24px',
+                                            borderColor: '#667eea',
+                                            color: '#667eea'
                                         }}
-                                    >
-                                        GPA: {education.gpa}
-                                    </Typography>
+                                    />
                                 )}
-                                
-                                {education.honors && (
-                                    <Typography
-                                        variant="body2"
-                                        sx={{ color: '#ffc107', fontWeight: 500 }}
-                                        contentEditable
-                                        suppressContentEditableWarning
-                                        onBlur={(e) => {
-                                            updateEducationField(education.id, 'honors', e.target.innerText);
-                                        }}
-                                    >
-                                        {education.honors}
-                                    </Typography>
-                                )}
-                            </Box>
+                            </InstitutionInfo>
                         </Box>
-                        
-                        <Chip
-                            label={
-                                <Typography
-                                    variant="caption"
-                                    contentEditable
-                                    suppressContentEditableWarning
-                                    onBlur={(e) => {
-                                        updateEducationField(education.id, 'graduationDate', e.target.innerText);
-                                    }}
-                                    sx={{ cursor: 'text' }}
-                                >
-                                    {education.graduationDate}
-                                </Typography>
-                            }
+
+                        <IconButton
                             size="small"
-                            variant="outlined"
-                            color="primary"
-                        />
+                            onClick={() => removeEducation(index)}
+                            sx={{ color: '#dc3545' }}
+                        >
+                            <DeleteIcon fontSize="small" />
+                        </IconButton>
                     </DegreeHeader>
 
-                    {/* Relevant Coursework */}
-                    {education.coursework && education.coursework.length > 0 && (
-                        <CourseworkContainer>
-                            <Typography variant="subtitle2" sx={{ mb: 1, color: '#495057', fontWeight: 600 }}>
-                                Materias Relevantes:
-                            </Typography>
-                            <ul>
-                                {education.coursework.map((course, index) => (
-                                    <li
-                                        key={index}
-                                        contentEditable
-                                        suppressContentEditableWarning
-                                        onBlur={(e) => {
-                                            setProp((props) => {
-                                                const eduIndex = props.data.findIndex(edu => edu.id === education.id);
-                                                if (eduIndex !== -1) {
-                                                    props.data[eduIndex].coursework[index] = e.target.innerText;
-                                                }
-                                            });
-                                        }}
-                                        style={{ cursor: 'text' }}
-                                    >
-                                        {course}
-                                    </li>
-                                ))}
-                            </ul>
-                        </CourseworkContainer>
+                    {education.coursework && (
+                        <Typography
+                            variant="body2"
+                            sx={{
+                                color: '#495057',
+                                lineHeight: 1.6,
+                                marginBottom: 1,
+                                fontStyle: 'italic'
+                            }}
+                        >
+                            <strong>{lang === 'es' ? 'Materias relevantes:' : 'Relevant Coursework:'}</strong> {education.coursework}
+                        </Typography>
+                    )}
+
+                    {education.honors && (
+                        <Typography
+                            component="div"
+                            variant="body2"
+                            sx={{
+                                color: '#495057',
+                                lineHeight: 1.6,
+                                cursor: 'text',
+                                '&:focus': {
+                                    outline: '1px dashed #667eea',
+                                    backgroundColor: 'rgba(102, 126, 234, 0.05)',
+                                    padding: '8px',
+                                    borderRadius: '4px'
+                                },
+                                '& p': {
+                                    margin: '0 0 8px 0',
+                                    '&:last-child': { marginBottom: 0 }
+                                },
+                                '& ul, & ol': {
+                                    paddingLeft: '20px',
+                                    margin: '8px 0'
+                                },
+                                '& li': {
+                                    marginBottom: '4px'
+                                }
+                            }}
+                            contentEditable
+                            suppressContentEditableWarning
+                            dangerouslySetInnerHTML={{ __html: education.honors }}
+                            onBlur={(e) => updateEducation(index, 'honors', e.target.innerHTML)}
+                        />
                     )}
                 </EducationItem>
-            )) : (
-                <Paper
+            ))}
+
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                <IconButton
+                    onClick={addEducation}
                     sx={{
-                        p: 3,
-                        textAlign: 'center',
-                        backgroundColor: '#f8f9fa',
-                        border: '2px dashed #dee2e6'
+                        backgroundColor: '#667eea',
+                        color: 'white',
+                        '&:hover': {
+                            backgroundColor: '#5a6fd8'
+                        }
                     }}
                 >
-                    <SchoolIcon sx={{ fontSize: 48, color: '#adb5bd', mb: 2 }} />
-                    <Typography variant="h6" color="text.secondary" gutterBottom>
-                        No hay educación agregada
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Haz clic en el botón "+" para agregar tu formación académica
-                    </Typography>
-                </Paper>
-            )}
+                    <AddIcon />
+                </IconButton>
+            </Box>
         </EducationContainer>
     );
 };

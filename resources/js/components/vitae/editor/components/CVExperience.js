@@ -110,7 +110,7 @@ const AchievementsList = styled(Box)(({ theme }) => ({
     }
 }));
 
-export const CVExperience = ({ title = "Experiencia Laboral", data = [] }) => {
+export const CVExperience = ({ title = "Experiencia Laboral", data = [], lang = 'es' }) => {
     const {
         connectors: { connect, drag },
         selected,
@@ -119,34 +119,36 @@ export const CVExperience = ({ title = "Experiencia Laboral", data = [] }) => {
         selected: state.events.selected
     }));
 
-    const handleAddExperience = () => {
+    // Don't render if no experience data
+    if (!data || !Array.isArray(data) || data.length === 0) {
+        return null;
+    }
+
+    const addExperience = () => {
         setProp((props) => {
-            const newExperience = {
+            props.data.push({
                 id: Date.now(),
-                position: "Nuevo Puesto",
-                company: "Nombre de la Empresa",
-                location: "Ubicación",
-                startDate: "Fecha Inicio",
-                endDate: "Fecha Fin",
-                description: "Descripción del puesto y responsabilidades principales...",
-                achievements: ["Logro o responsabilidad destacada"]
-            };
-            props.data = [...(props.data || []), newExperience];
+                position: lang === 'es' ? 'Nuevo Puesto' : 'New Position',
+                company: lang === 'es' ? 'Nueva Empresa' : 'New Company',
+                location: '',
+                startDate: '',
+                endDate: '',
+                description: '',
+                achievements: [],
+                technologies: []
+            });
         });
     };
 
-    const handleDeleteExperience = (experienceId) => {
+    const removeExperience = (index) => {
         setProp((props) => {
-            props.data = props.data.filter(exp => exp.id !== experienceId);
+            props.data.splice(index, 1);
         });
     };
 
-    const updateExperienceField = (experienceId, field, value) => {
+    const updateExperience = (index, field, value) => {
         setProp((props) => {
-            const experienceIndex = props.data.findIndex(exp => exp.id === experienceId);
-            if (experienceIndex !== -1) {
-                props.data[experienceIndex][field] = value;
-            }
+            props.data[index][field] = value;
         });
     };
 
@@ -155,201 +157,144 @@ export const CVExperience = ({ title = "Experiencia Laboral", data = [] }) => {
             ref={(ref) => connect(drag(ref))}
             sx={{
                 outline: selected ? '2px solid #667eea' : 'none',
-                outlineOffset: '4px'
+                outlineOffset: '4px',
+                cursor: selected ? 'move' : 'default'
             }}
         >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <SectionTitle
-                    contentEditable
-                    suppressContentEditableWarning
-                    onBlur={(e) => {
-                        setProp((props) => {
-                            props.title = e.target.innerText;
-                        });
-                    }}
-                    sx={{
-                        '&:focus': {
-                            outline: '1px dashed #667eea',
-                            backgroundColor: 'rgba(102, 126, 234, 0.05)',
-                            padding: '4px 8px',
-                            borderRadius: '4px'
-                        }
-                    }}
-                >
-                    {title}
-                </SectionTitle>
-                
-                {selected && (
-                    <IconButton
-                        onClick={handleAddExperience}
-                        color="primary"
-                        size="small"
-                        sx={{ 
-                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                            '&:hover': { backgroundColor: 'rgba(102, 126, 234, 0.2)' }
-                        }}
-                    >
-                        <AddIcon />
-                    </IconButton>
-                )}
-            </Box>
+            <SectionTitle
+                contentEditable
+                suppressContentEditableWarning
+                onBlur={(e) => {
+                    setProp((props) => {
+                        props.title = e.target.innerText;
+                    });
+                }}
+                sx={{
+                    '&:focus': {
+                        outline: '1px dashed #667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.05)',
+                        padding: '4px 8px',
+                        borderRadius: '4px'
+                    }
+                }}
+            >
+                {title}
+            </SectionTitle>
 
-            {data && data.length > 0 ? data.map((experience) => (
-                <ExperienceItem key={experience.id} elevation={1}>
-                    {selected && (
-                        <IconButton
-                            onClick={() => handleDeleteExperience(experience.id)}
-                            size="small"
-                            sx={{
-                                position: 'absolute',
-                                top: 8,
-                                right: 8,
-                                color: '#dc3545'
-                            }}
-                        >
-                            <DeleteIcon fontSize="small" />
-                        </IconButton>
-                    )}
-
+            {data.map((experience, index) => (
+                <ExperienceItem key={experience.id || index} elevation={1}>
                     <JobHeader>
                         <Box>
                             <JobTitle
                                 contentEditable
                                 suppressContentEditableWarning
-                                onBlur={(e) => {
-                                    updateExperienceField(experience.id, 'position', e.target.innerText);
-                                }}
+                                onBlur={(e) => updateExperience(index, 'position', e.target.innerText)}
                             >
-                                {experience.position}
+                                {experience.position || (lang === 'es' ? 'Puesto' : 'Position')}
                             </JobTitle>
                             
                             <CompanyInfo>
+                                <WorkIcon sx={{ color: '#667eea', fontSize: '1.1rem' }} />
                                 <CompanyName
                                     contentEditable
                                     suppressContentEditableWarning
-                                    onBlur={(e) => {
-                                        updateExperienceField(experience.id, 'company', e.target.innerText);
-                                    }}
+                                    onBlur={(e) => updateExperience(index, 'company', e.target.innerText)}
                                 >
-                                    {experience.company}
+                                    {experience.company || (lang === 'es' ? 'Empresa' : 'Company')}
                                 </CompanyName>
                                 
-                                <Typography variant="body2" color="text.secondary">
-                                    •
-                                </Typography>
+                                {experience.location && (
+                                    <Typography variant="body2" sx={{ color: '#6c757d' }}>
+                                        • {experience.location}
+                                    </Typography>
+                                )}
                                 
-                                <Typography
-                                    variant="body2"
-                                    color="text.secondary"
-                                    contentEditable
-                                    suppressContentEditableWarning
-                                    onBlur={(e) => {
-                                        updateExperienceField(experience.id, 'location', e.target.innerText);
-                                    }}
-                                    sx={{ cursor: 'text' }}
-                                >
-                                    {experience.location}
-                                </Typography>
+                                {(experience.startDate || experience.endDate) && (
+                                    <Typography variant="body2" sx={{ color: '#6c757d' }}>
+                                        • {experience.startDate} - {experience.endDate || (lang === 'es' ? 'Presente' : 'Present')}
+                                    </Typography>
+                                )}
                             </CompanyInfo>
                         </Box>
-                        
-                        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                            <Chip
-                                label={
-                                    <Typography
-                                        variant="caption"
-                                        contentEditable
-                                        suppressContentEditableWarning
-                                        onBlur={(e) => {
-                                            updateExperienceField(experience.id, 'startDate', e.target.innerText);
-                                        }}
-                                        sx={{ cursor: 'text' }}
-                                    >
-                                        {experience.startDate}
-                                    </Typography>
-                                }
-                                size="small"
-                                variant="outlined"
-                                color="primary"
-                            />
-                            <Typography variant="caption" sx={{ alignSelf: 'center' }}>-</Typography>
-                            <Chip
-                                label={
-                                    <Typography
-                                        variant="caption"
-                                        contentEditable
-                                        suppressContentEditableWarning
-                                        onBlur={(e) => {
-                                            updateExperienceField(experience.id, 'endDate', e.target.innerText);
-                                        }}
-                                        sx={{ cursor: 'text' }}
-                                    >
-                                        {experience.endDate}
-                                    </Typography>
-                                }
-                                size="small"
-                                variant="outlined"
-                                color="primary"
-                            />
-                        </Box>
+
+                        <IconButton
+                            size="small"
+                            onClick={() => removeExperience(index)}
+                            sx={{ color: '#dc3545' }}
+                        >
+                            <DeleteIcon fontSize="small" />
+                        </IconButton>
                     </JobHeader>
 
-                    <JobDescription
-                        contentEditable
-                        suppressContentEditableWarning
-                        onBlur={(e) => {
-                            updateExperienceField(experience.id, 'description', e.target.innerText);
-                        }}
-                    >
-                        {experience.description}
-                    </JobDescription>
+                    {experience.description && (
+                        <Typography
+                            component="div"
+                            variant="body2"
+                            sx={{
+                                color: '#495057',
+                                lineHeight: 1.6,
+                                marginBottom: 2,
+                                cursor: 'text',
+                                '&:focus': {
+                                    outline: '1px dashed #667eea',
+                                    backgroundColor: 'rgba(102, 126, 234, 0.05)',
+                                    padding: '8px',
+                                    borderRadius: '4px'
+                                },
+                                '& p': {
+                                    margin: '0 0 8px 0',
+                                    '&:last-child': { marginBottom: 0 }
+                                },
+                                '& ul, & ol': {
+                                    paddingLeft: '20px',
+                                    margin: '8px 0'
+                                },
+                                '& li': {
+                                    marginBottom: '4px'
+                                }
+                            }}
+                            contentEditable
+                            suppressContentEditableWarning
+                            dangerouslySetInnerHTML={{ __html: experience.description }}
+                            onBlur={(e) => updateExperience(index, 'description', e.target.innerHTML)}
+                        />
+                    )}
 
-                    {experience.achievements && experience.achievements.length > 0 && (
-                        <AchievementsList>
-                            <Typography variant="subtitle2" sx={{ mb: 1, color: '#495057', fontWeight: 600 }}>
-                                Logros Destacados:
-                            </Typography>
-                            <ul>
-                                {experience.achievements.map((achievement, index) => (
-                                    <li
-                                        key={index}
-                                        contentEditable
-                                        suppressContentEditableWarning
-                                        onBlur={(e) => {
-                                            setProp((props) => {
-                                                const expIndex = props.data.findIndex(exp => exp.id === experience.id);
-                                                if (expIndex !== -1) {
-                                                    props.data[expIndex].achievements[index] = e.target.innerText;
-                                                }
-                                            });
-                                        }}
-                                        style={{ cursor: 'text' }}
-                                    >
-                                        {achievement}
-                                    </li>
-                                ))}
-                            </ul>
-                        </AchievementsList>
+                    {experience.technologies && experience.technologies.length > 0 && (
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1 }}>
+                            {experience.technologies.map((tech, techIndex) => (
+                                <Chip
+                                    key={techIndex}
+                                    label={typeof tech === 'object' ? (tech.title_es || tech.title_en || tech.title || tech.code) : tech}
+                                    size="small"
+                                    variant="outlined"
+                                    sx={{
+                                        fontSize: '0.75rem',
+                                        height: '24px',
+                                        borderColor: '#667eea',
+                                        color: '#667eea'
+                                    }}
+                                />
+                            ))}
+                        </Box>
                     )}
                 </ExperienceItem>
-            )) : (
-                <Paper
+            ))}
+
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                <IconButton
+                    onClick={addExperience}
                     sx={{
-                        p: 3,
-                        textAlign: 'center',
-                        backgroundColor: '#f8f9fa',
-                        border: '2px dashed #dee2e6'
+                        backgroundColor: '#667eea',
+                        color: 'white',
+                        '&:hover': {
+                            backgroundColor: '#5a6fd8'
+                        }
                     }}
                 >
-                    <WorkIcon sx={{ fontSize: 48, color: '#adb5bd', mb: 2 }} />
-                    <Typography variant="h6" color="text.secondary" gutterBottom>
-                        No hay experiencia laboral agregada
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Haz clic en el botón "+" para agregar tu primera experiencia laboral
-                    </Typography>
-                </Paper>
-            )}
+                    <AddIcon />
+                </IconButton>
+            </Box>
         </ExperienceContainer>
     );
 };

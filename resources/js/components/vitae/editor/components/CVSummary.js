@@ -47,7 +47,7 @@ const SummaryText = styled(Typography)(({ theme }) => ({
     }
 }));
 
-export const CVSummary = ({ title = "Resumen Profesional", data = {} }) => {
+export const CVSummary = ({ title = "Resumen Profesional", data = {}, lang = 'es' }) => {
     const {
         connectors: { connect, drag },
         selected,
@@ -56,14 +56,32 @@ export const CVSummary = ({ title = "Resumen Profesional", data = {} }) => {
         selected: state.events.selected
     }));
 
-    const { content = "Escribe aquí tu resumen profesional..." } = data;
+    const { content = "" } = data;
+
+    // Don't render if no content
+    if (!content || content.trim() === "" || content === "Sin contenido") {
+        return null;
+    }
+
+    // Function to strip HTML tags for editing but preserve for display
+    const stripHtml = (html) => {
+        const tmp = document.createElement("DIV");
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || "";
+    };
+
+    // Function to convert newlines to HTML for editing
+    const textToHtml = (text) => {
+        return text.replace(/\n/g, '<br />');
+    };
 
     return (
         <SummaryContainer
             ref={(ref) => connect(drag(ref))}
             sx={{
                 outline: selected ? '2px solid #667eea' : 'none',
-                outlineOffset: '4px'
+                outlineOffset: '4px',
+                cursor: selected ? 'move' : 'default'
             }}
         >
             <SectionTitle
@@ -88,15 +106,36 @@ export const CVSummary = ({ title = "Resumen Profesional", data = {} }) => {
 
             <SummaryContent elevation={0}>
                 <SummaryText
-                    variant="body1"
+                    component="div"
                     contentEditable
                     suppressContentEditableWarning
+                    dangerouslySetInnerHTML={{ __html: content }}
                     onBlur={(e) => {
                         setProp((props) => {
-                            props.data.content = e.target.innerText;
+                            props.data.content = e.target.innerHTML;
                         });
                     }}
-                    dangerouslySetInnerHTML={{ __html: content }}
+                    sx={{
+                        '&:focus': {
+                            outline: '2px dashed #667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.05)',
+                            padding: '8px',
+                            borderRadius: '4px'
+                        },
+                        '& p': {
+                            margin: '0 0 12px 0',
+                            '&:last-child': {
+                                marginBottom: 0
+                            }
+                        },
+                        '& ul, & ol': {
+                            paddingLeft: '20px',
+                            margin: '8px 0'
+                        },
+                        '& li': {
+                            marginBottom: '4px'
+                        }
+                    }}
                 />
             </SummaryContent>
         </SummaryContainer>
@@ -109,7 +148,7 @@ CVSummary.craft = {
     props: {
         title: "Resumen Profesional",
         data: {
-            content: "Escribe aquí tu resumen profesional..."
+            content: ""
         }
     },
     rules: {

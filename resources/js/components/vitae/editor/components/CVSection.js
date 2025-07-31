@@ -67,350 +67,238 @@ const getIconForType = (type) => {
 };
 
 // Component for rendering list-type sections (certifications, etc.)
-const ListSection = ({ data, sectionId, setProp, selected }) => {
+const ListSection = ({ data, sectionId, setProp, selected, lang }) => {
     const handleAddItem = () => {
         setProp((props) => {
             const newItem = {
-                name: "Nuevo Item",
-                issuer: "Emisor/Organización",
-                date: "Fecha",
-                credentialId: "ID Credencial"
+                title: lang === 'es' ? "Nuevo Item" : "New Item",
+                subtitle: lang === 'es' ? "Organización" : "Organization",
+                date: "",
+                description: ""
             };
             props.data = [...(props.data || []), newItem];
         });
     };
 
-    const handleDeleteItem = (itemIndex) => {
+    const handleDeleteItem = (index) => {
         setProp((props) => {
-            props.data = props.data.filter((_, i) => i !== itemIndex);
+            props.data.splice(index, 1);
         });
     };
 
-    const updateItem = (itemIndex, field, value) => {
+    const updateItem = (index, field, value) => {
         setProp((props) => {
-            if (props.data[itemIndex]) {
-                props.data[itemIndex][field] = value;
-            }
+            props.data[index][field] = value;
         });
     };
+
+    if (!data || data.length === 0) return null;
 
     return (
         <Box>
-            {selected && (
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-                    <IconButton
-                        onClick={handleAddItem}
-                        color="primary"
-                        size="small"
-                        sx={{ 
-                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                            '&:hover': { backgroundColor: 'rgba(102, 126, 234, 0.2)' }
-                        }}
-                    >
-                        <AddIcon />
-                    </IconButton>
-                </Box>
-            )}
-
-            {data && data.length > 0 ? data.map((item, index) => (
+            {data.map((item, index) => (
                 <SectionItem key={index} elevation={1}>
-                    {selected && (
-                        <IconButton
-                            onClick={() => handleDeleteItem(index)}
-                            size="small"
-                            sx={{
-                                position: 'absolute',
-                                top: 8,
-                                right: 8,
-                                color: '#dc3545'
-                            }}
-                        >
-                            <DeleteIcon fontSize="small" />
-                        </IconButton>
-                    )}
-
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={8}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <Box sx={{ flex: 1 }}>
                             <EditableText
                                 variant="h6"
-                                sx={{ fontWeight: 600, color: '#2c3e50', mb: 1 }}
+                                sx={{ fontWeight: 600, color: '#2c3e50', mb: 0.5 }}
                                 contentEditable
                                 suppressContentEditableWarning
-                                onBlur={(e) => updateItem(index, 'name', e.target.innerText)}
+                                onBlur={(e) => updateItem(index, 'title', e.target.innerText)}
                             >
-                                {item.name}
+                                {item.title || item.name || (lang === 'es' ? 'Título' : 'Title')}
                             </EditableText>
                             
-                            <EditableText
-                                variant="body2"
-                                sx={{ color: '#667eea', fontWeight: 500 }}
-                                contentEditable
-                                suppressContentEditableWarning
-                                onBlur={(e) => updateItem(index, 'issuer', e.target.innerText)}
-                            >
-                                {item.issuer}
-                            </EditableText>
-                            
-                            {item.credentialId && (
+                            {(item.subtitle || item.organization) && (
                                 <EditableText
-                                    variant="caption"
-                                    sx={{ color: '#6c757d', display: 'block', mt: 0.5 }}
+                                    variant="body2"
+                                    sx={{ color: '#667eea', fontWeight: 500, mb: 1 }}
                                     contentEditable
                                     suppressContentEditableWarning
-                                    onBlur={(e) => updateItem(index, 'credentialId', e.target.innerText)}
+                                    onBlur={(e) => updateItem(index, 'subtitle', e.target.innerText)}
                                 >
-                                    ID: {item.credentialId}
+                                    {item.subtitle || item.organization}
                                 </EditableText>
                             )}
-                        </Grid>
+                            
+                            {item.date && (
+                                <Typography variant="caption" sx={{ color: '#6c757d', display: 'block', mb: 1 }}>
+                                    {item.date}
+                                </Typography>
+                            )}
+                            
+                            {item.description && (
+                                <Typography
+                                    component="div"
+                                    variant="body2"
+                                    sx={{
+                                        color: '#495057',
+                                        lineHeight: 1.6,
+                                        mb: 1,
+                                        '& p': { margin: '0 0 8px 0', '&:last-child': { marginBottom: 0 } },
+                                        '& ul, & ol': { paddingLeft: '20px', margin: '8px 0' },
+                                        '& li': { marginBottom: '4px' }
+                                    }}
+                                    dangerouslySetInnerHTML={{ __html: item.description }}
+                                />
+                            )}
+                        </Box>
                         
-                        <Grid item xs={12} sm={4}>
-                            <Chip
-                                label={
-                                    <EditableText
-                                        variant="caption"
-                                        contentEditable
-                                        suppressContentEditableWarning
-                                        onBlur={(e) => updateItem(index, 'date', e.target.innerText)}
-                                        sx={{ cursor: 'text' }}
-                                    >
-                                        {item.date}
-                                    </EditableText>
-                                }
+                        {selected && (
+                            <IconButton
                                 size="small"
-                                variant="outlined"
-                                color="primary"
-                            />
-                        </Grid>
-                    </Grid>
+                                onClick={() => handleDeleteItem(index)}
+                                sx={{ color: '#dc3545' }}
+                            >
+                                <DeleteIcon fontSize="small" />
+                            </IconButton>
+                        )}
+                    </Box>
                 </SectionItem>
-            )) : (
-                <Paper
-                    sx={{
-                        p: 3,
-                        textAlign: 'center',
-                        backgroundColor: '#f8f9fa',
-                        border: '2px dashed #dee2e6'
-                    }}
-                >
-                    <Typography variant="body2" color="text.secondary">
-                        No hay elementos. Haz clic en "+" para agregar.
-                    </Typography>
-                </Paper>
-            )}
-        </Box>
-    );
-};
-
-// Component for skills-type sections (languages, etc.)
-const SkillsSection = ({ data, sectionId, setProp, selected }) => {
-    const handleAddSkill = () => {
-        setProp((props) => {
-            const newSkill = { name: "Nueva Habilidad", level: "Nivel" };
-            props.data = [...(props.data || []), newSkill];
-        });
-    };
-
-    return (
-        <Box>
+            ))}
+            
             {selected && (
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
                     <IconButton
-                        onClick={handleAddSkill}
-                        color="primary"
-                        size="small"
-                        sx={{ 
-                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                            '&:hover': { backgroundColor: 'rgba(102, 126, 234, 0.2)' }
+                        onClick={handleAddItem}
+                        sx={{
+                            backgroundColor: '#667eea',
+                            color: 'white',
+                            '&:hover': { backgroundColor: '#5a6fd8' }
                         }}
                     >
                         <AddIcon />
                     </IconButton>
                 </Box>
             )}
-
-            <SectionItem elevation={1}>
-                <Grid container spacing={2}>
-                    {data && data.length > 0 ? data.map((skill, index) => (
-                        <Grid item xs={12} sm={6} key={index}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                                <EditableText
-                                    variant="body2"
-                                    sx={{ fontWeight: 500, color: '#495057' }}
-                                    contentEditable
-                                    suppressContentEditableWarning
-                                    onBlur={(e) => {
-                                        setProp((props) => {
-                                            if (props.data[index]) {
-                                                props.data[index].name = e.target.innerText;
-                                            }
-                                        });
-                                    }}
-                                >
-                                    {skill.name}
-                                </EditableText>
-                                
-                                <Chip
-                                    label={
-                                        <EditableText
-                                            variant="caption"
-                                            contentEditable
-                                            suppressContentEditableWarning
-                                            onBlur={(e) => {
-                                                setProp((props) => {
-                                                    if (props.data[index]) {
-                                                        props.data[index].level = e.target.innerText;
-                                                    }
-                                                });
-                                            }}
-                                            sx={{ cursor: 'text' }}
-                                        >
-                                            {skill.level}
-                                        </EditableText>
-                                    }
-                                    size="small"
-                                    variant="outlined"
-                                    color="secondary"
-                                />
-                            </Box>
-                        </Grid>
-                    )) : (
-                        <Grid item xs={12}>
-                            <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
-                                No hay habilidades. Haz clic en "+" para agregar.
-                            </Typography>
-                        </Grid>
-                    )}
-                </Grid>
-            </SectionItem>
         </Box>
     );
 };
 
-// Component for projects-type sections
-const ProjectsSection = ({ data, sectionId, setProp, selected }) => {
+// Component for rendering project-type sections
+const ProjectSection = ({ data, sectionId, setProp, selected, lang }) => {
     const handleAddProject = () => {
         setProp((props) => {
             const newProject = {
-                name: "Nuevo Proyecto",
-                description: "Descripción del proyecto",
-                technologies: ["Tech1", "Tech2"],
-                url: "https://proyecto.com",
-                date: "Fecha"
+                title: lang === 'es' ? "Nuevo Proyecto" : "New Project",
+                description: "",
+                technologies: [],
+                url: ""
             };
             props.data = [...(props.data || []), newProject];
         });
     };
 
+    const handleDeleteProject = (index) => {
+        setProp((props) => {
+            props.data.splice(index, 1);
+        });
+    };
+
+    const updateProject = (index, field, value) => {
+        setProp((props) => {
+            props.data[index][field] = value;
+        });
+    };
+
+    if (!data || data.length === 0) return null;
+
     return (
         <Box>
+            {data.map((project, index) => (
+                <SectionItem key={index} elevation={1}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <Box sx={{ flex: 1 }}>
+                            <EditableText
+                                variant="h6"
+                                sx={{ fontWeight: 600, color: '#2c3e50', mb: 1 }}
+                                contentEditable
+                                suppressContentEditableWarning
+                                onBlur={(e) => updateProject(index, 'title', e.target.innerText)}
+                            >
+                                {project.title || (lang === 'es' ? 'Título del Proyecto' : 'Project Title')}
+                            </EditableText>
+                            
+                            {project.url && (
+                                <Link 
+                                    href={project.url} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    sx={{ color: '#667eea', fontSize: '0.9rem', display: 'block', mb: 1 }}
+                                >
+                                    {project.url}
+                                </Link>
+                            )}
+                            
+                            {project.description && (
+                                <Typography
+                                    component="div"
+                                    variant="body2"
+                                    sx={{
+                                        color: '#495057',
+                                        lineHeight: 1.6,
+                                        mb: 1,
+                                        '& p': { margin: '0 0 8px 0', '&:last-child': { marginBottom: 0 } },
+                                        '& ul, & ol': { paddingLeft: '20px', margin: '8px 0' },
+                                        '& li': { marginBottom: '4px' }
+                                    }}
+                                    dangerouslySetInnerHTML={{ __html: project.description }}
+                                />
+                            )}
+                            
+                            {project.technologies && project.technologies.length > 0 && (
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                    {project.technologies.map((tech, techIndex) => (
+                                        <Chip
+                                            key={techIndex}
+                                            label={typeof tech === 'object' ? (tech.name || tech.title) : tech}
+                                            size="small"
+                                            variant="outlined"
+                                            sx={{
+                                                fontSize: '0.75rem',
+                                                height: '24px',
+                                                borderColor: '#667eea',
+                                                color: '#667eea'
+                                            }}
+                                        />
+                                    ))}
+                                </Box>
+                            )}
+                        </Box>
+                        
+                        {selected && (
+                            <IconButton
+                                size="small"
+                                onClick={() => handleDeleteProject(index)}
+                                sx={{ color: '#dc3545' }}
+                            >
+                                <DeleteIcon fontSize="small" />
+                            </IconButton>
+                        )}
+                    </Box>
+                </SectionItem>
+            ))}
+            
             {selected && (
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
                     <IconButton
                         onClick={handleAddProject}
-                        color="primary"
-                        size="small"
-                        sx={{ 
-                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                            '&:hover': { backgroundColor: 'rgba(102, 126, 234, 0.2)' }
+                        sx={{
+                            backgroundColor: '#667eea',
+                            color: 'white',
+                            '&:hover': { backgroundColor: '#5a6fd8' }
                         }}
                     >
                         <AddIcon />
                     </IconButton>
                 </Box>
             )}
-
-            {data && data.length > 0 ? data.map((project, index) => (
-                <SectionItem key={index} elevation={1}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={8}>
-                            <EditableText
-                                variant="h6"
-                                sx={{ fontWeight: 600, color: '#2c3e50', mb: 1 }}
-                                contentEditable
-                                suppressContentEditableWarning
-                                onBlur={(e) => {
-                                    setProp((props) => {
-                                        if (props.data[index]) {
-                                            props.data[index].name = e.target.innerText;
-                                        }
-                                    });
-                                }}
-                            >
-                                {project.name}
-                            </EditableText>
-                            
-                            <EditableText
-                                variant="body2"
-                                sx={{ color: '#495057', mb: 1, lineHeight: 1.5 }}
-                                contentEditable
-                                suppressContentEditableWarning
-                                onBlur={(e) => {
-                                    setProp((props) => {
-                                        if (props.data[index]) {
-                                            props.data[index].description = e.target.innerText;
-                                        }
-                                    });
-                                }}
-                            >
-                                {project.description}
-                            </EditableText>
-                            
-                            {project.technologies && (
-                                <Box sx={{ mb: 1 }}>
-                                    {project.technologies.map((tech, techIndex) => (
-                                        <Chip
-                                            key={techIndex}
-                                            label={tech}
-                                            size="small"
-                                            variant="outlined"
-                                            sx={{ mr: 0.5, mb: 0.5 }}
-                                        />
-                                    ))}
-                                </Box>
-                            )}
-                            
-                            {project.url && (
-                                <Link
-                                    href={project.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    sx={{ fontSize: '0.85rem', color: '#667eea' }}
-                                >
-                                    {project.url}
-                                </Link>
-                            )}
-                        </Grid>
-                        
-                        <Grid item xs={12} sm={4}>
-                            <Chip
-                                label={project.date}
-                                size="small"
-                                variant="outlined"
-                                color="primary"
-                            />
-                        </Grid>
-                    </Grid>
-                </SectionItem>
-            )) : (
-                <Paper
-                    sx={{
-                        p: 3,
-                        textAlign: 'center',
-                        backgroundColor: '#f8f9fa',
-                        border: '2px dashed #dee2e6'
-                    }}
-                >
-                    <Typography variant="body2" color="text.secondary">
-                        No hay proyectos. Haz clic en "+" para agregar.
-                    </Typography>
-                </Paper>
-            )}
         </Box>
     );
 };
 
-export const CVSection = ({ title = "Sección Adicional", data = [], type = "list" }) => {
+export const CVSection = ({ title = "Sección Adicional", data = [], type = "list", lang = 'es' }) => {
     const {
         connectors: { connect, drag },
         selected,
@@ -419,16 +307,33 @@ export const CVSection = ({ title = "Sección Adicional", data = [], type = "lis
         selected: state.events.selected
     }));
 
+    // Don't render if no data
+    if (!data || (Array.isArray(data) && data.length === 0)) {
+        return null;
+    }
+
     const renderSectionContent = () => {
         switch (type) {
-            case 'skills':
-                return <SkillsSection data={data} setProp={setProp} selected={selected} />;
             case 'projects':
-                return <ProjectsSection data={data} setProp={setProp} selected={selected} />;
+                return (
+                    <ProjectSection 
+                        data={data} 
+                        setProp={setProp} 
+                        selected={selected} 
+                        lang={lang}
+                    />
+                );
             case 'list':
             case 'certifications':
             default:
-                return <ListSection data={data} setProp={setProp} selected={selected} />;
+                return (
+                    <ListSection 
+                        data={data} 
+                        setProp={setProp} 
+                        selected={selected} 
+                        lang={lang}
+                    />
+                );
         }
     };
 
@@ -437,31 +342,32 @@ export const CVSection = ({ title = "Sección Adicional", data = [], type = "lis
             ref={(ref) => connect(drag(ref))}
             sx={{
                 outline: selected ? '2px solid #667eea' : 'none',
-                outlineOffset: '4px'
+                outlineOffset: '4px',
+                cursor: selected ? 'move' : 'default'
             }}
         >
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <SectionTitle
+                contentEditable
+                suppressContentEditableWarning
+                onBlur={(e) => {
+                    setProp((props) => {
+                        props.title = e.target.innerText;
+                    });
+                }}
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    '&:focus': {
+                        outline: '1px dashed #667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.05)',
+                        padding: '4px 8px',
+                        borderRadius: '4px'
+                    }
+                }}
+            >
                 {getIconForType(type)}
-                <SectionTitle
-                    contentEditable
-                    suppressContentEditableWarning
-                    onBlur={(e) => {
-                        setProp((props) => {
-                            props.title = e.target.innerText;
-                        });
-                    }}
-                    sx={{
-                        '&:focus': {
-                            outline: '1px dashed #667eea',
-                            backgroundColor: 'rgba(102, 126, 234, 0.05)',
-                            padding: '4px 8px',
-                            borderRadius: '4px'
-                        }
-                    }}
-                >
-                    {title}
-                </SectionTitle>
-            </Box>
+                {title}
+            </SectionTitle>
 
             {renderSectionContent()}
         </SectionContainer>

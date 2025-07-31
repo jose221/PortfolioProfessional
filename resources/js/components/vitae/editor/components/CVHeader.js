@@ -36,13 +36,7 @@ const TitleTypography = styled(Typography)(({ theme }) => ({
     fontStyle: 'italic'
 }));
 
-const SubtitleTypography = styled(Typography)(({ theme }) => ({
-    color: '#7f8c8d',
-    fontWeight: 400,
-    lineHeight: 1.4
-}));
-
-export const CVHeader = ({ data = {} }) => {
+export const CVHeader = ({ data = {}, lang = 'es' }) => {
     const {
         connectors: { connect, drag },
         selected,
@@ -52,10 +46,14 @@ export const CVHeader = ({ data = {} }) => {
     }));
 
     const {
-        fullName = "Nombre Completo",
-        title = "Título Profesional",
-        subtitle = "Descripción profesional breve"
+        fullName = "Sin nombre",
+        title = ""
     } = data;
+
+    // Don't render if no meaningful data
+    if (!fullName || fullName === "Sin nombre") {
+        return null;
+    }
 
     return (
         <HeaderContainer
@@ -85,43 +83,26 @@ export const CVHeader = ({ data = {} }) => {
                 {fullName}
             </NameTypography>
 
-            <TitleTypography
-                variant="h5"
-                contentEditable
-                suppressContentEditableWarning
-                onBlur={(e) => {
-                    setProp((props) => {
-                        props.data.title = e.target.innerText;
-                    });
-                }}
-                sx={{
-                    '&:focus': {
-                        outline: '1px dashed #667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.05)'
-                    }
-                }}
-            >
-                {title}
-            </TitleTypography>
-
-            <SubtitleTypography
-                variant="h6"
-                contentEditable
-                suppressContentEditableWarning
-                onBlur={(e) => {
-                    setProp((props) => {
-                        props.data.subtitle = e.target.innerText;
-                    });
-                }}
-                sx={{
-                    '&:focus': {
-                        outline: '1px dashed #667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.05)'
-                    }
-                }}
-            >
-                {subtitle}
-            </SubtitleTypography>
+            {title && title.trim() !== "" && (
+                <TitleTypography
+                    variant="h5"
+                    contentEditable
+                    suppressContentEditableWarning
+                    onBlur={(e) => {
+                        setProp((props) => {
+                            props.data.title = e.target.innerText;
+                        });
+                    }}
+                    sx={{
+                        '&:focus': {
+                            outline: '1px dashed #667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.05)'
+                        }
+                    }}
+                >
+                    {title}
+                </TitleTypography>
+            )}
         </HeaderContainer>
     );
 };
@@ -131,9 +112,8 @@ CVHeader.craft = {
     displayName: 'CV Header',
     props: {
         data: {
-            fullName: "Nombre Completo",
-            title: "Título Profesional", 
-            subtitle: "Descripción profesional breve"
+            fullName: "Sin nombre",
+            title: ""
         }
     },
     rules: {
