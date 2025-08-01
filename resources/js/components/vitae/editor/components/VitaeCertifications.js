@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNode, useEditor } from '@craftjs/core';
+import { useSelector } from 'react-redux';
+import { getPreviewMode } from '../../../../redux/selectors/preview-mode-selectors';
 import {
     Box,
     Typography,
@@ -116,6 +118,9 @@ const VitaeCertifications = ({ title, data, lang = 'es' }) => {
     const { enabled, actions } = useEditor((state) => ({
         enabled: state.options.enabled
     }));
+    
+    // Redux Preview Mode
+    const isPreviewMode = useSelector(getPreviewMode);
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -184,7 +189,7 @@ const VitaeCertifications = ({ title, data, lang = 'es' }) => {
                                 {certDate}
                             </Typography>
                         )}
-                        {enabled && (
+                        {enabled && !isPreviewMode && (
                             <IconButton 
                                 size="small" 
                                 onClick={() => handleEdit(item, index)} 
@@ -213,7 +218,7 @@ const VitaeCertifications = ({ title, data, lang = 'es' }) => {
                 position: 'relative'
             }}
         >
-            {enabled && (
+            {enabled && !isPreviewMode && (
                 <>
                     <DragHandle ref={(ref) => drag(ref)}>
                         <DragIcon sx={{ color: 'text.secondary' }} />

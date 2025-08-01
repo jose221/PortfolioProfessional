@@ -196,7 +196,7 @@ const VitaeEducation = ({ title, data, lang = 'es' }) => {
                                 GPA: {gpa}
                             </Typography>
                         )}
-                        {enabled && (
+                        {enabled && !isPreviewMode && (
                             <IconButton 
                                 size="small" 
                                 onClick={() => handleEdit(item, index)} 
@@ -247,7 +247,7 @@ const VitaeEducation = ({ title, data, lang = 'es' }) => {
                 position: 'relative'
             }}
         >
-            {enabled && (
+            {enabled && !isPreviewMode && (
                 <>
                     <DragHandle ref={drag}>
                         <Tooltip title={lang === 'es' ? 'Arrastrar Sección' : 'Drag Section'}>

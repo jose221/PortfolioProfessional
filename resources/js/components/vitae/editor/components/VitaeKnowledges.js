@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNode, useEditor } from '@craftjs/core';
+import { useSelector } from 'react-redux';
+import { getPreviewMode } from '../../../../redux/selectors/preview-mode-selectors';
 import {
     Box,
     Typography,
