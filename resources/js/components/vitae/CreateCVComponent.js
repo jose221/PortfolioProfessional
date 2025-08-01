@@ -1,8 +1,10 @@
 import React, { Component, useState } from 'react';
+import { Provider } from 'react-redux';
 import renderComponent from '../../utils/renderComponent';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import RComponent from "../RComponent";
+import store from '../../redux/store/store';
 
 import VitaeEditorContainer from "./editor/VitaeEditorContainer";
 
@@ -27,7 +29,9 @@ class CreateCVComponent extends RComponent{
     render(){
 
         return (
-            <VitaeEditorContainer data={this.state.information} lang={'es'}/>
+            <Provider store={store}>
+                <VitaeEditorContainer data={this.state.information} lang={'es'}/>
+            </Provider>
         )
     }
 }

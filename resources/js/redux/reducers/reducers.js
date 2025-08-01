@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import previewMode from "./preview-mode-reducer.js";
 function data(state = {}, action = {}) {
     switch (action.type) {
         case "ADD_TODO":
@@ -10,6 +11,7 @@ function data(state = {}, action = {}) {
     }
 }
 const reducers = combineReducers({
-    data
+    data,
+    previewMode
 });
 export default reducers;

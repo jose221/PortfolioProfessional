@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNode, useEditor } from '@craftjs/core';
+import { useSelector } from 'react-redux';
+import { getPreviewMode } from '../../../../redux/selectors/preview-mode-selectors';
 import {
     Box,
     Typography,
@@ -368,6 +370,9 @@ const VitaeStacks = ({ title, data, lang = 'es' }) => {
     const { enabled, actions } = useEditor((state) => ({
         enabled: state.options.enabled
     }));
+    
+    // Redux Preview Mode
+    const isPreviewMode = useSelector(getPreviewMode);
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -467,7 +472,7 @@ const VitaeStacks = ({ title, data, lang = 'es' }) => {
                 position: 'relative'
             }}
         >
-            {enabled && (isActive || isHovered) && (
+            {enabled && !isPreviewMode && (isActive || isHovered) && (
                 <>
                     <DragHandle ref={drag}>
                         <Tooltip title={lang === 'es' ? 'Arrastrar Sección' : 'Drag Section'}>
@@ -502,7 +507,7 @@ const VitaeStacks = ({ title, data, lang = 'es' }) => {
                     <Box key={category.id || categoryIndex} sx={{ mb: 2 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
                             <CategoryTitle>{getLocalizedText(category, 'title', lang, 'Categoría')}</CategoryTitle>
-                            {enabled && (
+                            {enabled && !isPreviewMode && (
                                 <Tooltip title={lang === 'es' ? 'Agregar Habilidad' : 'Add Skill'}>
                                     <IconButton size="small" onClick={() => handleAddSkill(categoryIndex)} color="primary">
                                         <AddIcon fontSize="small" />
@@ -519,7 +524,7 @@ const VitaeStacks = ({ title, data, lang = 'es' }) => {
                                         enabled={enabled}
                                         onUpdate={(updatedSkill) => handleUpdateSkill(categoryIndex, skillIndex, updatedSkill)}
                                     />
-                                    {enabled && (
+                                    {enabled && !isPreviewMode && (
                                         <Tooltip title={lang === 'es' ? 'Eliminar' : 'Delete'}>
                                             <IconButton
                                                 size="small"

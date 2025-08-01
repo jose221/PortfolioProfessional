@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNode, useEditor } from '@craftjs/core';
+import { useSelector } from 'react-redux';
+import { getPreviewMode } from '../../../../redux/selectors/preview-mode-selectors';
 import {
     Box,
     Typography,
@@ -124,6 +126,9 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
     const { enabled, actions } = useEditor((state) => ({
         enabled: state.options.enabled
     }));
+    
+    // Redux Preview Mode
+    const isPreviewMode = useSelector(getPreviewMode);
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -211,7 +216,7 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
                         <Typography variant="body2" sx={{ fontWeight: 500 }}>
                             {startDate} {endDate && `- ${endDate}`}
                         </Typography>
-                        {enabled && (
+                        {enabled && !isPreviewMode && (
                             <IconButton size="small" onClick={() => handleEdit(item, index)}>
                                 <EditIcon fontSize="small" />
                             </IconButton>
@@ -270,7 +275,7 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
                 position: 'relative'
             }}
         >
-            {enabled && (isActive || isHovered) && (
+            {enabled && !isPreviewMode && (isActive || isHovered) && (
                 <>
                     <DragHandle ref={drag}>
                         <Tooltip title={lang === 'es' ? 'Arrastrar Sección' : 'Drag Section'}>

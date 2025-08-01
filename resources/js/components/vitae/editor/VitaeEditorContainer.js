@@ -47,6 +47,7 @@ import { VitaeExperience } from './components/VitaeExperience';
 import { VitaeCustomSection } from './components/VitaeCustomSection';
 import { VitaeStudies } from './components/VitaeStudies';
 import { VitaeStacks } from './components/VitaeStacks';
+import PreviewModeButton from './components/PreviewModeButton';
 
 
 const EditorContainer = styled(Box)(({ theme }) => ({
@@ -529,6 +530,8 @@ const   VitaeEditorContent = ({ data, lang }) => {
                                 PDF
                             </Button>
                         </Tooltip>
+
+                        <PreviewModeButton lang={lang} />
 
                         <Button
                             variant="contained"
