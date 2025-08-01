@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Editor, Frame, Element, useEditor } from '@craftjs/core';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
@@ -30,7 +30,8 @@ import {
     Download as DownloadIcon,
     Settings as SettingsIcon,
     PictureAsPdf as PdfIcon,
-    Add as AddIcon
+    Add as AddIcon,
+    Description as DescriptionIcon
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import html2pdf from 'html2pdf.js';
@@ -48,6 +49,7 @@ import { VitaeCustomSection } from './components/VitaeCustomSection';
 import { VitaeStudies } from './components/VitaeStudies';
 import { VitaeStacks } from './components/VitaeStacks';
 import PreviewModeButton from './components/PreviewModeButton';
+
 
 
 const EditorContainer = styled(Box)(({ theme }) => ({
@@ -369,6 +371,88 @@ const   VitaeEditorContent = ({ data, lang }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [customSectionData, setCustomSectionData] = useState({ title: '', content: '' });
 
+    // CSS Pagination Hook
+    // Estado simple para paginación CSS
+    const [paginationEnabled, setPaginationEnabled] = useState(false);
+    const [totalPages, setTotalPages] = useState(1);
+
+    // Constantes para página A4
+    const PAGE_HEIGHT = 792; // px
+    const PAGE_MARGIN = 40; // px
+    const EFFECTIVE_PAGE_HEIGHT = PAGE_HEIGHT - (PAGE_MARGIN * 2);
+
+    // Función para calcular saltos de página inteligentes
+    const calculatePageBreaks = useCallback(() => {
+        const container = document.querySelector('#cv-container');
+        if (!container) return;
+
+        const sections = container.querySelectorAll('[data-section]');
+        if (sections.length === 0) return;
+
+        let currentPageHeight = 0;
+        let currentPage = 1;
+
+        // Limpiar clases existentes
+        sections.forEach(section => {
+            section.classList.remove('page-break-before');
+        });
+
+        sections.forEach((section, index) => {
+            const sectionHeight = section.offsetHeight || 0;
+            
+            console.log(`Sección ${section.getAttribute('data-section')}: ${sectionHeight}px, Página actual: ${currentPageHeight}px`);
+            
+            // Verificar si la sección cabe en la página actual
+            if (currentPageHeight + sectionHeight > EFFECTIVE_PAGE_HEIGHT && currentPageHeight > 0) {
+                // Nueva página necesaria
+                section.classList.add('page-break-before');
+                currentPage++;
+                currentPageHeight = sectionHeight;
+                console.log(`\u2728 SALTO DE PÁGINA en sección: ${section.getAttribute('data-section')}`);
+            } else {
+                currentPageHeight += sectionHeight;
+            }
+            
+            // Marcar sección con página actual
+            section.setAttribute('data-page', currentPage);
+        });
+        
+        setTotalPages(currentPage);
+        console.log(`\ud83d\udcc4 Total de páginas calculadas: ${currentPage}`);
+    }, [EFFECTIVE_PAGE_HEIGHT]);
+
+    // Función para alternar paginación
+    const togglePagination = useCallback(() => {
+        setPaginationEnabled(prev => {
+            const newValue = !prev;
+            
+            // Aplicar o remover clase CSS al contenedor usando querySelector
+            const container = document.querySelector('#cv-container');
+            if (container) {
+                if (newValue) {
+                    container.classList.add('pagination-enabled');
+                    // Calcular saltos de página después de aplicar estilos
+                    setTimeout(() => {
+                        calculatePageBreaks();
+                    }, 100);
+                } else {
+                    container.classList.remove('pagination-enabled');
+                    // Limpiar saltos de página
+                    const sections = container.querySelectorAll('[data-section]');
+                    sections.forEach(section => {
+                        section.classList.remove('page-break-before');
+                        section.removeAttribute('data-page');
+                    });
+                    setTotalPages(1);
+                }
+            }
+            
+            return newValue;
+        });
+    }, [calculatePageBreaks]);
+
+
+
     // Transform API data to template format
     useEffect(() => {
         if (data) {
@@ -437,7 +521,9 @@ const   VitaeEditorContent = ({ data, lang }) => {
     const handleDownloadPDF = async () => {
         try {
             const element = document.querySelector('[data-cv-content]');
-            if (!element) {
+            const container = document.querySelector('#cv-container');
+            
+            if (!element || !container) {
                 setNotification({
                     open: true,
                     message: 'No se pudo encontrar el contenido del CV',
@@ -446,34 +532,126 @@ const   VitaeEditorContent = ({ data, lang }) => {
                 return;
             }
 
+            // Mostrar indicador de carga
+            setNotification({
+                open: true,
+                message: lang === 'es' ? 'Generando PDF con paginado inteligente...' : 'Generating PDF with smart pagination...',
+                severity: 'info'
+            });
+
+            // PASO 1: Definir constantes de página
+            const PAGE_HEIGHT_MM = 297; // A4 height in mm
+            const PAGE_MARGIN_MM = 5;    // márgenes mínimos en mm
+            const EFFECTIVE_HEIGHT_MM = PAGE_HEIGHT_MM - (PAGE_MARGIN_MM * 2);
+            const PX_TO_MM = 0.264583;   // conversion factor
+            const EFFECTIVE_HEIGHT_PX = EFFECTIVE_HEIGHT_MM / PX_TO_MM;
+            
+            // PASO 2: Aplicar estilos de paginado temporalmente
+            const originalClasses = container.className;
+            container.classList.add('pdf-generation-mode');
+            
+            // PASO 3: Calcular y aplicar saltos de página inteligentes
+            const applyIntelligentPageBreaks = () => {
+                const sections = container.querySelectorAll('[data-section]');
+                
+                let currentPageHeight = 0;
+                let pageNumber = 1;
+                
+                // Limpiar clases existentes
+                sections.forEach(section => {
+                    section.classList.remove('pdf-page-break-before');
+                    section.style.pageBreakInside = 'avoid';
+                    section.style.breakInside = 'avoid';
+                });
+                
+                sections.forEach((section, index) => {
+                    const sectionHeight = section.offsetHeight || 0;
+                    
+                    console.log(`📄 PDF: Sección ${section.getAttribute('data-section')}: ${sectionHeight}px (${(sectionHeight * PX_TO_MM).toFixed(1)}mm)`);
+                    
+                    // Verificar si la sección cabe en la página actual
+                    if (currentPageHeight + sectionHeight > EFFECTIVE_HEIGHT_PX && currentPageHeight > 0) {
+                        // Nueva página necesaria
+                        section.classList.add('pdf-page-break-before');
+                        section.style.pageBreakBefore = 'always';
+                        pageNumber++;
+                        currentPageHeight = sectionHeight;
+                        console.log(`🔄 PDF: SALTO DE PÁGINA antes de ${section.getAttribute('data-section')} - Página ${pageNumber}`);
+                    } else {
+                        currentPageHeight += sectionHeight;
+                    }
+                    
+                    section.setAttribute('data-pdf-page', pageNumber);
+                });
+                
+                console.log(`📊 PDF: Total de páginas calculadas: ${pageNumber}`);
+                return pageNumber;
+            };
+            
+            // Aplicar saltos de página después de que los estilos se hayan aplicado
+            await new Promise(resolve => setTimeout(resolve, 200));
+            const totalPages = applyIntelligentPageBreaks();
+            
+            // PASO 3: Configuración de alta calidad para PDF
             const opt = {
-                margin: [10, 10, 10, 10],
-                filename: `CV_${templateData?.header?.fullName?.replace(/\s+/g, '_') || 'Harvard'}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
+                margin: [10, 0, 2, 0],
+                filename: `CV_${templateData?.header?.fullName?.replace(/\s+/g, '_') || 'Professional'}.pdf`,
+                image: { 
+                    type: 'jpeg', 
+                    quality: 1.0 // Máxima calidad
+                },
                 html2canvas: {
-                    scale: 2,
+                    scale: 2, // Escala reducida para evitar cortes
                     useCORS: true,
-                    letterRendering: true
+                    letterRendering: true,
+                    allowTaint: false,
+                    backgroundColor: '#ffffff',
+                    removeContainer: false,
+                    imageTimeout: 15000,
+                    logging: false,
+                    width: null, // Permitir ancho automático
+                    height: null // Permitir altura automática
                 },
                 jsPDF: {
                     unit: 'mm',
                     format: 'a4',
-                    orientation: 'portrait'
+                    orientation: 'portrait',
+                    compress: false // No comprimir para mejor calidad
+                },
+                pagebreak: {
+                    mode: ['avoid-all', 'css', 'legacy'],
+                    before: '.pdf-page-break-before',
+                    after: '.pdf-page-break-after',
+                    avoid: '[data-section]'
                 }
             };
 
+            // PASO 4: Generar PDF
+            console.log('🚀 Iniciando generación de PDF...');
             await html2pdf().set(opt).from(element).save();
+            
+            // PASO 5: Restaurar estado original
+            container.className = originalClasses;
+            const sections = container.querySelectorAll('[data-section]');
+            sections.forEach(section => {
+                section.classList.remove('pdf-page-break-before');
+                section.style.pageBreakBefore = '';
+                section.style.pageBreakInside = '';
+                section.style.breakInside = '';
+                section.removeAttribute('data-pdf-page');
+            });
 
             setNotification({
                 open: true,
-                message: 'CV descargado correctamente',
+                message: `${lang === 'es' ? 'PDF generado exitosamente' : 'PDF generated successfully'} (${totalPages} ${lang === 'es' ? 'páginas' : 'pages'})`,
                 severity: 'success'
             });
+            
         } catch (error) {
-            console.error('Error downloading PDF:', error);
+            console.error('❌ Error generating PDF:', error);
             setNotification({
                 open: true,
-                message: 'Error al descargar el CV',
+                message: lang === 'es' ? 'Error al generar el PDF' : 'Error generating PDF',
                 severity: 'error'
             });
         }
@@ -531,7 +709,47 @@ const   VitaeEditorContent = ({ data, lang }) => {
                             </Button>
                         </Tooltip>
 
-                        <PreviewModeButton lang={lang} />
+                        <PreviewModeButton />
+                        
+                        {/* Botón Toggle Paginado */}
+                        <Tooltip title={paginationEnabled 
+                            ? (lang === 'es' ? 'Desactivar Paginado' : 'Disable Pagination')
+                            : (lang === 'es' ? 'Activar Paginado' : 'Enable Pagination')
+                        }>
+                            <IconButton
+                                onClick={togglePagination}
+                                color={paginationEnabled ? 'primary' : 'default'}
+                                sx={{
+                                    ml: 1,
+                                    backgroundColor: paginationEnabled ? 'primary.main' : 'transparent',
+                                    color: paginationEnabled ? 'white' : 'inherit',
+                                    '&:hover': {
+                                        backgroundColor: paginationEnabled ? 'primary.dark' : 'action.hover'
+                                    }
+                                }}
+                            >
+                                <DescriptionIcon />
+                            </IconButton>
+                        </Tooltip>
+                        
+                        {/* Indicador de Páginas */}
+                        {paginationEnabled && (
+                            <Box sx={{
+                                ml: 1,
+                                px: 2,
+                                py: 0.5,
+                                backgroundColor: 'success.main',
+                                color: 'white',
+                                borderRadius: 2,
+                                fontSize: '0.875rem',
+                                fontWeight: 'bold',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 0.5
+                            }}>
+                                📄 {totalPages} {lang === 'es' ? (totalPages === 1 ? 'Página' : 'Páginas') : (totalPages === 1 ? 'Page' : 'Pages')}
+                            </Box>
+                        )}
 
                         <Button
                             variant="contained"
@@ -552,14 +770,16 @@ const   VitaeEditorContent = ({ data, lang }) => {
             </EditorToolbar>
 
             <CVCanvas>
+                {/* Renderizado tradicional - el paginado se manejará con CSS */}
                 <CVPaper elevation={8} data-cv-content>
                     <Frame>
-                        <Element
+                            <Element
                                 is={Container}
                                 id="cv-container"
                                 maxWidth={false}
                                 sx={{ padding: 0 }}
                                 canvas
+
                             >
                             {/* CV Header */}
                             {templateData.header && !isEmptyData(templateData.header) && (
@@ -569,6 +789,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                                     data={templateData.header}
                                     lang={lang}
                                     canvas
+                                    data-section="header"
                                 />
                             )}
 
@@ -580,6 +801,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                                     data={templateData.contact}
                                     lang={lang}
                                     canvas
+                                    data-section="contact"
                                 />
                             )}
 
@@ -592,6 +814,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                                     data={templateData.summary}
                                     lang={lang}
                                     canvas
+                                    data-section="summary"
                                 />
                             )}
                             {/* Work Experience */}
@@ -603,6 +826,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                                     data={templateData.experience}
                                     lang={lang}
                                     canvas
+                                    data-section="experience"
                                 />
                             )}
 
@@ -615,6 +839,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                                     data={templateData.education}
                                     lang={lang}
                                     canvas
+                                    data-section="education"
                                 />
                             )}
 
@@ -627,6 +852,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                                     data={templateData.studies}
                                     lang={lang}
                                     canvas
+                                    data-section="studies"
                                 />
                             )}
 
@@ -639,6 +865,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                                     data={templateData.knowledges}
                                     lang={lang}
                                     canvas
+                                    data-section="knowledges"
                                 />
                             )}
 
@@ -651,6 +878,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                                     data={templateData.certifications}
                                     lang={lang}
                                     canvas
+                                    data-section="certifications"
                                 />
                             )}
 
@@ -659,10 +887,11 @@ const   VitaeEditorContent = ({ data, lang }) => {
                                 <Element
                                     is={VitaeStacks}
                                     id="stacks-section"
-                                    title={lang === 'es' ? 'Tecnologías' : 'Stacks'}
+                                    title={lang === 'es' ? 'Habilidades y Competencias' : 'Skills & Competencies'}
                                     data={templateData.stacks}
                                     lang={lang}
                                     canvas
+                                    data-section="stacks"
                                 />
                             )}
                         </Element>

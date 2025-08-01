@@ -36,6 +36,8 @@ use App\Helpers\ArrayHelper
     <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.js" integrity="sha512-2RLMQRNr+D47nbLnsbEqtEmgKy67OSCpWJjJM394czt99xj3jJJJBQ43K7lJpfYAYtvekeyzqfZTx2mqoDh7vg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('js/admin-portafolio.js') }}" defer></script>
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <!-- CSS Pagination for CV Editor -->
+    <link href="{{ asset('css/pagination.css') }}" rel="stylesheet">
 <body>
 
 <div class="page-wrapper chiller-theme theme-blue">

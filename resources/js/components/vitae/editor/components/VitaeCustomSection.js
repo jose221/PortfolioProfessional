@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNode, useEditor } from '@craftjs/core';
+import { useSelector } from 'react-redux';
+import { getPreviewMode } from '../../../../redux/selectors/preview-mode-selectors';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
 import {
@@ -125,6 +127,9 @@ const VitaeCustomSection = ({ title, content, lang = 'es' }) => {
     const { enabled, actions } = useEditor((state) => ({
         enabled: state.options.enabled
     }));
+    
+    // Redux Preview Mode
+    const isPreviewMode = useSelector(getPreviewMode);
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -175,7 +180,7 @@ const VitaeCustomSection = ({ title, content, lang = 'es' }) => {
                 position: 'relative'
             }}
         >
-            {enabled && (
+            {enabled && !isPreviewMode && (
                 <>
                     <DragHandle ref={(ref) => drag(ref)}>
                         <DragIcon sx={{ color: 'text.secondary' }} />

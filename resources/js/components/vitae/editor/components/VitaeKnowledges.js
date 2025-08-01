@@ -124,6 +124,9 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
     const { enabled, actions } = useEditor((state) => ({
         enabled: state.options.enabled
     }));
+    
+    // Redux Preview Mode
+    const isPreviewMode = useSelector(getPreviewMode);
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -188,7 +191,7 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
                             {title}
                         </Typography>
                     </Box>
-                    {enabled && (
+                    {enabled && !isPreviewMode && (
                         <IconButton size="small" onClick={() => handleEdit(item, index)}>
                             <EditIcon fontSize="small" />
                         </IconButton>
@@ -249,7 +252,7 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
                 position: 'relative'
             }}
         >
-            {enabled && (
+            {enabled && !isPreviewMode && (
                 <>
                     <DragHandle ref={(ref) => drag(ref)}>
                         <DragIcon sx={{ color: 'text.secondary' }} />
