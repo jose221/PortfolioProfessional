@@ -51,7 +51,7 @@
         "react-trix": "^0.0.1",
         "redux": "^5.0.1",
         "styled-components": "^6.1.18",
-        "suneditor": "^2.45.1",
+        "suneditor": "^2.47.6",
         "suneditor-react": "^3.6.1"
     }
 }
