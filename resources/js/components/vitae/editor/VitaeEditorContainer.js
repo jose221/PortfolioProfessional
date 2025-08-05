@@ -49,7 +49,8 @@ import { VitaeCustomSection } from './components/VitaeCustomSection';
 import { VitaeStudies } from './components/VitaeStudies';
 import { VitaeStacks } from './components/VitaeStacks';
 import PreviewModeButton from './components/PreviewModeButton';
-
+import { enablePreviewMode, disablePreviewMode } from '../../../redux/actions/preview-mode.js';
+import { useDispatch } from 'react-redux';
 
 
 const EditorContainer = styled(Box)(({ theme }) => ({
@@ -105,7 +106,6 @@ const CVPaper = styled(Paper)(({ theme }) => ({
         left: 0,
         right: 0,
         height: '4px',
-        background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)',
     }
 }));
 
@@ -461,12 +461,6 @@ const   VitaeEditorContent = ({ data, lang }) => {
             if (transformed) {
                 setTemplateData(transformed);
                 console.log('CV Data transformed successfully:', transformed);
-            } else {
-                setNotification({
-                    open: true,
-                    message: 'No se pudieron cargar los datos del CV',
-                    severity: 'error'
-                });
             }
         }
     }, [data, lang]);
@@ -517,9 +511,10 @@ const   VitaeEditorContent = ({ data, lang }) => {
             severity: 'success'
         });
     };
-
+    const dispatch = useDispatch();
     const handleDownloadPDF = async () => {
         try {
+            dispatch(enablePreviewMode());
             const element = document.querySelector('[data-cv-content]');
             const container = document.querySelector('#cv-container');
             
@@ -594,7 +589,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
             
             // PASO 3: Configuración de alta calidad para PDF
             const opt = {
-                margin: [10, 0, 2, 0],
+                margin: [12, 0, 2, 0],
                 filename: `CV_${templateData?.header?.fullName?.replace(/\s+/g, '_') || 'Professional'}.pdf`,
                 image: { 
                     type: 'jpeg', 
@@ -646,7 +641,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                 message: `${lang === 'es' ? 'PDF generado exitosamente' : 'PDF generated successfully'} (${totalPages} ${lang === 'es' ? 'páginas' : 'pages'})`,
                 severity: 'success'
             });
-            
+            dispatch(disablePreviewMode());
         } catch (error) {
             console.error('❌ Error generating PDF:', error);
             setNotification({

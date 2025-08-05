@@ -74,101 +74,10 @@ body:has(.pagination-enabled) {
    MODO GENERACIÓN PDF
 ======================================== */
 
-/* Estilos específicos para generación de PDF */
-.pdf-generation-mode {
-    /* Optimización para PDF - Sin márgenes laterales */
-    margin-left: 0 !important; /* Sin márgenes */
-    padding-left: 0 !important;
-    margin-right: 0 !important; /* Sin márgenes */
-    padding-right: 0 !important;
-    background: white !important;
-    color: black !important;
-    font-family: 'Arial', 'Helvetica', sans-serif !important;
-    font-size: 12px !important;
-    line-height: 1.4 !important;
+.pdf-generation-mode{
     
-    /* Eliminar sombras y efectos para PDF */
-    box-shadow: none !important;
-    border: none !important;
-    border-radius: 0 !important;
-    
-    /* Configuración de página */
-    page-break-inside: avoid;
-    break-inside: avoid;
-    
-    /* Asegurar que ocupe todo el ancho */
-    position: relative !important;
-    left: 0 !important;
-    right: 0 !important;
 }
 
-/* Secciones en modo PDF */
-.pdf-generation-mode [data-section] {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    margin: 10px 0 0 0 !important; /* Solo margen inferior */
-    padding: 10px 0 0 0 !important; /* Solo padding vertical */
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    width: 100% !important;
-    
-    /* Tipografía optimizada para PDF */
-    font-family: inherit !important;
-    color: black !important;
-}
-
-/* Saltos de página para PDF */
-.pdf-generation-mode .pdf-page-break-before {
-    page-break-before: always !important;
-    break-before: page !important;
-    margin-top: 0 !important;
-    padding-top: 15mm !important;
-}
-
-/* Ocultar elementos visuales del editor en PDF */
-.pdf-generation-mode .pagination-page-indicator,
-.pdf-generation-mode .pagination-page-number,
-.pdf-generation-mode .page-divider,
-.pdf-generation-mode::before,
-.pdf-generation-mode [data-section]::before {
-    display: none !important;
-}
-
-/* Optimización de texto para PDF */
-.pdf-generation-mode h1,
-.pdf-generation-mode h2,
-.pdf-generation-mode h3,
-.pdf-generation-mode h4,
-.pdf-generation-mode h5,
-.pdf-generation-mode h6 {
-    color: black !important;
-    margin-bottom: 8px !important;
-    margin-top: 12px !important;
-    font-weight: bold !important;
-    page-break-after: avoid !important;
-}
-
-.pdf-generation-mode p {
-    margin-bottom: 6px !important;
-    color: black !important;
-    orphans: 3;
-    widows: 3;
-}
-
-/* Listas optimizadas para PDF */
-.pdf-generation-mode ul,
-.pdf-generation-mode ol {
-    margin-bottom: 10px !important;
-    padding-left: 20px !important;
-    page-break-inside: avoid !important;
-}
-
-.pdf-generation-mode li {
-    margin-bottom: 4px !important;
-    color: black !important;
-    page-break-inside: avoid !important;
-}
 
 /* ========================================
    REGLAS DE SALTO DE PÁGINA Y SECCIONES

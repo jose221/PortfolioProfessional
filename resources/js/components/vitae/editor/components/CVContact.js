@@ -23,7 +23,7 @@ const ContactItem = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     gap: theme.spacing(1),
-    marginBottom: theme.spacing(1),
+    marginBottom: '0',
     padding: theme.spacing(0.5),
     borderRadius: theme.spacing(0.5),
     '&:hover': {

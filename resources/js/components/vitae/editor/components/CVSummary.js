@@ -123,7 +123,7 @@ export const CVSummary = ({ title = "Resumen Profesional", data = {}, lang = 'es
                             borderRadius: '4px'
                         },
                         '& p': {
-                            margin: '0 0 12px 0',
+                            margin: '0 0 0 0',
                             '&:last-child': {
                                 marginBottom: 0
                             }

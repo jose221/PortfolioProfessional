@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 const HeaderContainer = styled(Box)(({ theme }) => ({
     textAlign: 'center',
     marginBottom: theme.spacing(4),
-    padding: theme.spacing(3, 0),
+    padding: theme.spacing(0, 0),
     borderBottom: '2px solid #667eea',
     position: 'relative',
     '&::after': {

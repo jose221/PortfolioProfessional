@@ -21,7 +21,6 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
     color: '#2c3e50',
     marginBottom: theme.spacing(2),
     paddingBottom: theme.spacing(1),
-    borderBottom: '2px solid #667eea',
     display: 'inline-block',
     position: 'relative'
 }));

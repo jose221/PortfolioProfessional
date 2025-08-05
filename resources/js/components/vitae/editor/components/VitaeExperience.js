@@ -78,7 +78,7 @@ const ExperienceItem = styled(Box)(({ theme }) => ({
     marginBottom: theme.spacing(3),
     paddingBottom: theme.spacing(2),
     '&:not(:last-child)': {
-        borderBottom: `1px solid ${theme.palette.divider}`,
+        //borderBottom: `1px solid ${theme.palette.divider}`,
     }
 }));
 
