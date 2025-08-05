@@ -693,39 +693,9 @@ const   VitaeEditorContent = ({ data, lang }) => {
                             </IconButton>
                         </Tooltip>
 
-                        <Tooltip title="Descargar PDF">
-                            <Button
-                                variant="outlined"
-                                onClick={handleDownloadPDF}
-                                startIcon={<PdfIcon />}
-                                sx={{ ml: 1 }}
-                            >
-                                PDF
-                            </Button>
-                        </Tooltip>
+                        
 
                         <PreviewModeButton />
-                        
-                        {/* Botón Toggle Paginado */}
-                        <Tooltip title={paginationEnabled 
-                            ? (lang === 'es' ? 'Desactivar Paginado' : 'Disable Pagination')
-                            : (lang === 'es' ? 'Activar Paginado' : 'Enable Pagination')
-                        }>
-                            <IconButton
-                                onClick={togglePagination}
-                                color={paginationEnabled ? 'primary' : 'default'}
-                                sx={{
-                                    ml: 1,
-                                    backgroundColor: paginationEnabled ? 'primary.main' : 'transparent',
-                                    color: paginationEnabled ? 'white' : 'inherit',
-                                    '&:hover': {
-                                        backgroundColor: paginationEnabled ? 'primary.dark' : 'action.hover'
-                                    }
-                                }}
-                            >
-                                <DescriptionIcon />
-                            </IconButton>
-                        </Tooltip>
                         
                         {/* Indicador de Páginas */}
                         {paginationEnabled && (
@@ -746,20 +716,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                             </Box>
                         )}
 
-                        <Button
-                            variant="contained"
-                            onClick={handleSave}
-                            startIcon={<SaveIcon />}
-                            sx={{
-                                ml: 1,
-                                background: 'linear-gradient(45deg, #667eea 30%, #764ba2 90%)',
-                                '&:hover': {
-                                    background: 'linear-gradient(45deg, #5a6fd8 30%, #6a4190 90%)',
-                                }
-                            }}
-                        >
-                            Guardar
-                        </Button>
+                
                     </Box>
                 </Toolbar>
             </EditorToolbar>
