@@ -376,9 +376,120 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
         return enabledSections.some(section => section.id === sectionId && section.enabled);
     };
     
-    console.log('=== SECTION FILTERING DEBUG ===');
+    // Create a mapping of section components
+    const sectionComponents = {
+        header: {
+            component: CVHeader,
+            data: templateData?.header,
+            isEmpty: () => !templateData?.header || isEmptyData(templateData.header),
+            title: null // Header doesn't need a title
+        },
+        contact: {
+            component: CVContact,
+            data: templateData?.contact,
+            isEmpty: () => !templateData?.contact || isEmptyData(templateData.contact),
+            title: null // Contact doesn't need a title
+        },
+        summary: {
+            component: CVSummary,
+            data: templateData?.summary,
+            isEmpty: () => !templateData?.summary || isEmptyData(templateData.summary.content),
+            title: lang === 'es' ? "Resumen Profesional" : "Professional Summary"
+        },
+        experience: {
+            component: VitaeExperience,
+            data: templateData?.experience,
+            isEmpty: () => !templateData?.experience || templateData.experience.length === 0,
+            title: lang === 'es' ? "Experiencia Laboral" : "Work Experience"
+        },
+        education: {
+            component: VitaeEducation,
+            data: templateData?.education,
+            isEmpty: () => !templateData?.education || templateData.education.length === 0,
+            title: lang === 'es' ? "Educación" : "Education"
+        },
+        studies: {
+            component: VitaeStudies,
+            data: templateData?.studies,
+            isEmpty: () => !templateData?.studies || templateData.studies.length === 0,
+            title: lang === 'es' ? "Estudios" : "Studies"
+        },
+        knowledges: {
+            component: VitaeKnowledges,
+            data: templateData?.knowledges,
+            isEmpty: () => !templateData?.knowledges || templateData.knowledges.length === 0,
+            title: lang === 'es' ? 'Conocimientos Técnicos' : 'Technical Knowledge'
+        },
+        certifications: {
+            component: VitaeCertifications,
+            data: templateData?.certifications,
+            isEmpty: () => !templateData?.certifications || templateData.certifications.length === 0,
+            title: lang === 'es' ? 'Certificaciones' : 'Certifications'
+        },
+        stacks: {
+            component: VitaeStacks,
+            data: templateData?.stacks,
+            isEmpty: () => !templateData?.stacks || templateData.stacks.length === 0,
+            title: lang === 'es' ? 'Habilidades y Competencias' : 'Skills & Competencies'
+        }
+    };
+    
+    // Function to render sections in the configured order
+    const renderSectionsInOrder = () => {
+        if (enabledSections.length === 0) {
+            // If no configuration, render all sections in default order
+            return Object.keys(sectionComponents).map(sectionId => 
+                renderSection(sectionId, sectionComponents[sectionId])
+            ).filter(Boolean);
+        }
+        
+        // Render sections in the user-configured order
+        return enabledSections
+            .filter(section => section.enabled)
+            .map(section => {
+                const sectionConfig = sectionComponents[section.id];
+                if (!sectionConfig) {
+                    console.warn(`Section component not found for: ${section.id}`);
+                    return null;
+                }
+                return renderSection(section.id, sectionConfig);
+            })
+            .filter(Boolean);
+    };
+    
+    // Function to render a single section
+    const renderSection = (sectionId, config) => {
+        if (!config || config.isEmpty()) {
+            return null;
+        }
+        
+        const Component = config.component;
+        const props = {
+            id: `${sectionId}-section`,
+            data: config.data,
+            lang: lang,
+            canvas: true,
+            'data-section': sectionId
+        };
+        
+        if (config.title) {
+            props.title = config.title;
+        }
+        
+        return (
+            <Element
+                key={sectionId}
+                is={Component}
+                {...props}
+            />
+        );
+    };
+    
+    console.log('=== SECTION ORDERING DEBUG ===');
     console.log('Enabled sections:', enabledSections);
     console.log('Theme colors:', themeColors);
+    console.log('Section order:', enabledSections.map(s => s.id));
+    console.log('Template data keys:', templateData ? Object.keys(templateData) : 'No template data');
     console.log('================================');
 
     const [notification, setNotification] = useState({ open: false, message: '', severity: 'info' });
@@ -754,119 +865,8 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
                                 canvas
 
                             >
-                            {/* CV Header */}
-                            {templateData.header && !isEmptyData(templateData.header) && isSectionEnabled('header') && (
-                                <Element
-                                    is={CVHeader}
-                                    id="header-section"
-                                    data={templateData.header}
-                                    lang={lang}
-                                    canvas
-                                    data-section="header"
-                                />
-                            )}
-
-                            {/* Contact Information */}
-                            {templateData.contact && !isEmptyData(templateData.contact) && isSectionEnabled('contact') && (
-                                <Element
-                                    is={CVContact}
-                                    id="contact-section"
-                                    data={templateData.contact}
-                                    lang={lang}
-                                    canvas
-                                    data-section="contact"
-                                />
-                            )}
-
-                            {/* Professional Summary */}
-                            {templateData.summary && !isEmptyData(templateData.summary.content) && isSectionEnabled('summary') && (
-                                <Element
-                                    is={CVSummary}
-                                    id="summary-section"
-                                    title={lang === 'es' ? "Resumen Profesional" : "Professional Summary"}
-                                    data={templateData.summary}
-                                    lang={lang}
-                                    canvas
-                                    data-section="summary"
-                                />
-                            )}
-                            {/* Work Experience */}
-                            {templateData.experience && templateData.experience.length > 0 && isSectionEnabled('experience') && (
-                                <Element
-                                    is={VitaeExperience}
-                                    id="experience-section"
-                                    title={lang === 'es' ? "Experiencia Laboral" : "Work Experience"}
-                                    data={templateData.experience}
-                                    lang={lang}
-                                    canvas
-                                    data-section="experience"
-                                />
-                            )}
-
-                            {/* Education */}
-                            {templateData.education && templateData.education.length > 0 && isSectionEnabled('education') && (
-                                <Element
-                                    is={VitaeEducation}
-                                    id="education-section"
-                                    title={lang === 'es' ? "Educación" : "Education"}
-                                    data={templateData.education}
-                                    lang={lang}
-                                    canvas
-                                    data-section="education"
-                                />
-                            )}
-
-                            {/* Studies */}
-                            {templateData.studies && templateData.studies.length > 0 && isSectionEnabled('studies') && (
-                                <Element
-                                    is={VitaeStudies}
-                                    id="studies-section"
-                                    title={lang === 'es' ? "Estudios" : "Studies"}
-                                    data={templateData.studies}
-                                    lang={lang}
-                                    canvas
-                                    data-section="studies"
-                                />
-                            )}
-
-                            {/* Knowledges */}
-                            {templateData.knowledges && templateData.knowledges.length > 0 && isSectionEnabled('knowledges') && (
-                                <Element
-                                    is={VitaeKnowledges}
-                                    id="knowledges-section"
-                                    title={lang === 'es' ? 'Conocimientos Técnicos' : 'Technical Knowledge'}
-                                    data={templateData.knowledges}
-                                    lang={lang}
-                                    canvas
-                                    data-section="knowledges"
-                                />
-                            )}
-
-                            {/* Certifications */}
-                            {templateData.certifications && templateData.certifications.length > 0 && isSectionEnabled('certifications') && (
-                                <Element
-                                    is={VitaeCertifications}
-                                    id="certifications-section"
-                                    title={lang === 'es' ? 'Certificaciones' : 'Certifications'}
-                                    data={templateData.certifications}
-                                    lang={lang}
-                                    canvas
-                                    data-section="certifications"
-                                />
-                            )}
-
-                            {/* Stacks */}
-                            {templateData.stacks && templateData.stacks.length > 0 && isSectionEnabled('stacks') && (
-                                <Element
-                                    is={VitaeStacks}
-                                    id="stacks-section"
-                                    title={lang === 'es' ? 'Habilidades y Competencias' : 'Skills & Competencies'}
-                                    data={templateData.stacks}
-                                    lang={lang}
-                                    canvas
-                                    data-section="stacks"
-                                />
-                            )}
+                            {/* Dynamic Section Rendering - Respects user-configured order and enabled/disabled state */}
+                            {renderSectionsInOrder()}
                         </Element>
                     </Frame>
                 </CVPaper>
