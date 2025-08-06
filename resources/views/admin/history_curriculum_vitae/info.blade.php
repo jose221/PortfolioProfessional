@@ -10,6 +10,6 @@
                 <li class="breadcrumb-item active" aria-current="page">Mi CV</li>
             </ol>
         </nav>
-        <info-vitae-component data-id="{{$id}}"  data-user_id="{{auth()->id()}}"></info-vitae-component>
+        <!--<info-vitae-component data-id="{{$id}}"  data-user_id="{{auth()->id()}}"></info-vitae-component>-->
     </div>
 @endsection

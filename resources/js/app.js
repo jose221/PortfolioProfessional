@@ -60,5 +60,4 @@ import FormHomeComponent from "./components/home/FormComponent";
 import CertificationsComponent from "./components/certifications/CertificationsComponent";
 import FormCertificationsComponent from "./components/certifications/FormCertificationsComponent";
 import ListCertificationsComponent from "./components/certifications/ListCertificationsComponent";
-import InfoVitaeComponent from "./components/vitae/InfoVitaeComponent";
 import CreateCVComponent from "./components/vitae/CreateCVComponent";
