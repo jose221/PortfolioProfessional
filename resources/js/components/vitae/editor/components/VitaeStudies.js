@@ -322,28 +322,6 @@ const VitaeStudies = ({ title, data, lang = 'es' }) => {
                                 onChange={(e) => setEditingItem({ ...editingItem, graduationDate: e.target.value })}
                                 fullWidth
                             />
-                            <TextField
-                                label="GPA"
-                                value={editingItem.gpa || ''}
-                                onChange={(e) => setEditingItem({ ...editingItem, gpa: e.target.value })}
-                                fullWidth
-                            />
-                            <TextField
-                                label={lang === 'es' ? 'Materias Relevantes' : 'Relevant Coursework'}
-                                value={editingItem.coursework || ''}
-                                onChange={(e) => setEditingItem({ ...editingItem, coursework: e.target.value })}
-                                multiline
-                                rows={2}
-                                fullWidth
-                            />
-                            <TextField
-                                label={lang === 'es' ? 'Reconocimientos' : 'Honors'}
-                                value={editingItem.honors || ''}
-                                onChange={(e) => setEditingItem({ ...editingItem, honors: e.target.value })}
-                                multiline
-                                rows={2}
-                                fullWidth
-                            />
                         </Box>
                     )}
                 </DialogContent>

@@ -306,7 +306,7 @@ const transformApiDataToTemplate = (apiData, lang = 'es') => {
 
             return {
                 id: knowledge.id || index + 1,
-                name: getLocalizedText(knowledge, 'title', lang, "Conocimiento"),
+                title: getLocalizedText(knowledge, 'title', lang, "Conocimiento"),
                 description: getLocalizedText(knowledge, 'description', lang, "")
             };
         }).filter(Boolean)

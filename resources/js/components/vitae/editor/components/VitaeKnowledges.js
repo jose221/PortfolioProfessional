@@ -24,6 +24,7 @@ import {
     Psychology as KnowledgeIcon
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
+import SunEditor from 'suneditor-react';
 
 const SectionContainer = styled(Paper)(({ theme }) => ({
     marginBottom: theme.spacing(3),
@@ -133,6 +134,7 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
     const [editingItem, setEditingItem] = useState(null);
 
     // Validate and sanitize data
+    console.log("data", data)
     const knowledgesData = Array.isArray(data) ? data : [];
     const sectionTitle = safeString(title, lang === 'es' ? 'Conocimientos Técnicos' : 'Technical Knowledge');
 
@@ -314,13 +316,13 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
                                 onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
                                 fullWidth
                             />
-                            <TextField
-                                label={lang === 'es' ? 'Descripción' : 'Description'}
-                                value={editingItem.description || ''}
-                                onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
-                                multiline
-                                rows={3}
-                                fullWidth
+                            <SunEditor
+                                lang={lang}
+                                setContents={editingItem.description || ''}
+                                onChange={(e) => setEditingItem({ ...editingItem, description: e })}
+                                setOptions={{
+                                    height: 200,
+                                }}
                             />
                         </Box>
                     )}

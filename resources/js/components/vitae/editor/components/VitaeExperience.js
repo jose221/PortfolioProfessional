@@ -24,6 +24,7 @@ import {
     Work as WorkIcon
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
+import SunEditor from 'suneditor-react';
 
 const SectionContainer = styled(Paper)(({ theme }) => ({
     marginBottom: theme.spacing(3),
@@ -372,15 +373,15 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
                                     fullWidth
                                 />
                             </Box>
-                            <TextField
-                                label={lang === 'es' ? 'Descripción' : 'Description'}
-                                value={editingItem.description || ''}
-                                onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
-                                multiline
-                                rows={4}
-                                fullWidth
-                                helperText={lang === 'es' ? 'Puedes usar HTML básico' : 'You can use basic HTML'}
+                            <SunEditor
+                                lang={lang}
+                                setContents={editingItem.description || ''}
+                                onChange={(e) => setEditingItem({ ...editingItem, description: e })}
+                                setOptions={{
+                                    height: 200,
+                                }}
                             />
+                            
                             <TextField
                                 label={lang === 'es' ? 'Tecnologías (separadas por comas)' : 'Technologies (comma separated)'}
                                 value={editingItem.technologiesText || ''}

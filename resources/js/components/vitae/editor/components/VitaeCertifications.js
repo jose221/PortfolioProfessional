@@ -23,6 +23,7 @@ import {
     EmojiEvents as CertificationIcon
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
+import SunEditor from 'suneditor-react';
 
 const SectionContainer = styled(Paper)(({ theme }) => ({
     marginBottom: theme.spacing(3),
@@ -292,13 +293,13 @@ const VitaeCertifications = ({ title, data, lang = 'es' }) => {
                                 onChange={(e) => setEditingItem({ ...editingItem, date: e.target.value })}
                                 fullWidth
                             />
-                            <TextField
-                                label={lang === 'es' ? 'Descripción' : 'Description'}
-                                value={editingItem.description || ''}
-                                onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
-                                multiline
-                                rows={3}
-                                fullWidth
+                            <SunEditor
+                                lang={lang}
+                                setContents={editingItem.description || ''}
+                                onChange={(e) => setEditingItem({ ...editingItem, description: e })}
+                                setOptions={{
+                                    height: 200,
+                                }}
                             />
                         </Box>
                     )}
