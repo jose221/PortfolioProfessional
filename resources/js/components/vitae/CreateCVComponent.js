@@ -6,7 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import RComponent from "../RComponent";
 import store from '../../redux/store/store';
 
-import VitaeEditorContainer from "./editor/VitaeEditorContainer";
+import SimpleEditorLoader from "./editor/components/SimpleEditorLoader";
 
 let primary_url = window.url_api+"/admin/all-information";
 let title = "Creador de CV";
@@ -30,7 +30,7 @@ class CreateCVComponent extends RComponent{
 
         return (
             <Provider store={store}>
-                <VitaeEditorContainer data={this.state.information} lang={'es'}/>
+                <SimpleEditorLoader data={this.state.information} lang={'es'}/>
             </Provider>
         )
     }

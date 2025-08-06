@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import VitaeEditorContainer from './VitaeEditorContainer';
+import SimpleEditorLoader from './components/SimpleEditorLoader';
 
 const DemoContainer = styled(Box)(({ theme }) => ({
     width: '100%',
@@ -36,7 +36,7 @@ const CVEditorDemo = () => {
             </DemoHeader>
             
             <Box sx={{ flex: 1 }}>
-                <VitaeEditorContainer />
+                <SimpleEditorLoader />
             </Box>
         </DemoContainer>
     );

@@ -360,12 +360,26 @@ const transformApiDataToTemplate = (apiData, lang = 'es') => {
 };
 
 // Main Editor Component
-const   VitaeEditorContent = ({ data, lang }) => {
+const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections = [], themeColors = {} }) => {
     const { actions, query, enabled } = useEditor((state) => ({
         enabled: state.options.enabled
     }));
 
     const [templateData, setTemplateData] = useState(null);
+    
+    // Function to check if a section is enabled
+    const isSectionEnabled = (sectionId) => {
+        if (enabledSections.length === 0) {
+            // If no configuration is provided, show all sections (default behavior)
+            return true;
+        }
+        return enabledSections.some(section => section.id === sectionId && section.enabled);
+    };
+    
+    console.log('=== SECTION FILTERING DEBUG ===');
+    console.log('Enabled sections:', enabledSections);
+    console.log('Theme colors:', themeColors);
+    console.log('================================');
 
     const [notification, setNotification] = useState({ open: false, message: '', severity: 'info' });
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -693,7 +707,14 @@ const   VitaeEditorContent = ({ data, lang }) => {
                             </IconButton>
                         </Tooltip>
 
-                        
+                        {/* Configuration Button */}
+                        {onOpenConfiguration && (
+                            <Tooltip title={lang === 'es' ? 'Configurar CV' : 'Configure CV'}>
+                                <IconButton onClick={onOpenConfiguration} color="inherit">
+                                    <SettingsIcon />
+                                </IconButton>
+                            </Tooltip>
+                        )}
 
                         <PreviewModeButton />
                         
@@ -734,7 +755,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
 
                             >
                             {/* CV Header */}
-                            {templateData.header && !isEmptyData(templateData.header) && (
+                            {templateData.header && !isEmptyData(templateData.header) && isSectionEnabled('header') && (
                                 <Element
                                     is={CVHeader}
                                     id="header-section"
@@ -746,7 +767,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                             )}
 
                             {/* Contact Information */}
-                            {templateData.contact && !isEmptyData(templateData.contact) && (
+                            {templateData.contact && !isEmptyData(templateData.contact) && isSectionEnabled('contact') && (
                                 <Element
                                     is={CVContact}
                                     id="contact-section"
@@ -758,7 +779,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                             )}
 
                             {/* Professional Summary */}
-                            {templateData.summary && !isEmptyData(templateData.summary.content) && (
+                            {templateData.summary && !isEmptyData(templateData.summary.content) && isSectionEnabled('summary') && (
                                 <Element
                                     is={CVSummary}
                                     id="summary-section"
@@ -770,7 +791,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                                 />
                             )}
                             {/* Work Experience */}
-                            {templateData.experience && templateData.experience.length > 0 && (
+                            {templateData.experience && templateData.experience.length > 0 && isSectionEnabled('experience') && (
                                 <Element
                                     is={VitaeExperience}
                                     id="experience-section"
@@ -783,7 +804,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                             )}
 
                             {/* Education */}
-                            {templateData.education && templateData.education.length > 0 && (
+                            {templateData.education && templateData.education.length > 0 && isSectionEnabled('education') && (
                                 <Element
                                     is={VitaeEducation}
                                     id="education-section"
@@ -796,7 +817,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                             )}
 
                             {/* Studies */}
-                            {templateData.studies && templateData.studies.length > 0 && (
+                            {templateData.studies && templateData.studies.length > 0 && isSectionEnabled('studies') && (
                                 <Element
                                     is={VitaeStudies}
                                     id="studies-section"
@@ -809,7 +830,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                             )}
 
                             {/* Knowledges */}
-                            {templateData.knowledges && templateData.knowledges.length > 0 && (
+                            {templateData.knowledges && templateData.knowledges.length > 0 && isSectionEnabled('knowledges') && (
                                 <Element
                                     is={VitaeKnowledges}
                                     id="knowledges-section"
@@ -822,7 +843,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                             )}
 
                             {/* Certifications */}
-                            {templateData.certifications && templateData.certifications.length > 0 && (
+                            {templateData.certifications && templateData.certifications.length > 0 && isSectionEnabled('certifications') && (
                                 <Element
                                     is={VitaeCertifications}
                                     id="certifications-section"
@@ -835,7 +856,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
                             )}
 
                             {/* Stacks */}
-                            {templateData.stacks && templateData.stacks.length > 0 && (
+                            {templateData.stacks && templateData.stacks.length > 0 && isSectionEnabled('stacks') && (
                                 <Element
                                     is={VitaeStacks}
                                     id="stacks-section"
@@ -947,7 +968,7 @@ const   VitaeEditorContent = ({ data, lang }) => {
 };
 
 // Main Container Component with Craft.js Provider
-const VitaeEditorContainer = ({ data, lang = 'es' }) => {
+const VitaeEditorContainer = ({ data, lang = 'es', onOpenConfiguration, enabledSections = [], themeColors = {} }) => {
     return (
         <Editor
             resolver={{
@@ -967,7 +988,7 @@ const VitaeEditorContainer = ({ data, lang = 'es' }) => {
             }}
             onRender={({ render }) => <div>{render}</div>}
         >
-            <VitaeEditorContent data={data} lang={lang} />
+            <VitaeEditorContent data={data} lang={lang} onOpenConfiguration={onOpenConfiguration} enabledSections={enabledSections} themeColors={themeColors} />
         </Editor>
     );
 };
