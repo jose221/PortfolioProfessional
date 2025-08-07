@@ -27,34 +27,14 @@ import { styled } from '@mui/material/styles';
 import SunEditor from 'suneditor-react';
 
 const SectionContainer = styled(Paper)(({ theme }) => ({
-    marginBottom: theme.spacing(3),
-    padding: theme.spacing(3),
-    position: 'relative',
-    border: '2px solid transparent',
-    transition: 'all 0.3s ease',
-    '&:hover': {
-        borderColor: theme.palette.primary.light,
-        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-    }
-}));
-
-const DragHandle = styled(Box)(({ theme }) => ({
-    position: 'absolute',
-    top: theme.spacing(1),
-    left: theme.spacing(1),
-    cursor: 'grab',
-    opacity: 0.6,
-    '&:hover': {
-        opacity: 1,
-    },
-    '&:active': {
-        cursor: 'grabbing',
-    }
+    marginBottom: theme.spacing(1),
+    boxShadow: 'none',
+    borderColor: 'none'
 }));
 
 const ActionButtons = styled(Box)(({ theme }) => ({
     position: 'absolute',
-    top: theme.spacing(1),
+    top: theme.spacing(0),
     right: theme.spacing(1),
     display: 'flex',
     gap: theme.spacing(0.5),
@@ -72,12 +52,13 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
     fontWeight: 600,
     color: theme.palette.primary.main,
     borderBottom: `2px solid ${theme.palette.primary.main}`,
-    paddingBottom: theme.spacing(1)
+    paddingBottom: theme.spacing(1),
+    fontSize: '15px'
 }));
 
 const KnowledgeItem = styled(Box)(({ theme }) => ({
-    marginBottom: theme.spacing(2),
-    padding: theme.spacing(2),
+    marginBottom: theme.spacing(1.7),
+    padding: theme.spacing(1.5),
     backgroundColor: theme.palette.grey[50],
     borderRadius: theme.shape.borderRadius,
     border: `1px solid ${theme.palette.grey[200]}`,
@@ -189,7 +170,7 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
             <KnowledgeItem key={item.id || index}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary' }}>
+                        <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary', fontSize: '13px' }}>
                             {title}
                         </Typography>
                     </Box>
@@ -232,7 +213,7 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
                             '& em, & i': {
                                 fontStyle: 'italic'
                             },
-                            fontSize: '0.875rem'
+                            fontSize: '12px'
                         }}
                         dangerouslySetInnerHTML={{ __html: description }}
                     />
@@ -255,11 +236,7 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
             }}
         >
             {enabled && !isPreviewMode && (
-                <>
-                    <DragHandle ref={(ref) => drag(ref)}>
-                        <DragIcon sx={{ color: 'text.secondary' }} />
-                    </DragHandle>
-                    
+                <>  
                     <ActionButtons>
                         <Tooltip title={lang === 'es' ? 'Eliminar Sección' : 'Delete Section'}>
                             <IconButton size="small" onClick={handleDelete} color="error">

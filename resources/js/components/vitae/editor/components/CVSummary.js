@@ -4,11 +4,11 @@ import { Box, Typography, Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 const SummaryContainer = styled(Box)(({ theme }) => ({
-    marginBottom: theme.spacing(4)
+    marginBottom: theme.spacing(1)
 }));
 
 const SectionTitle = styled(Typography)(({ theme }) => ({
-    fontSize: '1.3rem',
+    fontSize: '15px',
     fontWeight: 600,
     color: '#2c3e50',
     marginBottom: theme.spacing(2),
@@ -19,7 +19,7 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
 }));
 
 const SummaryContent = styled(Paper)(({ theme }) => ({
-    padding: theme.spacing(3),
+    padding: theme.spacing(2, 2),
     backgroundColor: '#f8f9fa',
     border: '1px solid #dee2e6',
     borderRadius: theme.spacing(1),
@@ -28,7 +28,7 @@ const SummaryContent = styled(Paper)(({ theme }) => ({
 }));
 
 const SummaryText = styled(Typography)(({ theme }) => ({
-    fontSize: '1rem',
+    fontSize: '12px',
     lineHeight: 1.6,
     color: '#495057',
     textAlign: 'justify',

@@ -13,7 +13,7 @@ const ExperienceContainer = styled(Box)(({ theme }) => ({
 }));
 
 const SectionTitle = styled(Typography)(({ theme }) => ({
-    fontSize: '1.3rem',
+    fontSize: '13px !important',
     fontWeight: 600,
     color: '#2c3e50',
     marginBottom: theme.spacing(2),
@@ -45,7 +45,7 @@ const JobHeader = styled(Box)(({ theme }) => ({
 }));
 
 const JobTitle = styled(Typography)(({ theme }) => ({
-    fontSize: '1.1rem',
+    fontSize: '12px',
     fontWeight: 600,
     color: '#2c3e50',
     cursor: 'text',
@@ -66,7 +66,7 @@ const CompanyInfo = styled(Box)(({ theme }) => ({
 }));
 
 const CompanyName = styled(Typography)(({ theme }) => ({
-    fontSize: '1rem',
+    fontSize: '12px',
     fontWeight: 500,
     color: '#667eea',
     cursor: 'text',
@@ -79,7 +79,7 @@ const CompanyName = styled(Typography)(({ theme }) => ({
 }));
 
 const JobDescription = styled(Typography)(({ theme }) => ({
-    fontSize: '0.95rem',
+    fontSize: '12px',
     lineHeight: 1.6,
     color: '#495057',
     marginBottom: theme.spacing(2),
@@ -99,7 +99,7 @@ const AchievementsList = styled(Box)(({ theme }) => ({
         margin: 0,
         paddingLeft: theme.spacing(2),
         '& li': {
-            fontSize: '0.9rem',
+            fontSize: '12px',
             lineHeight: 1.5,
             color: '#495057',
             marginBottom: theme.spacing(0.5),
@@ -194,7 +194,7 @@ export const CVExperience = ({ title = "Experiencia Laboral", data = [], lang = 
                             </JobTitle>
                             
                             <CompanyInfo>
-                                <WorkIcon sx={{ color: '#667eea', fontSize: '1.1rem' }} />
+                                <WorkIcon sx={{ color: '#667eea', fontSize: '13px' }} />
                                 <CompanyName
                                     contentEditable
                                     suppressContentEditableWarning
@@ -269,7 +269,7 @@ export const CVExperience = ({ title = "Experiencia Laboral", data = [], lang = 
                                     size="small"
                                     variant="outlined"
                                     sx={{
-                                        fontSize: '0.75rem',
+                                        fontSize: '12px',
                                         height: '24px',
                                         borderColor: '#667eea',
                                         color: '#667eea'

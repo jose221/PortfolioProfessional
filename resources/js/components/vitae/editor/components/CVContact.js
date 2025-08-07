@@ -12,7 +12,7 @@ import {
 } from '@mui/icons-material';
 
 const ContactContainer = styled(Box)(({ theme }) => ({
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(1.5),
     padding: theme.spacing(2),
     backgroundColor: '#f8f9fa',
     borderRadius: theme.spacing(1),
@@ -24,7 +24,7 @@ const ContactItem = styled(Box)(({ theme }) => ({
     alignItems: 'center',
     gap: theme.spacing(1),
     marginBottom: '0',
-    padding: theme.spacing(0.5),
+    padding: theme.spacing(0),
     borderRadius: theme.spacing(0.5),
     '&:hover': {
         backgroundColor: 'rgba(102, 126, 234, 0.05)'
@@ -32,14 +32,14 @@ const ContactItem = styled(Box)(({ theme }) => ({
 }));
 
 const ContactText = styled(Typography)(({ theme }) => ({
-    fontSize: '0.9rem',
+    fontSize: '12px !important',
     color: '#495057',
     fontWeight: 400,
     cursor: 'text',
     '&:focus': {
         outline: '1px dashed #667eea',
         backgroundColor: 'rgba(102, 126, 234, 0.05)',
-        padding: theme.spacing(0.5),
+        padding: theme.spacing(0),
         borderRadius: theme.spacing(0.5)
     }
 }));

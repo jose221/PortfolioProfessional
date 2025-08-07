@@ -26,35 +26,16 @@ import {
 import { styled } from '@mui/material/styles';
 
 const SectionContainer = styled(Paper)(({ theme }) => ({
-    marginBottom: theme.spacing(2),
-    padding: theme.spacing(2),
-    position: 'relative',
-    border: '2px solid transparent',
-    transition: 'all 0.3s ease',
-    '&:hover': {
-        borderColor: theme.palette.primary.light,
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-    }
+    marginBottom: theme.spacing(3),
+    boxShadow: 'none',
+    borderColor: 'none'
 }));
 
-const DragHandle = styled(Box)(({ theme }) => ({
-    position: 'absolute',
-    top: theme.spacing(0.5),
-    left: theme.spacing(0.5),
-    cursor: 'grab',
-    opacity: 0.6,
-    '&:hover': {
-        opacity: 1,
-    },
-    '&:active': {
-        cursor: 'grabbing',
-    }
-}));
 
 const ActionButtons = styled(Box)(({ theme }) => ({
     position: 'absolute',
-    top: theme.spacing(0.5),
-    right: theme.spacing(0.5),
+    top: theme.spacing(0),
+    right: theme.spacing(1),
     display: 'flex',
     gap: theme.spacing(0.5),
     opacity: 0.7,
@@ -77,13 +58,13 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
 
 const CategoryTitle = styled(Typography)(({ theme }) => ({
     fontWeight: 600,
-    fontSize: '0.95rem',
+    fontSize: '15px',
     color: theme.palette.text.primary,
     marginBottom: theme.spacing(1),
     marginTop: theme.spacing(2),
     '&:first-of-type': {
         marginTop: 0,
-    }
+    },
 }));
 
 const SkillsContainer = styled(Box)(({ theme }) => ({
@@ -92,28 +73,26 @@ const SkillsContainer = styled(Box)(({ theme }) => ({
     flexWrap: 'wrap',
     justifyContent: 'start',
     gap: theme.spacing(1),
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(1),
 }));
 
 const SkillItem = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    flex: '1 1 100%',
-    padding: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-    borderRadius: theme.spacing(0.5),
+    padding: theme.spacing(1.5),
+    backgroundColor: theme.palette.grey[50],
+    borderRadius: theme.shape.borderRadius,
     border: `1px solid ${theme.palette.grey[200]}`,
-    backgroundColor: theme.palette.background.paper,
     transition: 'all 0.2s ease',
     '&:hover': {
-        backgroundColor: theme.palette.grey[50],
+        backgroundColor: theme.palette.grey[100],
         borderColor: theme.palette.primary.light,
+    },
+    '&:not(:last-child)': {
+        marginBottom: theme.spacing(0, 0.5),
     }
 }));
 
 const SkillName = styled(Typography)(({ theme }) => ({
-    fontSize: '0.9rem',
+    fontSize: '12px',
     fontWeight: 600,
     color: theme.palette.text.primary,
     lineHeight: 1.2,
@@ -127,7 +106,7 @@ const SkillName = styled(Typography)(({ theme }) => ({
 }));
 
 const SkillDescription = styled(Typography)(({ theme }) => ({
-    fontSize: '0.8rem',
+    fontSize: '12px',
     color: theme.palette.text.secondary,
     lineHeight: 1.3,
     marginBottom: theme.spacing(0.5),
@@ -147,7 +126,7 @@ const SkillDescription = styled(Typography)(({ theme }) => ({
 }));
 
 const YearsText = styled(Typography)(({ theme }) => ({
-    fontSize: '0.75rem',
+    fontSize: '12px',
     color: theme.palette.primary.main,
     fontWeight: 500,
     fontStyle: 'italic',
@@ -161,7 +140,7 @@ const YearsText = styled(Typography)(({ theme }) => ({
 
 const InlineInput = styled(TextField)(({ theme }) => ({
     '& .MuiInputBase-root': {
-        fontSize: 'inherit',
+        fontSize: '12px',
         fontWeight: 'inherit',
         color: 'inherit',
         padding: 0,
@@ -474,13 +453,6 @@ const VitaeStacks = ({ title, data, lang = 'es' }) => {
         >
             {enabled && !isPreviewMode && (isActive || isHovered) && (
                 <>
-                    <DragHandle ref={drag}>
-                        <Tooltip title={lang === 'es' ? 'Arrastrar Sección' : 'Drag Section'}>
-                            <IconButton size="small">
-                                <DragIcon fontSize="small" />
-                            </IconButton>
-                        </Tooltip>
-                    </DragHandle>
 
                     <ActionButtons>
                         <Tooltip title={lang === 'es' ? 'Editar Título' : 'Edit Title'}>

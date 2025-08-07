@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 
 const HeaderContainer = styled(Box)(({ theme }) => ({
     textAlign: 'center',
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(2),
     padding: theme.spacing(0, 0),
     borderBottom: '2px solid #667eea',
     position: 'relative',
@@ -26,14 +26,16 @@ const NameTypography = styled(Typography)(({ theme }) => ({
     color: '#2c3e50',
     marginBottom: theme.spacing(1),
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    letterSpacing: '0.5px'
+    letterSpacing: '0.5px',
+    fontSize: '32px !important'
 }));
 
 const TitleTypography = styled(Typography)(({ theme }) => ({
     color: '#667eea',
     fontWeight: 500,
     marginBottom: theme.spacing(0.5),
-    fontStyle: 'italic'
+    fontStyle: 'italic',
+    fontSize: '20px !important'
 }));
 
 export const CVHeader = ({ data = {}, lang = 'es' }) => {

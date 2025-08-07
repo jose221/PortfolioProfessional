@@ -26,34 +26,15 @@ import {
 import { styled } from '@mui/material/styles';
 
 const SectionContainer = styled(Paper)(({ theme }) => ({
-    marginBottom: theme.spacing(3),
-    padding: theme.spacing(3),
-    position: 'relative',
-    border: '2px solid transparent',
-    transition: 'all 0.3s ease',
-    '&:hover': {
-        borderColor: theme.palette.primary.light,
-        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-    }
+    marginBottom: theme.spacing(1),
+    boxShadow: 'none',
+    borderColor: 'none'
 }));
 
-const DragHandle = styled(Box)(({ theme }) => ({
-    position: 'absolute',
-    top: theme.spacing(1),
-    left: theme.spacing(1),
-    cursor: 'grab',
-    opacity: 0.6,
-    '&:hover': {
-        opacity: 1,
-    },
-    '&:active': {
-        cursor: 'grabbing',
-    }
-}));
 
 const ActionButtons = styled(Box)(({ theme }) => ({
     position: 'absolute',
-    top: theme.spacing(1),
+    top: theme.spacing(0),
     right: theme.spacing(1),
     display: 'flex',
     gap: theme.spacing(0.5),
@@ -71,14 +52,20 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
     fontWeight: 600,
     color: theme.palette.primary.main,
     borderBottom: `2px solid ${theme.palette.primary.main}`,
-    paddingBottom: theme.spacing(1)
+    paddingBottom: theme.spacing(1),
+    fontSize: '15px'
 }));
 
 const StudyItem = styled(Box)(({ theme }) => ({
-    marginBottom: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
-    '&:not(:last-child)': {
-        borderBottom: `1px solid ${theme.palette.divider}`,
+    marginBottom: theme.spacing(1.7),
+    padding: theme.spacing(1.5),
+    backgroundColor: theme.palette.grey[50],
+    borderRadius: theme.shape.borderRadius,
+    border: `1px solid ${theme.palette.grey[200]}`,
+    transition: 'all 0.2s ease',
+    '&:hover': {
+        backgroundColor: theme.palette.grey[100],
+        borderColor: theme.palette.primary.light,
     }
 }));
 
@@ -173,26 +160,26 @@ const VitaeStudies = ({ title, data, lang = 'es' }) => {
             <StudyItem key={item.id || index}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary' }}>
+                        <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary', fontSize: '13px' }}>
                             {degree}
                         </Typography>
-                        <Typography variant="subtitle1" sx={{ color: 'primary.main', fontWeight: 500 }}>
+                        <Typography variant="subtitle1" sx={{ color: 'primary.main', fontWeight: 500, fontSize: '12px' }}>
                             {institution}
                         </Typography>
                         {folio && (
-                            <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
+                            <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0, fontSize: '12px' }}>
                                 {lang === 'es' ? 'Folio:' : 'Folio:'} {folio}
                             </Typography>
                         )}
                     </Box>
                     <Box sx={{ textAlign: 'right', minWidth: '120px' }}>
                         {graduationDate && (
-                            <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                            <Typography variant="body2" sx={{ fontWeight: 500, fontSize: '12px' }}>
                                 {graduationDate}
                             </Typography>
                         )}
                         {gpa && (
-                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                            <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '12px' }}>
                                 GPA: {gpa}
                             </Typography>
                         )}
@@ -206,10 +193,10 @@ const VitaeStudies = ({ title, data, lang = 'es' }) => {
 
                 {coursework && (
                     <Box sx={{ mt: 1 }}>
-                        <Typography variant="body2" sx={{ fontWeight: 500, mb: 0.5 }}>
+                        <Typography variant="body2" sx={{ fontWeight: 500, mb: 0.5, fontSize: '12px' }}>
                             {lang === 'es' ? 'Materias Relevantes:' : 'Relevant Coursework:'}
                         </Typography>
-                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '12px' }}>
                             {coursework}
                         </Typography>
                     </Box>
@@ -217,10 +204,10 @@ const VitaeStudies = ({ title, data, lang = 'es' }) => {
 
                 {honors && (
                     <Box sx={{ mt: 1 }}>
-                        <Typography variant="body2" sx={{ fontWeight: 500, mb: 0.5 }}>
+                        <Typography variant="body2" sx={{ fontWeight: 500, mb: 0.5, fontSize: '12px' }}>
                             {lang === 'es' ? 'Reconocimientos:' : 'Honors:'}
                         </Typography>
-                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '12px' }}>
                             {honors}
                         </Typography>
                     </Box>
@@ -244,9 +231,6 @@ const VitaeStudies = ({ title, data, lang = 'es' }) => {
         >
             {enabled && !isPreviewMode && (
                 <>
-                    <DragHandle ref={(ref) => drag(ref)}>
-                        <DragIcon sx={{ color: 'text.secondary' }} />
-                    </DragHandle>
                     
                     <ActionButtons>
                         <Tooltip title={lang === 'es' ? 'Eliminar Sección' : 'Delete Section'}>
