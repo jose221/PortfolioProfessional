@@ -2,18 +2,29 @@ import React from 'react';
 import { useNode } from '@craftjs/core';
 import { Box, Typography, Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { getVitaeTheme } from '../contexts/ThemeContext';
 
+// Personalización del vitae
+const theme = getVitaeTheme();
+
+const textFontColor = theme.colors.text;
+const titleFontColor = theme.colors.sectionTitle;
+
+const textFontSize =  '12px';
+const titleFontSize = '15px';
+const subtitleFontSize = '13px';
+// Personalización del vitae
 const SummaryContainer = styled(Box)(({ theme }) => ({
     marginBottom: theme.spacing(1)
 }));
 
 const SectionTitle = styled(Typography)(({ theme }) => ({
-    fontSize: '15px',
+    fontSize: titleFontSize,
     fontWeight: 600,
-    color: '#2c3e50',
+    color: titleFontColor,
     marginBottom: theme.spacing(2),
     paddingBottom: theme.spacing(1),
-    borderBottom: '2px solid #667eea',
+    borderBottom: `2px solid ${titleFontColor} `,
     display: 'inline-block',
     position: 'relative'
 }));
@@ -28,9 +39,9 @@ const SummaryContent = styled(Paper)(({ theme }) => ({
 }));
 
 const SummaryText = styled(Typography)(({ theme }) => ({
-    fontSize: '12px',
+    fontSize: textFontSize,
     lineHeight: 1.6,
-    color: '#495057',
+    color: textFontColor,
     textAlign: 'justify',
     cursor: 'text',
     minHeight: '60px',
@@ -42,12 +53,12 @@ const SummaryText = styled(Typography)(({ theme }) => ({
     },
     '&:empty::before': {
         content: '"Haz clic aquí para agregar tu resumen profesional..."',
-        color: '#adb5bd',
+        color: textFontColor,
         fontStyle: 'italic'
     }
 }));
 
-export const CVSummary = ({ title = "Resumen Profesional", data = {}, lang = 'es' }) => {
+export const CVSummary = ({ title = "Resumen Profesional", data = {}, lang = 'es', fontSize: subtitleFontSize }) => {
     const {
         connectors: { connect, drag },
         selected,

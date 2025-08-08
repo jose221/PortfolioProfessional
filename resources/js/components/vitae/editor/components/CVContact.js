@@ -10,6 +10,17 @@ import {
     Language as WebsiteIcon,
     GitHub as GitHubIcon
 } from '@mui/icons-material';
+import { getVitaeTheme } from '../contexts/ThemeContext';
+
+// Personalización del vitae
+const theme = getVitaeTheme();
+
+const textFontColor = theme.colors.text;
+const titleFontColor = theme.colors.sectionTitle;
+const iconsFontColor = theme.colors.icons;
+
+const textFontSize =  '12px !important';
+// Personalización del vitae
 
 const ContactContainer = styled(Box)(({ theme }) => ({
     marginBottom: theme.spacing(1.5),
@@ -32,8 +43,8 @@ const ContactItem = styled(Box)(({ theme }) => ({
 }));
 
 const ContactText = styled(Typography)(({ theme }) => ({
-    fontSize: '12px !important',
-    color: '#495057',
+    fontSize: textFontSize,
+    color: textFontColor,
     fontWeight: 400,
     cursor: 'text',
     '&:focus': {
@@ -45,7 +56,7 @@ const ContactText = styled(Typography)(({ theme }) => ({
 }));
 
 const getIconForType = (type) => {
-    const iconProps = { fontSize: 'small', sx: { color: '#667eea' } };
+    const iconProps = { fontSize: 'small', sx: { color: iconsFontColor } };
     switch (type) {
         case 'email': return <EmailIcon {...iconProps} />;
         case 'phone': return <PhoneIcon {...iconProps} />;

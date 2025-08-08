@@ -24,6 +24,20 @@ import {
     Psychology as SkillsIcon
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
+import { getVitaeTheme } from '../contexts/ThemeContext';
+
+// Personalización del vitae
+const theme = getVitaeTheme();
+
+const textFontColor = theme.colors.text;
+const titleFontColor = theme.colors.sectionTitle;
+const iconsFontColor = theme.colors.icons;
+
+const textFontSize = '12px !important';
+const titleFontSize = '15px !important';
+const subtitleFontSize = '13px !important';
+
+// Personalización del vitae
 
 const SectionContainer = styled(Paper)(({ theme }) => ({
     marginBottom: theme.spacing(3),
@@ -50,15 +64,15 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
     gap: theme.spacing(1),
     marginBottom: theme.spacing(1.5),
     fontWeight: 600,
-    fontSize: '1.1rem',
-    color: theme.palette.primary.main,
-    borderBottom: `2px solid ${theme.palette.primary.main}`,
+    fontSize: titleFontSize,
+    color: titleFontColor,
+    borderBottom: `2px solid ${titleFontColor}`,
     paddingBottom: theme.spacing(0.5)
 }));
 
 const CategoryTitle = styled(Typography)(({ theme }) => ({
     fontWeight: 600,
-    fontSize: '15px',
+    fontSize: titleFontSize,
     color: theme.palette.text.primary,
     marginBottom: theme.spacing(1),
     marginTop: theme.spacing(2),
@@ -92,10 +106,10 @@ const SkillItem = styled(Box)(({ theme }) => ({
 }));
 
 const SkillName = styled(Typography)(({ theme }) => ({
-    fontSize: '12px',
+    fontSize: textFontSize,
     fontWeight: 600,
-    color: theme.palette.text.primary,
-    lineHeight: 1.2,
+    color: textFontColor,
+    lineHeight: 1,
     marginBottom: theme.spacing(0.5),
     cursor: 'pointer',
     padding: theme.spacing(0.25),
@@ -106,9 +120,9 @@ const SkillName = styled(Typography)(({ theme }) => ({
 }));
 
 const SkillDescription = styled(Typography)(({ theme }) => ({
-    fontSize: '12px',
-    color: theme.palette.text.secondary,
-    lineHeight: 1.3,
+    fontSize: textFontSize,
+    color: textFontColor,
+    lineHeight: 1,
     marginBottom: theme.spacing(0.5),
     flex: 1,
     cursor: 'pointer',
@@ -126,8 +140,8 @@ const SkillDescription = styled(Typography)(({ theme }) => ({
 }));
 
 const YearsText = styled(Typography)(({ theme }) => ({
-    fontSize: '12px',
-    color: theme.palette.primary.main,
+    fontSize: textFontSize,
+    color: textFontColor,
     fontWeight: 500,
     fontStyle: 'italic',
     cursor: 'pointer',
@@ -140,9 +154,9 @@ const YearsText = styled(Typography)(({ theme }) => ({
 
 const InlineInput = styled(TextField)(({ theme }) => ({
     '& .MuiInputBase-root': {
-        fontSize: '12px',
+        fontSize: textFontSize,
         fontWeight: 'inherit',
-        color: 'inherit',
+        color: textFontColor,
         padding: 0,
     },
     '& .MuiInputBase-input': {
@@ -231,7 +245,7 @@ const VitaeSkillItem = ({ item, lang, onUpdate, enabled }) => {
     };
 
     return (
-        <SkillItem sx={{ paddingRight: '15px' }}>
+        <SkillItem sx={{ paddingRight: titleFontSize }}>
             {editing.field === 'title' ? (
                 <InlineInput
                     value={editing.value}

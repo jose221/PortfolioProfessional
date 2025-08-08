@@ -25,6 +25,21 @@ import {
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import SunEditor from 'suneditor-react';
+import { getVitaeTheme } from '../contexts/ThemeContext';
+
+
+// Personalización del vitae
+const theme = getVitaeTheme();
+
+const textFontColor = theme.colors.text;
+const titleFontColor = theme.colors.sectionTitle;
+const iconsFontColor = theme.colors.icons;
+
+const textFontSize = '12px !important';
+const titleFontSize = '15px !important';
+const subtitleFontSize = '13px !important';
+
+// Personalización del vitae
 
 const SectionContainer = styled(Paper)(({ theme }) => ({
     marginBottom: theme.spacing(1),
@@ -50,10 +65,10 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
     gap: theme.spacing(1),
     marginBottom: theme.spacing(2),
     fontWeight: 600,
-    color: theme.palette.primary.main,
-    borderBottom: `2px solid ${theme.palette.primary.main}`,
+    color: titleFontColor,
+    borderBottom: `2px solid ${titleFontColor}`,
     paddingBottom: theme.spacing(1),
-    fontSize: '15px'
+    fontSize: titleFontSize
 }));
 
 const KnowledgeItem = styled(Box)(({ theme }) => ({
@@ -170,7 +185,7 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
             <KnowledgeItem key={item.id || index}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary', fontSize: '13px' }}>
+                        <Typography variant="h6" sx={{ fontWeight: 600, color: textFontColor, fontSize: subtitleFontSize }}>
                             {title}
                         </Typography>
                     </Box>
@@ -188,12 +203,12 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
                             '& p': { 
                                 margin: '8px 0',
                                 lineHeight: 1.6,
-                                color: 'text.secondary'
+                                color: textFontColor
                             },
                             '& ul, & ol': { 
                                 paddingLeft: '20px', 
                                 margin: '8px 0',
-                                color: 'text.secondary'
+                                color: textFontColor
                             },
                             '& li': { 
                                 margin: '4px 0',
@@ -208,12 +223,12 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
                             },
                             '& strong, & b': {
                                 fontWeight: 600,
-                                color: 'text.primary'
+                                color: textFontColor
                             },
                             '& em, & i': {
                                 fontStyle: 'italic'
                             },
-                            fontSize: '12px'
+                            fontSize: textFontSize
                         }}
                         dangerouslySetInnerHTML={{ __html: description }}
                     />

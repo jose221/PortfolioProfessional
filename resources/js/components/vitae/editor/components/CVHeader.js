@@ -2,12 +2,23 @@ import React from 'react';
 import { useNode } from '@craftjs/core';
 import { Box, Typography, Divider } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { getVitaeTheme } from '../contexts/ThemeContext';
+
+// Personalización del vitae
+const theme = getVitaeTheme();
+
+const titleHeaderText = theme.colors.header;
+const lineHeaderText = theme.colors.sectionTitle;
+
+const subtitleFontSize =  '20px !important';
+const titleFontSize = '32px !important';
+// Personalización del vitae
 
 const HeaderContainer = styled(Box)(({ theme }) => ({
     textAlign: 'center',
     marginBottom: theme.spacing(2),
     padding: theme.spacing(0, 0),
-    borderBottom: '2px solid #667eea',
+    borderBottom: `2px solid ${lineHeaderText}`,
     position: 'relative',
     '&::after': {
         content: '""',
@@ -17,25 +28,25 @@ const HeaderContainer = styled(Box)(({ theme }) => ({
         transform: 'translateX(-50%)',
         width: '100px',
         height: '2px',
-        background: 'linear-gradient(90deg, #667eea, #764ba2)',
+        background: `linear-gradient(90deg, ${lineHeaderText}, ${lineHeaderText})`,
     }
 }));
 
 const NameTypography = styled(Typography)(({ theme }) => ({
     fontWeight: 700,
-    color: '#2c3e50',
+    color: titleHeaderText,
     marginBottom: theme.spacing(1),
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     letterSpacing: '0.5px',
-    fontSize: '32px !important'
+    fontSize: titleFontSize
 }));
 
 const TitleTypography = styled(Typography)(({ theme }) => ({
-    color: '#667eea',
+    color: titleHeaderText,
     fontWeight: 500,
     marginBottom: theme.spacing(0.5),
     fontStyle: 'italic',
-    fontSize: '20px !important'
+    fontSize: subtitleFontSize
 }));
 
 export const CVHeader = ({ data = {}, lang = 'es' }) => {

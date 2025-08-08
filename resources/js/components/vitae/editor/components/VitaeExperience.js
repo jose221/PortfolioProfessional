@@ -25,6 +25,19 @@ import {
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import SunEditor from 'suneditor-react';
+import { getVitaeTheme } from '../contexts/ThemeContext';
+
+// Personalización del vitae
+const theme = getVitaeTheme();
+
+const textFontColor = theme.colors.text;
+const titleFontColor = theme.colors.sectionTitle;
+const iconsFontColor = theme.colors.icons;
+
+const textFontSize =  '12px';
+const titleFontSize = '15px';
+const subtitleFontSize = '13px';
+// Personalización del vitae
 
 const SectionContainer = styled(Paper)(({ theme }) => ({
     marginBottom: theme.spacing(1),
@@ -50,10 +63,10 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
     gap: theme.spacing(1),
     marginBottom: theme.spacing(2),
     fontWeight: 600,
-    color: theme.palette.primary.main,
-    borderBottom: `2px solid ${theme.palette.primary.main}`,
+    color: titleFontColor,
+    borderBottom: `2px solid ${titleFontColor}`,
     paddingBottom: theme.spacing(1),
-    fontSize: '15px',
+    fontSize: titleFontSize,
 }));
 
 const ExperienceItem = styled(Box)(({ theme }) => ({
@@ -180,17 +193,17 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
             <ExperienceItem key={item.id || index}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary', fontSize: '12px' }}>
+                        <Typography variant="h6" sx={{ fontWeight: 600, color: textFontColor, fontSize: textFontSize }}>
                             {position} - {company}
                         </Typography>
                         {location && (
-                            <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '12px' }}>
+                            <Typography variant="body2" sx={{ color: textFontColor, fontSize: textFontSize }}>
                                 {location}
                             </Typography>
                         )}
                     </Box>
                     <Box sx={{ textAlign: 'right', minWidth: '120px' }}>
-                        <Typography variant="body2" sx={{ fontWeight: 500, fontSize: '12px' }}>
+                        <Typography variant="body2" sx={{ fontWeight: 500, color: textFontColor, fontSize: textFontSize }}>
                             {startDate} {endDate && `- ${endDate}`}
                         </Typography>
                         {enabled && !isPreviewMode && (
@@ -205,7 +218,7 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
                     <Box sx={{ mt: 1, mb: 1 }}>
                         <Typography 
                             variant="body2" 
-                            sx={{ color: 'text.secondary', lineHeight: 1.6, fontSize: '12px' }}
+                            sx={{ color: textFontColor, lineHeight: 1.6, fontSize: textFontSize }}
                             dangerouslySetInnerHTML={{ __html: description }}
                         />
                     </Box>
@@ -213,7 +226,7 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
 
                 {technologies.length > 0 && (
                     <Box sx={{ mt: 1, display: 'flex', alignItems: 'center', gridGap:'10px' }}>
-                        <Typography variant="body2" sx={{ fontWeight: 500, mb: 0, fontSize: '12px' }}>
+                        <Typography variant="body2" sx={{ fontWeight: 500, mb: 0, color: textFontColor, fontSize: textFontSize }}>
                             {lang === 'es' ? 'Tecnologías:' : 'Technologies:'}
                         </Typography>
                         <TechnologiesContainer>
@@ -227,8 +240,7 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
                                         label={techText}
                                         size="small"
                                         variant="outlined"
-                                        color="primary"
-                                        sx={{ fontSize: '12px' }}
+                                        sx={{ fontSize: textFontSize, color:textFontColor, borderColor: textFontColor }}
                                     />
                                 );
                             })}

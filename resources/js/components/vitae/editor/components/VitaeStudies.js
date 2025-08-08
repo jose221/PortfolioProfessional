@@ -24,6 +24,20 @@ import {
     MenuBook as StudiesIcon
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
+import { getVitaeTheme } from '../contexts/ThemeContext';
+
+// Personalización del vitae
+const theme = getVitaeTheme();
+
+const textFontColor = theme.colors.text;
+const titleFontColor = theme.colors.sectionTitle;
+const iconsFontColor = theme.colors.icons;
+
+const textFontSize = '12px !important';
+const titleFontSize = '15px !important';
+const subtitleFontSize = '13px !important';
+
+// Personalización del vitae
 
 const SectionContainer = styled(Paper)(({ theme }) => ({
     marginBottom: theme.spacing(1),
@@ -50,10 +64,10 @@ const SectionTitle = styled(Typography)(({ theme }) => ({
     gap: theme.spacing(1),
     marginBottom: theme.spacing(2),
     fontWeight: 600,
-    color: theme.palette.primary.main,
-    borderBottom: `2px solid ${theme.palette.primary.main}`,
+    color: titleFontColor,
+    borderBottom: `2px solid ${titleFontColor}`,
     paddingBottom: theme.spacing(1),
-    fontSize: '15px'
+    fontSize: titleFontSize
 }));
 
 const StudyItem = styled(Box)(({ theme }) => ({
@@ -160,26 +174,26 @@ const VitaeStudies = ({ title, data, lang = 'es' }) => {
             <StudyItem key={item.id || index}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary', fontSize: '13px' }}>
+                        <Typography variant="h6" sx={{ fontWeight: 600, color: textFontColor, fontSize: subtitleFontSize }}>
                             {degree}
                         </Typography>
-                        <Typography variant="subtitle1" sx={{ color: 'primary.main', fontWeight: 500, fontSize: '12px' }}>
+                        <Typography variant="subtitle1" sx={{ color: textFontColor, fontWeight: 500, fontSize: textFontSize }}>
                             {institution}
                         </Typography>
                         {folio && (
-                            <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0, fontSize: '12px' }}>
+                            <Typography variant="body2" sx={{ color: textFontColor, mt: 0, fontSize: textFontSize }}>
                                 {lang === 'es' ? 'Folio:' : 'Folio:'} {folio}
                             </Typography>
                         )}
                     </Box>
                     <Box sx={{ textAlign: 'right', minWidth: '120px' }}>
                         {graduationDate && (
-                            <Typography variant="body2" sx={{ fontWeight: 500, fontSize: '12px' }}>
+                            <Typography variant="body2" sx={{ fontWeight: 500, color: textFontColor, fontSize: textFontSize }}>
                                 {graduationDate}
                             </Typography>
                         )}
                         {gpa && (
-                            <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '12px' }}>
+                            <Typography variant="body2" sx={{ color: textFontColor, fontSize: textFontSize }}>
                                 GPA: {gpa}
                             </Typography>
                         )}
@@ -193,10 +207,10 @@ const VitaeStudies = ({ title, data, lang = 'es' }) => {
 
                 {coursework && (
                     <Box sx={{ mt: 1 }}>
-                        <Typography variant="body2" sx={{ fontWeight: 500, mb: 0.5, fontSize: '12px' }}>
+                        <Typography variant="body2" sx={{ color: textFontColor, fontWeight: 500, mb: 0.5, fontSize: textFontSize }}>
                             {lang === 'es' ? 'Materias Relevantes:' : 'Relevant Coursework:'}
                         </Typography>
-                        <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '12px' }}>
+                        <Typography variant="body2" sx={{ color: textFontColor, fontSize: textFontSize }}>
                             {coursework}
                         </Typography>
                     </Box>
@@ -204,10 +218,10 @@ const VitaeStudies = ({ title, data, lang = 'es' }) => {
 
                 {honors && (
                     <Box sx={{ mt: 1 }}>
-                        <Typography variant="body2" sx={{ fontWeight: 500, mb: 0.5, fontSize: '12px' }}>
+                        <Typography variant="body2" sx={{ color: textFontColor, fontWeight: 500, mb: 0.5, fontSize: textFontSize }}>
                             {lang === 'es' ? 'Reconocimientos:' : 'Honors:'}
                         </Typography>
-                        <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '12px' }}>
+                        <Typography variant="body2" sx={{ color: textFontColor, fontSize: textFontSize }}>
                             {honors}
                         </Typography>
                     </Box>

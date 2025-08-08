@@ -14,16 +14,19 @@ const defaultTheme = {
     template: 'Harvard',
     colors: {
         header: '#2c3e50',
-        sectionTitle: '#34495e',
+        headerText: '#2c3e50',
+        sectionTitle: '#2c3e50',
         text: '#2c3e50',
-        icons: '#3498db'
+        icons: '#2c3e50'
     }
 };
-
+export const getVitaeTheme = () => {
+    const savedTheme = localStorage.getItem('vitae-theme');
+    return savedTheme ? JSON.parse(savedTheme) : defaultTheme;
+}
 export const ThemeProvider = ({ children }) => {
     const [theme, setTheme] = useState(() => {
-        const savedTheme = localStorage.getItem('vitae-theme');
-        return savedTheme ? JSON.parse(savedTheme) : defaultTheme;
+        return getVitaeTheme()
     });
 
     const [isConfigured, setIsConfigured] = useState(() => {
