@@ -145,27 +145,18 @@ const InitialConfigModal = ({
     };
 
     const handleSave = React.useCallback(() => {
-        console.log('=== SAVE BUTTON CLICKED ===');
-        console.log('Config to save:', config);
-        console.log('onSave prop:', onSave);
-        console.log('onSave type:', typeof onSave);
-        
         if (!onSave) {
-            console.error('onSave prop is missing!');
             return;
         }
         
         if (typeof onSave !== 'function') {
-            console.error('onSave is not a function, it is:', typeof onSave, onSave);
             return;
         }
         
         try {
-            console.log('Calling onSave with config...');
             onSave(config);
-            console.log('onSave called successfully');
         } catch (error) {
-            console.error('Error calling onSave:', error);
+            // Error calling onSave
         }
     }, [config, onSave]);
 

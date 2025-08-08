@@ -153,7 +153,7 @@ const transformApiDataToTemplate = (apiData, lang = 'es') => {
     if (!apiData || !Object.keys(apiData).length) {
         return null;
     }
-    console.log("apiData",apiData)
+
     const {
         myInformation,
         myContacts,
@@ -340,8 +340,7 @@ const transformApiDataToTemplate = (apiData, lang = 'es') => {
             };
         }).filter(Boolean)
         : [];
-    console.log("la experiencia", experience)
-    console.log("los stacks", stacks)
+
     return {
         templateId: "cv_template_harvard_dynamic",
         templateName: "CV Harvard Plantilla",
@@ -449,7 +448,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
             .map(section => {
                 const sectionConfig = sectionComponents[section.id];
                 if (!sectionConfig) {
-                    console.warn(`Section component not found for: ${section.id}`);
+                    // Section component not found
                     return null;
                 }
                 return renderSection(section.id, sectionConfig);
@@ -485,12 +484,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
         );
     };
     
-    console.log('=== SECTION ORDERING DEBUG ===');
-    console.log('Enabled sections:', enabledSections);
-    console.log('Theme colors:', themeColors);
-    console.log('Section order:', enabledSections.map(s => s.id));
-    console.log('Template data keys:', templateData ? Object.keys(templateData) : 'No template data');
-    console.log('================================');
+
 
     const [notification, setNotification] = useState({ open: false, message: '', severity: 'info' });
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -525,7 +519,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
         sections.forEach((section, index) => {
             const sectionHeight = section.offsetHeight || 0;
             
-            console.log(`Sección ${section.getAttribute('data-section')}: ${sectionHeight}px, Página actual: ${currentPageHeight}px`);
+
             
             // Verificar si la sección cabe en la página actual
             if (currentPageHeight + sectionHeight > EFFECTIVE_PAGE_HEIGHT && currentPageHeight > 0) {
@@ -533,7 +527,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
                 section.classList.add('page-break-before');
                 currentPage++;
                 currentPageHeight = sectionHeight;
-                console.log(`\u2728 SALTO DE PÁGINA en sección: ${section.getAttribute('data-section')}`);
+
             } else {
                 currentPageHeight += sectionHeight;
             }
@@ -543,7 +537,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
         });
         
         setTotalPages(currentPage);
-        console.log(`\ud83d\udcc4 Total de páginas calculadas: ${currentPage}`);
+
     }, [EFFECTIVE_PAGE_HEIGHT]);
 
     // Función para alternar paginación
@@ -585,14 +579,14 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
 
             if (transformed) {
                 setTemplateData(transformed);
-                console.log('CV Data transformed successfully:', transformed);
+
             }
         }
     }, [data, lang]);
 
     const handleSave = () => {
         const json = query.serialize();
-        console.log('Saving CV:', json);
+
         setNotification({
             open: true,
             message: 'CV guardado correctamente',
@@ -687,7 +681,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
                 sections.forEach((section, index) => {
                     const sectionHeight = section.offsetHeight || 0;
                     
-                    console.log(`📄 PDF: Sección ${section.getAttribute('data-section')}: ${sectionHeight}px (${(sectionHeight * PX_TO_MM).toFixed(1)}mm)`);
+
                     
                     // Verificar si la sección cabe en la página actual
                     if (currentPageHeight + sectionHeight > EFFECTIVE_HEIGHT_PX && currentPageHeight > 0) {
@@ -696,7 +690,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
                         section.style.pageBreakBefore = 'always';
                         pageNumber++;
                         currentPageHeight = sectionHeight;
-                        console.log(`🔄 PDF: SALTO DE PÁGINA antes de ${section.getAttribute('data-section')} - Página ${pageNumber}`);
+
                     } else {
                         currentPageHeight += sectionHeight;
                     }
@@ -704,7 +698,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
                     section.setAttribute('data-pdf-page', pageNumber);
                 });
                 
-                console.log(`📊 PDF: Total de páginas calculadas: ${pageNumber}`);
+
                 return pageNumber;
             };
             
@@ -747,7 +741,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
             };
 
             // PASO 4: Generar PDF
-            console.log('🚀 Iniciando generación de PDF...');
+
             await html2pdf().set(opt).from(element).save();
             
             // PASO 5: Restaurar estado original
@@ -768,7 +762,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
             });
             dispatch(disablePreviewMode());
         } catch (error) {
-            console.error('❌ Error generating PDF:', error);
+            // Error generating PDF
             setNotification({
                 open: true,
                 message: lang === 'es' ? 'Error al generar el PDF' : 'Error generating PDF',

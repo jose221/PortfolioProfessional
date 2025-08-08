@@ -269,7 +269,7 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
 
                     <ActionButtons>
                         <Tooltip title={lang === 'es' ? 'Editar Título' : 'Edit Title'}>
-                            <IconButton size="small" onClick={() => console.log('Edit title')} color="primary">
+                            <IconButton size="small" color="primary">
                                 <EditIcon fontSize="small" />
                             </IconButton>
                         </Tooltip>

@@ -130,7 +130,7 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
     const [editingItem, setEditingItem] = useState(null);
 
     // Validate and sanitize data
-    console.log("data", data)
+
     const knowledgesData = Array.isArray(data) ? data : [];
     const sectionTitle = safeString(title, lang === 'es' ? 'Conocimientos Técnicos' : 'Technical Knowledge');
 

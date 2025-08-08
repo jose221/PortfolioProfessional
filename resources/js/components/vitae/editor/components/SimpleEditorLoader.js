@@ -45,8 +45,6 @@ const SimpleEditorLoader = ({ data, lang = 'es' }) => {
     });
 
     useEffect(() => {
-        console.log('SimpleEditorLoader: Checking configuration...');
-        
         // Check if already configured
         const configured = localStorage.getItem('vitae-configured') === 'true';
         
@@ -64,7 +62,7 @@ const SimpleEditorLoader = ({ data, lang = 'es' }) => {
                         colors: theme.colors || defaultColors
                     }));
                 } catch (e) {
-                    console.error('Error parsing saved theme:', e);
+                    // Error parsing saved theme
                 }
             }
             
@@ -76,7 +74,7 @@ const SimpleEditorLoader = ({ data, lang = 'es' }) => {
                         sections: sections || defaultSections
                     }));
                 } catch (e) {
-                    console.error('Error parsing saved sections:', e);
+                    // Error parsing saved sections
                 }
             }
             
@@ -87,8 +85,6 @@ const SimpleEditorLoader = ({ data, lang = 'es' }) => {
     }, []);
 
     const handleConfigSave = (newConfig) => {
-        console.log('SimpleEditorLoader: Saving configuration...', newConfig);
-        
         try {
             // Save to localStorage
             localStorage.setItem('vitae-configured', 'true');
@@ -105,20 +101,16 @@ const SimpleEditorLoader = ({ data, lang = 'es' }) => {
             
             // Force editor re-render by changing key
             setEditorKey(Date.now());
-            
-            console.log('Configuration saved successfully! Editor will re-render...');
         } catch (error) {
-            console.error('Error saving configuration:', error);
+            // Error saving configuration
         }
     };
 
     const handleOpenConfigModal = () => {
-        console.log('Opening configuration modal from menu...');
         setShowConfigModal(true);
     };
 
     const handleCloseConfigModal = () => {
-        console.log('Closing configuration modal...');
         setShowConfigModal(false);
     };
 
