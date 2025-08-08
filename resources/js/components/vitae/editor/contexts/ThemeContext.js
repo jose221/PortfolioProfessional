@@ -15,9 +15,9 @@ const defaultTheme = {
     colors: {
         header: '#2c3e50',
         headerText: '#2c3e50',
-        sectionTitle: '#2c3e50',
+        sectionTitle: '#34495e',
         text: '#2c3e50',
-        icons: '#2c3e50'
+        icons: '#34495e'
     }
 };
 export const getVitaeTheme = () => {

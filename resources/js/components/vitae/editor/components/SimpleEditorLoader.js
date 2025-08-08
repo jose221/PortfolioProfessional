@@ -16,22 +16,21 @@ const LoadingContainer = styled(Box)(({ theme }) => ({
 
 const defaultSections = [
     { id: 'header', name: 'Encabezado', nameEn: 'Header', enabled: true, required: true },
-    { id: 'summary', name: 'Resumen Profesional', nameEn: 'Professional Summary', enabled: true, required: false },
     { id: 'contact', name: 'Información de Contacto', nameEn: 'Contact Information', enabled: true, required: false },
+    { id: 'summary', name: 'Resumen Profesional', nameEn: 'Professional Summary', enabled: true, required: true },
     { id: 'experience', name: 'Experiencia Laboral', nameEn: 'Work Experience', enabled: true, required: false },
-    { id: 'education', name: 'Educación', nameEn: 'Education', enabled: true, required: false },
-    { id: 'skills', name: 'Habilidades y Competencias', nameEn: 'Skills & Competencies', enabled: true, required: false },
+    { id: 'studies', name: 'Estudios', nameEn: 'Studies', enabled: true, required: false },
     { id: 'certifications', name: 'Certificaciones', nameEn: 'Certifications', enabled: true, required: false },
     { id: 'knowledges', name: 'Conocimientos', nameEn: 'Knowledge', enabled: true, required: false },
-    { id: 'studies', name: 'Estudios', nameEn: 'Studies', enabled: true, required: false },
-    { id: 'stacks', name: 'Tecnologías', nameEn: 'Technologies', enabled: true, required: false }
+    { id: 'stacks', name: 'Habilidades y Competencias', nameEn: 'Skills and Competencies', enabled: true, required: false },
 ];
 
 const defaultColors = {
     header: '#2c3e50',
+    headerText: '#2c3e50',
     sectionTitle: '#34495e',
     text: '#2c3e50',
-    icons: '#3498db'
+    icons: '#34495e'
 };
 
 const SimpleEditorLoader = ({ data, lang = 'es' }) => {
@@ -122,15 +121,6 @@ const SimpleEditorLoader = ({ data, lang = 'es' }) => {
         console.log('Closing configuration modal...');
         setShowConfigModal(false);
     };
-
-    console.log('=== SimpleEditorLoader Debug ===');
-    console.log('Is loading:', isLoading);
-    console.log('Is configured:', isConfigured);
-    console.log('Editor key:', editorKey);
-    console.log('Config:', config);
-    console.log('Show config modal:', showConfigModal);
-    console.log('Enabled sections:', config.sections.filter(section => section.enabled).map(s => s.id));
-    console.log('================================');
 
     if (isLoading) {
         return (

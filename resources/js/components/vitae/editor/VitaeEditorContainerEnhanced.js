@@ -40,9 +40,7 @@ import html2pdf from 'html2pdf.js';
 import { CVHeader } from './components/CVHeader';
 import { CVSummary } from './components/CVSummary';
 import { CVContact } from './components/CVContact';
-import { VitaeEducation } from './components/VitaeEducation';
 import { VitaeKnowledges } from './components/VitaeKnowledges';
-import { VitaeSkills } from './components/VitaeSkills';
 import { VitaeCertifications } from './components/VitaeCertifications';
 import { VitaeExperience } from './components/VitaeExperience';
 import { VitaeCustomSection } from './components/VitaeCustomSection';
@@ -214,27 +212,6 @@ const transformApiDataToTemplate = (apiData, lang = 'es', enabledSections = []) 
                 achievements: exp.achievements || exp.logros || []
             })) : null,
 
-        // Education
-        education: enabledSectionIds.includes('education') && apiData.education && Array.isArray(apiData.education)
-            ? apiData.education.map(edu => ({
-                institution: getLocalizedText(edu, 'institution', lang, getLocalizedText(edu, 'institucion', lang)),
-                degree: getLocalizedText(edu, 'degree', lang, getLocalizedText(edu, 'titulo', lang)),
-                field: getLocalizedText(edu, 'field', lang, getLocalizedText(edu, 'campo', lang)),
-                startDate: safeString(edu.start_date || edu.fecha_inicio),
-                endDate: safeString(edu.end_date || edu.fecha_fin),
-                gpa: safeString(edu.gpa || edu.promedio),
-                description: getLocalizedText(edu, 'description', lang, getLocalizedText(edu, 'descripcion', lang))
-            })) : null,
-
-        // Skills
-        skills: enabledSectionIds.includes('skills') && apiData.skills && Array.isArray(apiData.skills)
-            ? apiData.skills.map(skill => ({
-                name: getLocalizedText(skill, 'name', lang, getLocalizedText(skill, 'nombre', lang)),
-                category: getLocalizedText(skill, 'category', lang, getLocalizedText(skill, 'categoria', lang)),
-                level: safeString(skill.level || skill.nivel),
-                yearsExperience: skill.years_experience || skill.años_experiencia || 0,
-                description: getLocalizedText(skill, 'description', lang, getLocalizedText(skill, 'descripcion', lang))
-            })) : null,
 
         // Certifications
         certifications: enabledSectionIds.includes('certifications') && apiData.certifications && Array.isArray(apiData.certifications)
@@ -284,8 +261,6 @@ const sectionComponents = {
     summary: CVSummary,
     contact: CVContact,
     experience: VitaeExperience,
-    education: VitaeEducation,
-    skills: VitaeSkills,
     certifications: VitaeCertifications,
     knowledges: VitaeKnowledges,
     studies: VitaeStudies,
@@ -590,9 +565,8 @@ const VitaeEditorContainerEnhanced = ({ data, lang = 'es' }) => {
                 CVHeader,
                 CVSummary,
                 CVContact,
-                VitaeEducation,
+
                 VitaeKnowledges,
-                VitaeSkills,
                 VitaeCertifications,
                 VitaeExperience,
                 VitaeCustomSection,

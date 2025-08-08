@@ -41,6 +41,10 @@ const presetColors = {
         '#2c3e50', '#34495e', '#1a252f', '#2980b9', '#8e44ad',
         '#c0392b', '#d35400', '#f39c12', '#27ae60', '#16a085'
     ],
+    headerText: [
+        '#2c3e50', '#34495e', '#1a252f', '#2980b9', '#8e44ad',
+        '#c0392b', '#d35400', '#f39c12', '#27ae60', '#16a085'
+    ],
     sectionTitle: [
         '#34495e', '#2c3e50', '#7f8c8d', '#3498db', '#9b59b6',
         '#e74c3c', '#e67e22', '#f1c40f', '#2ecc71', '#1abc9c'
@@ -50,7 +54,7 @@ const presetColors = {
         '#495057', '#6c757d', '#343a40', '#17a2b8', '#28a745'
     ],
     icons: [
-        '#3498db', '#2980b9', '#9b59b6', '#8e44ad', '#e74c3c',
+        '#34495e', '#2c3e50', '#3498db', '#2980b9', '#9b59b6', '#8e44ad', '#e74c3c',
         '#c0392b', '#e67e22', '#d35400', '#f1c40f', '#f39c12'
     ]
 };
@@ -60,8 +64,17 @@ const colorLabels = {
         es: 'Color del Encabezado',
         en: 'Header Color',
         description: {
-            es: 'Color de fondo del encabezado principal',
-            en: 'Background color of the main header'
+            es: 'Color del encabezado principal',
+            en: 'color of the main header'
+        },
+        icon: HeaderIcon
+    },
+    headerText: {
+        es: 'Color de la Descripción en el Encabezado',
+        en: 'Description Header Color',
+        description: {
+            es: 'Color de texto despues del encabezado principal',
+            en: 'Text color of the main header'
         },
         icon: HeaderIcon
     },
