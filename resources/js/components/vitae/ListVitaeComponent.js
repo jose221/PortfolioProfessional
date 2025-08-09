@@ -1,5 +1,6 @@
 import React, { Component, useState } from 'react';
 import renderComponent from '../../utils/renderComponent';
+import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -22,6 +23,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import Vitae from "../../models/Vitae";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import {
     Box,
     Typography,
@@ -48,6 +50,8 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 const ModernHeader = styled(CardHeader)(({ theme }) => ({
+    display: 'flex',
+    justifyContent: 'space-between',
     padding: theme.spacing(2, 3),
     '& .MuiCardHeader-title': {
         fontSize: '1.5rem',
@@ -529,6 +533,15 @@ class ListVitaeComponent extends RComponent{
                                         <DeleteIcon sx={{ fontSize: 18 }} />
                                     </ModernActionButton>
                                 </Tooltip>
+                                <Tooltip title="Crear nuevo CV" arrow>
+                                    <Button href='/admin/vitae/editor'
+                                      size="small">
+                                        <AutoAwesomeIcon sx={ {fontSize: 18, mr: 1 }} />
+                                        Crear CV 
+                                      </Button>
+                                </Tooltip>
+
+
                             </Stack>
                         }
                     />
