@@ -585,13 +585,101 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
     }, [data, lang]);
 
     const handleSave = () => {
-        const json = query.serialize();
-
-        setNotification({
-            open: true,
-            message: 'CV guardado correctamente',
-            severity: 'success'
-        });
+        console.log('🔄 Iniciando exportación...');
+        
+        try {
+            // Get the current editor state from Craft.js
+            const editorState = query.serialize();
+            console.log('✅ Editor state serialized:', editorState);
+            
+            // Create the export object compatible with Craft.js
+            const exportData = {
+                version: '1.0.0',
+                timestamp: new Date().toISOString(),
+                craftjs: {
+                    state: editorState,
+                    resolver: {
+                        // List of components that need to be available when importing
+                        components: [
+                            'Box',
+                            'Container', 
+                            'CVHeader',
+                            'CVSummary',
+                            'CVContact',
+                            'VitaeEducation',
+                            'VitaeKnowledges',
+                            'VitaeSkills',
+                            'VitaeCertifications',
+                            'VitaeExperience',
+                            'VitaeCustomSection',
+                            'VitaeStudies',
+                            'VitaeStacks'
+                        ]
+                    }
+                },
+                config: {
+                    language: lang,
+                    enabledSections: enabledSections || [],
+                    themeColors: themeColors || {},
+                    originalData: data // Include original API data for reference
+                },
+                metadata: {
+                    exportedBy: 'VitaeEditorContainer',
+                    description: lang === 'es' ? 'Exportación de CV desde el editor' : 'CV export from editor'
+                }
+            };
+            
+            console.log('📦 Export data prepared:', exportData);
+            
+            // Convert to JSON string
+            const jsonString = JSON.stringify(exportData, null, 2);
+            console.log('📄 JSON string length:', jsonString.length);
+            
+            // Create data URL (more reliable than blob for downloads)
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(jsonString);
+            console.log('🔗 Data URL created (length):', dataStr.length);
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.href = dataStr;
+            const filename = `cv-export-${new Date().toISOString().split('T')[0]}.json`;
+            link.download = filename;
+            link.setAttribute('download', filename);
+            link.style.display = 'none';
+            link.rel = 'noopener'; // Security best practice
+            
+            console.log('📥 Download filename:', filename);
+            
+            // Add to DOM and trigger download
+            document.body.appendChild(link);
+            console.log('🖱️ Triggering download click...');
+            
+            // Trigger download immediately
+            link.click();
+            
+            // Clean up after a short delay
+            setTimeout(() => {
+                document.body.removeChild(link);
+                console.log('🗑️ Link removed from DOM');
+            }, 100);
+            
+            setNotification({
+                open: true,
+                message: lang === 'es' ? 'CV exportado y descargado exitosamente' : 'CV exported and downloaded successfully',
+                severity: 'success'
+            });
+            
+            console.log('✅ Export completed successfully');
+            
+        } catch (error) {
+            console.error('❌ Error exporting CV:', error);
+            console.error('Stack trace:', error.stack);
+            setNotification({
+                open: true,
+                message: lang === 'es' ? `Error al exportar el CV: ${error.message}` : `Error exporting CV: ${error.message}`,
+                severity: 'error'
+            });
+        }
     };
 
     const handleUndo = () => {

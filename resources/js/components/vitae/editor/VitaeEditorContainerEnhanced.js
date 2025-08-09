@@ -323,12 +323,132 @@ const VitaeEditorContentEnhanced = ({ data, lang }) => {
 
     // Event handlers
     const handleSave = useCallback(() => {
-        setNotification({
-            open: true,
-            message: lang === 'es' ? 'CV guardado exitosamente' : 'CV saved successfully',
-            severity: 'success'
-        });
-    }, [lang]);
+        console.log('🔄 Iniciando exportación...');
+        
+        try {
+            // Debug: Check if query is available
+            console.log('📊 Query object:', query);
+            console.log('🎨 Theme object:', theme);
+            console.log('📋 Enabled sections:', enabledSections);
+            
+            // Get the current editor state from Craft.js
+            let editorState = null;
+            try {
+                editorState = query.serialize();
+                console.log('✅ Editor state serialized:', editorState);
+            } catch (serializeError) {
+                console.warn('⚠️ Error serializing editor state:', serializeError);
+                // Fallback: create a basic state representation
+                editorState = {
+                    ROOT: {
+                        type: { resolvedName: 'Container' },
+                        isCanvas: true,
+                        props: {},
+                        displayName: 'Container',
+                        custom: {},
+                        hidden: false,
+                        nodes: [],
+                        linkedNodes: {}
+                    }
+                };
+            }
+            
+            // Get current theme and section configuration
+            const currentConfig = {
+                theme: {
+                    template: theme?.template || 'Harvard',
+                    colors: theme?.colors || {}
+                },
+                sections: {
+                    enabled: enabledSections || [],
+                    custom: customSections || [],
+                    order: sectionOrder || []
+                },
+                language: lang,
+                originalData: data // Include original API data for reference
+            };
+            
+            console.log('⚙️ Current config:', currentConfig);
+            
+            // Create the export object compatible with Craft.js
+            const exportData = {
+                version: '1.0.0',
+                timestamp: new Date().toISOString(),
+                craftjs: {
+                    state: editorState,
+                    resolver: {
+                        // List of components that need to be available when importing
+                        components: [
+                            'Box',
+                            'Container', 
+                            'CVHeader',
+                            'CVSummary',
+                            'CVContact',
+                            'VitaeKnowledges',
+                            'VitaeCertifications',
+                            'VitaeExperience',
+                            'VitaeCustomSection',
+                            'VitaeStudies',
+                            'VitaeStacks'
+                        ]
+                    }
+                },
+                config: currentConfig,
+                metadata: {
+                    exportedBy: 'VitaeEditorContainerEnhanced',
+                    description: lang === 'es' ? 'Exportación de CV desde el editor' : 'CV export from editor'
+                }
+            };
+            
+            console.log('📦 Export data prepared:', exportData);
+            
+            // Convert to JSON string
+            const jsonString = JSON.stringify(exportData, null, 2);
+            console.log('📄 JSON string length:', jsonString.length);
+            
+            // Create blob and download
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            console.log('🗂️ Blob created:', blob.size, 'bytes');
+            
+            const url = URL.createObjectURL(blob);
+            console.log('🔗 URL created:', url);
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.href = url;
+            const filename = `cv-export-${new Date().toISOString().split('T')[0]}.json`;
+            link.download = filename;
+            
+            console.log('📥 Download filename:', filename);
+            
+            // Add to DOM, click, and remove
+            document.body.appendChild(link);
+            console.log('🖱️ Triggering download click...');
+            link.click();
+            document.body.removeChild(link);
+            
+            // Clean up the URL object
+            URL.revokeObjectURL(url);
+            console.log('🧹 URL cleaned up');
+            
+            setNotification({
+                open: true,
+                message: lang === 'es' ? 'CV exportado y descargado exitosamente' : 'CV exported and downloaded successfully',
+                severity: 'success'
+            });
+            
+            console.log('✅ Export completed successfully');
+            
+        } catch (error) {
+            console.error('❌ Error exporting CV:', error);
+            console.error('Stack trace:', error.stack);
+            setNotification({
+                open: true,
+                message: lang === 'es' ? `Error al exportar el CV: ${error.message}` : `Error exporting CV: ${error.message}`,
+                severity: 'error'
+            });
+        }
+    }, [lang, query, theme, enabledSections, customSections, sectionOrder, data]);
 
     const handleUndo = () => {
         actions.history.undo();
