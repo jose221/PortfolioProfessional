@@ -45,8 +45,6 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
-    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-    color: theme.palette.primary.contrastText,
     textAlign: 'center',
     fontWeight: 600,
     fontSize: '1.25rem',

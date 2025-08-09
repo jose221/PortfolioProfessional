@@ -86,6 +86,14 @@ const SimpleEditorLoader = ({ data, lang = 'es' }) => {
 
     const handleConfigSave = (newConfig) => {
         try {
+            
+        } catch (error) {
+            // Error saving configuration
+        }
+    };
+
+    const handleExportEditorCV = (newConfig) => {
+        try {
             // Save to localStorage
             localStorage.setItem('vitae-configured', 'true');
             localStorage.setItem('vitae-theme', JSON.stringify({

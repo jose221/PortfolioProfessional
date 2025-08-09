@@ -46,6 +46,7 @@ import { VitaeCustomSection } from './components/VitaeCustomSection';
 import { VitaeStudies } from './components/VitaeStudies';
 import { VitaeStacks } from './components/VitaeStacks';
 import PreviewModeButton from './components/PreviewModeButton';
+import SaveOptionsModal from './components/SaveOptionsModal';
 import { enablePreviewMode, disablePreviewMode } from '../../../redux/actions/preview-mode.js';
 import { useDispatch } from 'react-redux';
 
@@ -486,6 +487,8 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
     const [notification, setNotification] = useState({ open: false, message: '', severity: 'info' });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [customSectionData, setCustomSectionData] = useState({ title: '', content: '' });
+    const [showSaveOptionsModal, setShowSaveOptionsModal] = useState(false);
+    const [saveLoading, setSaveLoading] = useState(false);
 
     // CSS Pagination Hook
     // Estado simple para paginación CSS
@@ -582,6 +585,11 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
     }, [data, lang]);
 
     const handleSave = () => {
+        setShowSaveOptionsModal(true);
+    };
+
+    // Function to export CV data as JSON (original functionality)
+    const exportCVAsJSON = () => {
         try {
             // Get the current editor state from Craft.js
             const editorState = query.serialize();
@@ -647,18 +655,205 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
                 document.body.removeChild(link);
             }, 100);
             
+            return true;
+        } catch (error) {
+            console.error('Error exporting CV as JSON:', error);
+            return false;
+        }
+    };
+
+    // Function to save CV to history (API call)
+    const saveCVToHistory = async () => {
+        try {
+            setSaveLoading(true);
+            
+            // Generate PDF blob first
+            const pdfBlob = await generatePDFBlob();
+            if (!pdfBlob) {
+                throw new Error('Failed to generate PDF');
+            }
+
+            // Create FormData to send to API
+            const formData = new FormData();
+            
+            // Add PDF file
+            const filename = `cv-${new Date().toISOString().split('T')[0]}.pdf`;
+            formData.append('path', pdfBlob, filename);
+            
+            // Add other required fields (adjust based on your FormVitaeComponent structure)
+            formData.append('name', data?.myInformation?.name || 'CV Sin Nombre');
+            formData.append('description', lang === 'es' ? 'CV generado desde el editor' : 'CV generated from editor');
+            
+            // Make API call to save CV
+            const primary_url = window.url_api + "/admin/history-curriculum-vitae";
+            const response = await fetch(primary_url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            
             setNotification({
                 open: true,
-                message: lang === 'es' ? 'CV exportado y descargado exitosamente' : 'CV exported and downloaded successfully',
+                message: lang === 'es' ? 'CV guardado en el historial exitosamente' : 'CV saved to history successfully',
                 severity: 'success'
             });
-            
+
+            return true;
         } catch (error) {
+            console.error('Error saving CV to history:', error);
             setNotification({
                 open: true,
-                message: lang === 'es' ? `Error al exportar el CV: ${error.message}` : `Error exporting CV: ${error.message}`,
+                message: lang === 'es' ? `Error al guardar en el historial: ${error.message}` : `Error saving to history: ${error.message}`,
                 severity: 'error'
             });
+            return false;
+        } finally {
+            setSaveLoading(false);
+        }
+    };
+
+    // Function to generate PDF blob for saving
+    const generatePDFBlob = async () => {
+        try {
+            dispatch(enablePreviewMode());
+            const element = document.querySelector('[data-cv-content]');
+            const container = document.querySelector('#cv-container');
+            
+            if (!element || !container) {
+                throw new Error('CV content not found');
+            }
+
+            // Apply intelligent page breaks
+            const applyIntelligentPageBreaks = () => {
+                const sections = container.querySelectorAll('[data-section]');
+                const EFFECTIVE_HEIGHT_PX = 752; // A4 height minus margins
+                
+                let currentPageHeight = 0;
+                let pageNumber = 1;
+                
+                sections.forEach(section => {
+                    section.classList.remove('pdf-page-break-before');
+                    section.style.pageBreakInside = 'avoid';
+                    section.style.breakInside = 'avoid';
+                });
+                
+                sections.forEach((section) => {
+                    const sectionHeight = section.offsetHeight || 0;
+                    
+                    if (currentPageHeight + sectionHeight > EFFECTIVE_HEIGHT_PX && currentPageHeight > 0) {
+                        section.classList.add('pdf-page-break-before');
+                        section.style.pageBreakBefore = 'always';
+                        pageNumber++;
+                        currentPageHeight = sectionHeight;
+                    } else {
+                        currentPageHeight += sectionHeight;
+                    }
+                    
+                    section.setAttribute('data-pdf-page', pageNumber);
+                });
+                
+                return pageNumber;
+            };
+
+            const totalPages = applyIntelligentPageBreaks();
+
+            const opt = {
+                margin: [10, 10, 10, 10],
+                filename: `cv-${new Date().toISOString().split('T')[0]}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    width: element.offsetWidth,
+                    height: element.offsetHeight
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait',
+                    compress: true
+                },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            // Generate PDF as blob
+            const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
+
+            // Clean up page breaks
+            const sections = container.querySelectorAll('[data-section]');
+            sections.forEach(section => {
+                section.classList.remove('pdf-page-break-before');
+                section.style.pageBreakBefore = '';
+                section.style.pageBreakInside = '';
+                section.style.breakInside = '';
+                section.removeAttribute('data-pdf-page');
+            });
+
+            dispatch(disablePreviewMode());
+            return pdfBlob;
+        } catch (error) {
+            dispatch(disablePreviewMode());
+            throw error;
+        }
+    };
+
+    // Save Options Modal Handlers
+    const handleSaveToHistory = async () => {
+        const success = await saveCVToHistory();
+        if (success) {
+            setShowSaveOptionsModal(false);
+        }
+    };
+
+    const handleDownloadOnly = async () => {
+        setSaveLoading(true);
+        try {
+            await handleDownloadPDF();
+            setShowSaveOptionsModal(false);
+        } catch (error) {
+            console.error('Error downloading PDF:', error);
+        } finally {
+            setSaveLoading(false);
+        }
+    };
+
+    const handleBothActions = async () => {
+        setSaveLoading(true);
+        try {
+            // First save to history
+            const saveSuccess = await saveCVToHistory();
+            
+            if (saveSuccess) {
+                // Then download PDF
+                await handleDownloadPDF();
+                setShowSaveOptionsModal(false);
+                
+                setNotification({
+                    open: true,
+                    message: lang === 'es' ? 'CV guardado en historial y descargado exitosamente' : 'CV saved to history and downloaded successfully',
+                    severity: 'success'
+                });
+            }
+        } catch (error) {
+            console.error('Error in both actions:', error);
+        } finally {
+            setSaveLoading(false);
+        }
+    };
+
+    const handleCloseSaveModal = () => {
+        if (!saveLoading) {
+            setShowSaveOptionsModal(false);
         }
     };
 
@@ -1024,6 +1219,17 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
                     <Button onClick={handleSaveCustomSection} variant="contained">{lang === 'es' ? 'Guardar' : 'Save'}</Button>
                 </DialogActions>
             </Dialog>
+
+            {/* Save Options Modal */}
+            <SaveOptionsModal
+                open={showSaveOptionsModal}
+                onClose={handleCloseSaveModal}
+                onSaveToHistory={handleSaveToHistory}
+                onDownloadOnly={handleDownloadOnly}
+                onBoth={handleBothActions}
+                lang={lang}
+                loading={saveLoading}
+            />
 
         </EditorContainer>
     );
