@@ -24,14 +24,11 @@ import {
 } from '@mui/material';
 import {
     Save as SaveIcon,
-    Preview as PreviewIcon,
     Undo as UndoIcon,
     Redo as RedoIcon,
-    Download as DownloadIcon,
     Settings as SettingsIcon,
     PictureAsPdf as PdfIcon,
-    Add as AddIcon,
-    Description as DescriptionIcon
+    Add as AddIcon
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import html2pdf from 'html2pdf.js';
@@ -585,12 +582,9 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
     }, [data, lang]);
 
     const handleSave = () => {
-        console.log('🔄 Iniciando exportación...');
-        
         try {
             // Get the current editor state from Craft.js
             const editorState = query.serialize();
-            console.log('✅ Editor state serialized:', editorState);
             
             // Create the export object compatible with Craft.js
             const exportData = {
@@ -629,15 +623,11 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
                 }
             };
             
-            console.log('📦 Export data prepared:', exportData);
-            
             // Convert to JSON string
             const jsonString = JSON.stringify(exportData, null, 2);
-            console.log('📄 JSON string length:', jsonString.length);
             
             // Create data URL (more reliable than blob for downloads)
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(jsonString);
-            console.log('🔗 Data URL created (length):', dataStr.length);
             
             // Create download link
             const link = document.createElement('a');
@@ -646,21 +636,15 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
             link.download = filename;
             link.setAttribute('download', filename);
             link.style.display = 'none';
-            link.rel = 'noopener'; // Security best practice
-            
-            console.log('📥 Download filename:', filename);
+            link.rel = 'noopener';
             
             // Add to DOM and trigger download
             document.body.appendChild(link);
-            console.log('🖱️ Triggering download click...');
-            
-            // Trigger download immediately
             link.click();
             
             // Clean up after a short delay
             setTimeout(() => {
                 document.body.removeChild(link);
-                console.log('🗑️ Link removed from DOM');
             }, 100);
             
             setNotification({
@@ -669,11 +653,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
                 severity: 'success'
             });
             
-            console.log('✅ Export completed successfully');
-            
         } catch (error) {
-            console.error('❌ Error exporting CV:', error);
-            console.error('Stack trace:', error.stack);
             setNotification({
                 open: true,
                 message: lang === 'es' ? `Error al exportar el CV: ${error.message}` : `Error exporting CV: ${error.message}`,
