@@ -4,7 +4,6 @@
  * building robust, powerful web applications using React + Laravel.
  */
 
-
 require('./bootstrap');
 
 /**
@@ -27,7 +26,6 @@ import FormKnowledgeAbilityComponent from "./components/knowledgesAbility/FormKn
 import InfoKnowLedgesComponent from "./components/knowledges/InfoKnowLedgesComponent";
 import ProfessionalExperiencesComponent from "./components/ProfessionalExperiences/ProfessionalExperiencesComponent";
 import ListProfessionalExperiencesComponent from "./components/ProfessionalExperiences/ListProfessionalExperiencesComponent";
-
 
 import FormProfessionalExperiencesComponent from "./components/ProfessionalExperiences/FormProfessionalExperiencesComponent";
 import StudiesComponent from "./components/studies/StudiesComponent";
@@ -62,3 +60,4 @@ import FormHomeComponent from "./components/home/FormComponent";
 import CertificationsComponent from "./components/certifications/CertificationsComponent";
 import FormCertificationsComponent from "./components/certifications/FormCertificationsComponent";
 import ListCertificationsComponent from "./components/certifications/ListCertificationsComponent";
+import CreateCVComponent from "./components/vitae/CreateCVComponent";

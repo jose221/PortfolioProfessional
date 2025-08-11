@@ -1,0 +1,357 @@
+/* ========================================
+   PAGINADO INTELIGENTE CSS PURO
+   Compatible con Craft.js y PDF Export
+======================================== */
+
+/* Constantes para página A4 */
+:root {
+    --page-width: 612px;      /* A4 width at 96 DPI */
+    --page-height: 792px;     /* A4 height at 96 DPI */
+    --page-margin: 40px;      /* Page margins */
+    --effective-height: 712px; /* page-height - (2 * margin) */
+}
+
+/* ========================================
+   CONTENEDOR PRINCIPAL CON PAGINADO
+======================================== */
+
+/* Cuando la paginación está habilitada */
+.pagination-enabled {
+    /* Simular páginas A4 */
+    width: var(--page-width) !important;
+    max-width: var(--page-width) !important;
+    min-height: var(--page-height);
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    position: relative;
+    
+    /* Configuración de paginado */
+    page-break-inside: avoid;
+    break-inside: avoid;
+    
+    /* Estilos visuales para el editor */
+    border: 2px solid #2196f3;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    padding: var(--page-margin);
+    
+    /* Efecto visual de página */
+    background: linear-gradient(to bottom, #ffffff 0%, #fafafa 100%);
+}
+
+/* Fondo del editor cuando está paginado */
+.pagination-enabled {
+    background-color: #f0f4f8 !important;
+}
+
+/* Contenedor padre cuando la paginación está activa */
+body:has(.pagination-enabled) {
+    background-color: #e3f2fd;
+}
+
+/* Estilo alternativo para el contenedor padre */
+.pagination-enabled {
+    position: relative;
+}
+
+.pagination-enabled::before {
+    content: "PÁGINA A4 - MODO PAGINADO";
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2196f3;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1000;
+}
+
+/* ========================================
+   MODO GENERACIÓN PDF
+======================================== */
+
+.pdf-generation-mode{
+    
+}
+
+
+/* ========================================
+   REGLAS DE SALTO DE PÁGINA Y SECCIONES
+======================================== */
+
+/* Secciones con data-section cuando la paginación está activa */
+.pagination-enabled [data-section] {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.8);
+    border-left: 4px solid #2196f3;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+/* Indicador visual de sección */
+.pagination-enabled [data-section]::before {
+    content: attr(data-section);
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background: #2196f3;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* Salto de página visual */
+.pagination-enabled .page-break-before {
+    border-top: 3px dashed #ff9800;
+    margin-top: 40px;
+    padding-top: 40px;
+    position: relative;
+}
+
+.pagination-enabled .page-break-before::before {
+    content: "\1F4C4 NUEVA PÁGINA";
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ff9800;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 11px;
+    font-weight: bold;
+    z-index: 100;
+}
+
+/* Evitar cortes en secciones principales */
+.vitae-section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 16px;
+}
+
+/* Evitar cortes en elementos individuales */
+.vitae-item {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 12px;
+}
+
+/* Forzar nueva página antes de ciertas secciones */
+.page-break-before {
+    page-break-before: always;
+    break-before: page;
+}
+
+/* Evitar salto de página después */
+.page-break-avoid-after {
+    page-break-after: avoid;
+    break-after: avoid;
+}
+
+/* Permitir salto dentro del elemento (para contenido muy largo) */
+.page-break-allow-inside {
+    page-break-inside: auto;
+    break-inside: auto;
+}
+
+/* ========================================
+   INDICADORES VISUALES (SOLO EDITOR)
+======================================== */
+
+/* Líneas divisorias entre páginas */
+.page-divider {
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        #2196f3 20%, 
+        #2196f3 80%, 
+        transparent 100%
+    );
+    border-style: dashed;
+    border-color: #2196f3;
+    opacity: 0.6;
+    z-index: 10;
+}
+
+/* Numeración de páginas */
+.page-number {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #666;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Contador de páginas superior */
+.page-counter {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 12px 24px;
+    border-radius: 24px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 auto 20px auto;
+    text-align: center;
+    font-weight: 500;
+    color: #333;
+    width: fit-content;
+}
+
+/* Advertencia de contenido oversized */
+.oversized-warning {
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    background: rgba(255, 193, 7, 0.1);
+    color: #f57c00;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid #f57c00;
+    z-index: 1000;
+}
+
+/* ========================================
+   ESTILOS PARA IMPRESIÓN/PDF
+======================================== */
+
+@media print {
+    /* Configuración de página */
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+    
+    /* Ocultar indicadores visuales en impresión */
+    .page-divider,
+    .page-number,
+    .page-counter,
+    .oversized-warning {
+        display: none !important;
+    }
+    
+    /* Ajustar contenedor para impresión */
+    .cv-paginated {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        page-break-after: always;
+    }
+    
+    .cv-paginated:last-child {
+        page-break-after: auto;
+    }
+    
+    /* Fondo del editor */
+    .cv-editor-paginated {
+        background: white;
+        padding: 0;
+    }
+    
+    /* Asegurar saltos de página correctos */
+    .vitae-section {
+        page-break-inside: avoid;
+    }
+    
+    .vitae-item {
+        page-break-inside: avoid;
+    }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+======================================== */
+
+@media (max-width: 768px) {
+    .cv-paginated {
+        width: 100%;
+        margin: 0 10px;
+    }
+    
+    .cv-editor-paginated {
+        padding: 10px;
+    }
+    
+    .page-counter {
+        margin: 0 10px 20px 10px;
+    }
+}
+
+/* ========================================
+   ANIMACIONES Y TRANSICIONES
+======================================== */
+
+.cv-paginated {
+    transition: all 0.3s ease;
+}
+
+.page-number {
+    transition: opacity 0.2s ease;
+}
+
+.page-counter {
+    transition: all 0.3s ease;
+}
+
+/* Hover effects */
+.page-number:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 1);
+}
+
+/* ========================================
+   UTILIDADES ADICIONALES
+======================================== */
+
+/* Espaciado entre secciones */
+.vitae-section + .vitae-section {
+    margin-top: 24px;
+}
+
+/* Contenido que puede dividirse */
+.divisible-content {
+    page-break-inside: auto;
+    break-inside: auto;
+}
+
+/* Mantener juntos elementos relacionados */
+.keep-together {
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+/* Forzar salto antes de elemento importante */
+.new-page {
+    page-break-before: always;
+    break-before: page;
+}

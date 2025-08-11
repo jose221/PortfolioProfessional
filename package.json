@@ -27,6 +27,8 @@
         "sass-loader": "^16.0.5"
     },
     "dependencies": {
+        "@craftjs/core": "^0.2.12",
+        "@craftjs/utils": "^0.2.5",
         "@emotion/react": "^11.11.1",
         "@emotion/styled": "^11.11.0",
         "@mui/icons-material": "^7.1.1",
@@ -37,13 +39,21 @@
         "dayjs": "^1.11.9",
         "dompurify": "^3.2.6",
         "draft-js": "^0.11.7",
+        "fabric": "^6.7.1",
+        "html-docx-js": "^0.3.1",
+        "html2pdf.js": "^0.10.3",
+        "lodash.debounce": "^4.0.8",
+        "mammoth": "^1.9.1",
+        "pdfjs-dist": "^5.4.54",
         "qs": "^6.14.0",
         "react-dropzone": "^14.2.3",
+        "react-pdf": "^10.0.1",
         "react-redux": "^9.2.0",
         "react-trix": "^0.0.1",
+        "react-use-measure": "^2.1.7",
         "redux": "^5.0.1",
         "styled-components": "^6.1.18",
-        "suneditor": "^2.45.1",
+        "suneditor": "^2.47.6",
         "suneditor-react": "^3.6.1"
     }
 }

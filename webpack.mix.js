@@ -19,3 +19,6 @@ mix.sass('resources/sass/appIndex.scss', 'public/css');
 mix.sass('resources/sass/admin.scss', 'public/css');
 mix.sass('resources/sass/my-portafolio.scss', 'public/css');
 mix.sass('resources/sass/stylish-auth.scss', 'public/css');
+
+// CSS Pagination for CV Editor
+mix.styles('resources/css/pagination.css', 'public/css/pagination.css');

@@ -13,7 +13,8 @@ const initialState = {
         information:{},
         expandedAccordion:"",
         dataAutocomplete:{}
-    }
+    },
+    previewMode: false
 }
 const store = createStore(reducers, initialState);
 export default store;
