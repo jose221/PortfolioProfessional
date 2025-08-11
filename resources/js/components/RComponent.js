@@ -2,7 +2,11 @@ import React, { Component, useState } from 'react';
 import {DefaultService} from "../services/DefaultService";
 import store from "../redux/store/store";
 import addTodo from "../redux/actions/add-todo";
+import HttpRequest from "./request/DefaultHttpRequest";
+import DefaultHttpRequest from './request/DefaultHttpRequest';
+
 export default class RComponent extends Component{
+    props = {}
     state = {
         currentLang: "es",
         ids:[],
@@ -18,8 +22,10 @@ export default class RComponent extends Component{
         expandedAccordion:"",
         dataAutocomplete:{}
     }
-    constructor() {
+    httpRequest = new DefaultHttpRequest();
+    constructor(props) {
         super();
+        this.props = props;
         window.url_api = window.url_api || "http://localhost:8080/api";
         window.url_image = window.url_image || "http://localhost:8080";
     }
@@ -44,7 +50,7 @@ export default class RComponent extends Component{
     handleEdit = async (url, item) =>{
         let param = {}
         param[item.field] = item.value
-        let response = await DefaultService.edit(url, param)
+        let response = await this.httpRequest.edit(url, param)
         this.setState({isSuccess: true});
         this.setState({isSuccessMessage: response.message});
         this.dispatchStore(this.state)
@@ -127,7 +133,7 @@ export default class RComponent extends Component{
 
     async getItem(url, params = {}){
         this.setState({isLoading: true})
-        let data = await DefaultService.find(url, params);
+        let data = await this.httpRequest.find(url, params);
         data.updated_at = this.formatDateString(data.updated_at)
         this.state.isLoading = false;
         this.dispatchStore(this.state);
@@ -135,7 +141,7 @@ export default class RComponent extends Component{
     }
     async getItems(url, params = {}, showLoading=true, config={}) {
         if(showLoading) this.setState({isLoading: true});
-        let data = await DefaultService.all(url, params, config);
+        let data = await this.httpRequest.all(url, params, config);
 
         if(data.updated_at) {
             data.updated_at = this.formatDateString(data.updated_at);
@@ -153,7 +159,7 @@ export default class RComponent extends Component{
     onUpdate = async (url, params) =>{
         //console.log(this.validData(this.state.data,))
         this.setState({isLoading: true})
-        let response = await DefaultService.update(url, params)
+        let response = await this.httpRequest.update(url, params)
         this.state.isLoading = false;
         this.state.isSuccess = true;
         this.state.isSuccessMessage = response.message;
@@ -162,7 +168,7 @@ export default class RComponent extends Component{
     }
     onCreate = async (url, params) =>{
         //console.log(this.validData(this.state.data,))
-        let response = await DefaultService.create(url, params)
+        let response = await this.httpRequest.create(url, params)
         this.state.isLoading = false;
         this.state.isSuccess = true;
         this.state.isSuccessMessage = response.message;
@@ -172,7 +178,7 @@ export default class RComponent extends Component{
     onDelete = async (url, params, showMessage=true) =>{
         const mParams = this.mapParamsToNumericArray(params);
 
-        let response = await DefaultService.delete(url, {
+        let response = await this.httpRequest.delete(url, {
             ids: mParams
         })
         if(showMessage){

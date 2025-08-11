@@ -49,6 +49,7 @@ import PreviewModeButton from './components/PreviewModeButton';
 import SaveOptionsModal from './components/SaveOptionsModal';
 import { enablePreviewMode, disablePreviewMode } from '../../../redux/actions/preview-mode.js';
 import { useDispatch } from 'react-redux';
+import DefaultHttpRequest from '../../request/DefaultHttpRequest.js';
 
 
 const EditorContainer = styled(Box)(({ theme }) => ({
@@ -662,44 +663,198 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
         }
     };
 
-    // Function to save CV to history (API call)
+    // Función mejorada para generar PDF blob basada en handleDownloadPDF funcional
+    const generatePDFBlob = async () => {
+        try {
+            dispatch(enablePreviewMode());
+            const element = document.querySelector('[data-cv-content]');
+            const container = document.querySelector('#cv-container');
+
+            if (!element || !container) {
+                throw new Error('CV content not found');
+            }
+
+            // PASO 1: Definir constantes de página (desde la versión funcional)
+            const PAGE_HEIGHT_MM = 297; // A4 height in mm
+            const PAGE_MARGIN_MM = 5;    // márgenes mínimos en mm
+            const EFFECTIVE_HEIGHT_MM = PAGE_HEIGHT_MM - (PAGE_MARGIN_MM * 2);
+            const PX_TO_MM = 0.264583;   // conversion factor
+            const EFFECTIVE_HEIGHT_PX = EFFECTIVE_HEIGHT_MM / PX_TO_MM;
+
+            // PASO 2: Aplicar estilos de paginado temporalmente
+            const originalClasses = container.className;
+            container.classList.add('pdf-generation-mode');
+
+            // PASO 3: Calcular y aplicar saltos de página inteligentes
+            const applyIntelligentPageBreaks = () => {
+                const sections = container.querySelectorAll('[data-section]');
+
+                let currentPageHeight = 0;
+                let pageNumber = 1;
+
+                // Limpiar clases existentes
+                sections.forEach(section => {
+                    section.classList.remove('pdf-page-break-before');
+                    section.style.pageBreakInside = 'avoid';
+                    section.style.breakInside = 'avoid';
+                });
+
+                sections.forEach((section, index) => {
+                    const sectionHeight = section.offsetHeight || 0;
+
+                    // Verificar si la sección cabe en la página actual
+                    if (currentPageHeight + sectionHeight > EFFECTIVE_HEIGHT_PX && currentPageHeight > 0) {
+                        // Nueva página necesaria
+                        section.classList.add('pdf-page-break-before');
+                        section.style.pageBreakBefore = 'always';
+                        pageNumber++;
+                        currentPageHeight = sectionHeight;
+                    } else {
+                        currentPageHeight += sectionHeight;
+                    }
+
+                    section.setAttribute('data-pdf-page', pageNumber);
+                });
+
+                return pageNumber;
+            };
+
+            // Aplicar saltos de página después de que los estilos se hayan aplicado
+            await new Promise(resolve => setTimeout(resolve, 200));
+            const totalPages = applyIntelligentPageBreaks();
+
+            // PASO 4: Configuración de alta calidad para PDF
+            const opt = {
+                margin: [12, 0, 2, 0],
+                image: { 
+                    type: 'jpeg', 
+                    quality: 1.0 // Máxima calidad
+                },
+                html2canvas: {
+                    scale: 2, // Escala reducida para evitar cortes
+                    useCORS: true,
+                    letterRendering: true,
+                    allowTaint: false,
+                    backgroundColor: '#ffffff',
+                    removeContainer: false,
+                    imageTimeout: 15000,
+                    logging: false,
+                    width: null, // Permitir ancho automático
+                    height: null // Permitir altura automática
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait',
+                    compress: false // No comprimir para mejor calidad
+                },
+                pagebreak: {
+                    mode: ['avoid-all', 'css', 'legacy'],
+                    before: '.pdf-page-break-before',
+                    after: '.pdf-page-break-after',
+                    avoid: '[data-section]'
+                }
+            };
+
+            // PASO 5: Generar PDF como blob
+            const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
+
+            // PASO 6: Restaurar estado original
+            container.className = originalClasses;
+            const sections = container.querySelectorAll('[data-section]');
+            sections.forEach(section => {
+                section.classList.remove('pdf-page-break-before');
+                section.style.pageBreakBefore = '';
+                section.style.pageBreakInside = '';
+                section.style.breakInside = '';
+                section.removeAttribute('data-pdf-page');
+            });
+
+            dispatch(disablePreviewMode());
+
+            // Retornar blob y total de páginas para mayor utilidad
+            return { blob: pdfBlob, totalPages };
+        } catch (error) {
+            dispatch(disablePreviewMode());
+            throw error;
+        }
+    };
+
+    // Función simplificada para descargar PDF que usa el generador mejorado
+    const handleDownloadPDF = async () => {
+        try {
+            // Mostrar indicador de carga
+            setNotification({
+                open: true,
+                message: lang === 'es' ? 'Generando PDF con paginado inteligente...' : 'Generating PDF with smart pagination...',
+                severity: 'info'
+            });
+
+            // Usar el generador mejorado
+            const { blob, totalPages } = await generatePDFBlob();
+
+            // Crear link de descarga desde el blob
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `CV_${templateData?.header?.fullName?.replace(/\s+/g, '_') || 'Professional'}.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            setNotification({
+                open: true,
+                message: `${lang === 'es' ? 'PDF generado exitosamente' : 'PDF generated successfully'} (${totalPages} ${lang === 'es' ? 'páginas' : 'pages'})`,
+                severity: 'success'
+            });
+        } catch (error) {
+            setNotification({
+                open: true,
+                message: lang === 'es' ? 'Error al generar el PDF' : 'Error generating PDF',
+                severity: 'error'
+            });
+        }
+    };
+
+    // Actualizar también la función saveCVToHistory para usar la nueva versión
     const saveCVToHistory = async () => {
         try {
             setSaveLoading(true);
-            
+
             // Generate PDF blob first
-            const pdfBlob = await generatePDFBlob();
+            const { blob: pdfBlob } = await generatePDFBlob();
             if (!pdfBlob) {
                 throw new Error('Failed to generate PDF');
             }
 
-            // Create FormData to send to API
-            const formData = new FormData();
-            
-            // Add PDF file
+            // Crear un objeto File desde el blob
             const filename = `cv-${new Date().toISOString().split('T')[0]}.pdf`;
-            formData.append('path', pdfBlob, filename);
-            
-            // Add other required fields (adjust based on your FormVitaeComponent structure)
-            formData.append('name', data?.myInformation?.name || 'CV Sin Nombre');
-            formData.append('description', lang === 'es' ? 'CV generado desde el editor' : 'CV generated from editor');
-            
-            // Make API call to save CV
-            const primary_url = window.url_api + "/admin/history-curriculum-vitae";
-            const response = await fetch(primary_url, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-                }
+            const pdfFile = new File([pdfBlob], filename, { 
+                type: 'application/pdf',
+                lastModified: Date.now()
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            const cvData = {
+                path: pdfFile,
+                archive_name: data?.myInformation?.name || 'CV Sin Nombre',
+                archive_type:'pdf'
+            };
+
+            // Make API call to save CV
+            const primary_url = window.url_api + "/admin/history-curriculum-vitae";
+            const httpRequest = new DefaultHttpRequest();
+            const response = await httpRequest.create(primary_url, cvData);
+
+            if(response.code != 200){
+                setNotification({
+                    open: true,
+                    message: lang === 'es' ? `Error al guardar en el historial: ${response.message}` : `Error saving to history: ${response.message}`,
+                    severity: 'error'
+                });
+                return false;
             }
 
-            const result = await response.json();
-            
             setNotification({
                 open: true,
                 message: lang === 'es' ? 'CV guardado en el historial exitosamente' : 'CV saved to history successfully',
@@ -719,95 +874,6 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
             setSaveLoading(false);
         }
     };
-
-    // Function to generate PDF blob for saving
-    const generatePDFBlob = async () => {
-        try {
-            dispatch(enablePreviewMode());
-            const element = document.querySelector('[data-cv-content]');
-            const container = document.querySelector('#cv-container');
-            
-            if (!element || !container) {
-                throw new Error('CV content not found');
-            }
-
-            // Apply intelligent page breaks
-            const applyIntelligentPageBreaks = () => {
-                const sections = container.querySelectorAll('[data-section]');
-                const EFFECTIVE_HEIGHT_PX = 752; // A4 height minus margins
-                
-                let currentPageHeight = 0;
-                let pageNumber = 1;
-                
-                sections.forEach(section => {
-                    section.classList.remove('pdf-page-break-before');
-                    section.style.pageBreakInside = 'avoid';
-                    section.style.breakInside = 'avoid';
-                });
-                
-                sections.forEach((section) => {
-                    const sectionHeight = section.offsetHeight || 0;
-                    
-                    if (currentPageHeight + sectionHeight > EFFECTIVE_HEIGHT_PX && currentPageHeight > 0) {
-                        section.classList.add('pdf-page-break-before');
-                        section.style.pageBreakBefore = 'always';
-                        pageNumber++;
-                        currentPageHeight = sectionHeight;
-                    } else {
-                        currentPageHeight += sectionHeight;
-                    }
-                    
-                    section.setAttribute('data-pdf-page', pageNumber);
-                });
-                
-                return pageNumber;
-            };
-
-            const totalPages = applyIntelligentPageBreaks();
-
-            const opt = {
-                margin: [10, 10, 10, 10],
-                filename: `cv-${new Date().toISOString().split('T')[0]}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2,
-                    useCORS: true,
-                    allowTaint: true,
-                    backgroundColor: '#ffffff',
-                    width: element.offsetWidth,
-                    height: element.offsetHeight
-                },
-                jsPDF: { 
-                    unit: 'mm', 
-                    format: 'a4', 
-                    orientation: 'portrait',
-                    compress: true
-                },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-            };
-
-            // Generate PDF as blob
-            const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob');
-
-            // Clean up page breaks
-            const sections = container.querySelectorAll('[data-section]');
-            sections.forEach(section => {
-                section.classList.remove('pdf-page-break-before');
-                section.style.pageBreakBefore = '';
-                section.style.pageBreakInside = '';
-                section.style.breakInside = '';
-                section.removeAttribute('data-pdf-page');
-            });
-
-            dispatch(disablePreviewMode());
-            return pdfBlob;
-        } catch (error) {
-            dispatch(disablePreviewMode());
-            throw error;
-        }
-    };
-
-    // Save Options Modal Handlers
     const handleSaveToHistory = async () => {
         const success = await saveCVToHistory();
         if (success) {
@@ -894,145 +960,6 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
         });
     };
     const dispatch = useDispatch();
-    const handleDownloadPDF = async () => {
-        try {
-            dispatch(enablePreviewMode());
-            const element = document.querySelector('[data-cv-content]');
-            const container = document.querySelector('#cv-container');
-            
-            if (!element || !container) {
-                setNotification({
-                    open: true,
-                    message: 'No se pudo encontrar el contenido del CV',
-                    severity: 'error'
-                });
-                return;
-            }
-
-            // Mostrar indicador de carga
-            setNotification({
-                open: true,
-                message: lang === 'es' ? 'Generando PDF con paginado inteligente...' : 'Generating PDF with smart pagination...',
-                severity: 'info'
-            });
-
-            // PASO 1: Definir constantes de página
-            const PAGE_HEIGHT_MM = 297; // A4 height in mm
-            const PAGE_MARGIN_MM = 5;    // márgenes mínimos en mm
-            const EFFECTIVE_HEIGHT_MM = PAGE_HEIGHT_MM - (PAGE_MARGIN_MM * 2);
-            const PX_TO_MM = 0.264583;   // conversion factor
-            const EFFECTIVE_HEIGHT_PX = EFFECTIVE_HEIGHT_MM / PX_TO_MM;
-            
-            // PASO 2: Aplicar estilos de paginado temporalmente
-            const originalClasses = container.className;
-            container.classList.add('pdf-generation-mode');
-            
-            // PASO 3: Calcular y aplicar saltos de página inteligentes
-            const applyIntelligentPageBreaks = () => {
-                const sections = container.querySelectorAll('[data-section]');
-                
-                let currentPageHeight = 0;
-                let pageNumber = 1;
-                
-                // Limpiar clases existentes
-                sections.forEach(section => {
-                    section.classList.remove('pdf-page-break-before');
-                    section.style.pageBreakInside = 'avoid';
-                    section.style.breakInside = 'avoid';
-                });
-                
-                sections.forEach((section, index) => {
-                    const sectionHeight = section.offsetHeight || 0;
-                    
-
-                    
-                    // Verificar si la sección cabe en la página actual
-                    if (currentPageHeight + sectionHeight > EFFECTIVE_HEIGHT_PX && currentPageHeight > 0) {
-                        // Nueva página necesaria
-                        section.classList.add('pdf-page-break-before');
-                        section.style.pageBreakBefore = 'always';
-                        pageNumber++;
-                        currentPageHeight = sectionHeight;
-
-                    } else {
-                        currentPageHeight += sectionHeight;
-                    }
-                    
-                    section.setAttribute('data-pdf-page', pageNumber);
-                });
-                
-
-                return pageNumber;
-            };
-            
-            // Aplicar saltos de página después de que los estilos se hayan aplicado
-            await new Promise(resolve => setTimeout(resolve, 200));
-            const totalPages = applyIntelligentPageBreaks();
-            
-            // PASO 3: Configuración de alta calidad para PDF
-            const opt = {
-                margin: [12, 0, 2, 0],
-                filename: `CV_${templateData?.header?.fullName?.replace(/\s+/g, '_') || 'Professional'}.pdf`,
-                image: { 
-                    type: 'jpeg', 
-                    quality: 1.0 // Máxima calidad
-                },
-                html2canvas: {
-                    scale: 2, // Escala reducida para evitar cortes
-                    useCORS: true,
-                    letterRendering: true,
-                    allowTaint: false,
-                    backgroundColor: '#ffffff',
-                    removeContainer: false,
-                    imageTimeout: 15000,
-                    logging: false,
-                    width: null, // Permitir ancho automático
-                    height: null // Permitir altura automática
-                },
-                jsPDF: {
-                    unit: 'mm',
-                    format: 'a4',
-                    orientation: 'portrait',
-                    compress: false // No comprimir para mejor calidad
-                },
-                pagebreak: {
-                    mode: ['avoid-all', 'css', 'legacy'],
-                    before: '.pdf-page-break-before',
-                    after: '.pdf-page-break-after',
-                    avoid: '[data-section]'
-                }
-            };
-
-            // PASO 4: Generar PDF
-
-            await html2pdf().set(opt).from(element).save();
-            
-            // PASO 5: Restaurar estado original
-            container.className = originalClasses;
-            const sections = container.querySelectorAll('[data-section]');
-            sections.forEach(section => {
-                section.classList.remove('pdf-page-break-before');
-                section.style.pageBreakBefore = '';
-                section.style.pageBreakInside = '';
-                section.style.breakInside = '';
-                section.removeAttribute('data-pdf-page');
-            });
-
-            setNotification({
-                open: true,
-                message: `${lang === 'es' ? 'PDF generado exitosamente' : 'PDF generated successfully'} (${totalPages} ${lang === 'es' ? 'páginas' : 'pages'})`,
-                severity: 'success'
-            });
-            dispatch(disablePreviewMode());
-        } catch (error) {
-            // Error generating PDF
-            setNotification({
-                open: true,
-                message: lang === 'es' ? 'Error al generar el PDF' : 'Error generating PDF',
-                severity: 'error'
-            });
-        }
-    };
 
     const handleCloseNotification = () => {
         setNotification({ ...notification, open: false });
