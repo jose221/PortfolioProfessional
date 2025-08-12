@@ -93,6 +93,7 @@ const SimpleEditorLoader = ({ data, lang = 'es' }) => {
     };
 
     const handleExportEditorCV = (newConfig) => {
+
         try {
             // Save to localStorage
             localStorage.setItem('vitae-configured', 'true');
@@ -109,6 +110,11 @@ const SimpleEditorLoader = ({ data, lang = 'es' }) => {
             
             // Force editor re-render by changing key
             setEditorKey(Date.now());
+            setTimeout(()=>{
+                if(isConfigured){
+                    window.location.reload();
+                }
+            }, 100)
         } catch (error) {
             // Error saving configuration
         }
@@ -138,7 +144,7 @@ const SimpleEditorLoader = ({ data, lang = 'es' }) => {
             <InitialConfigModal
                 open={true}
                 onClose={() => {}} // Prevent closing without configuration
-                onSave={handleConfigSave}
+                onSave={handleExportEditorCV}
                 initialTemplate={config.template}
                 initialSections={config.sections}
                 initialColors={config.colors}
@@ -164,7 +170,7 @@ const SimpleEditorLoader = ({ data, lang = 'es' }) => {
                 <InitialConfigModal
                     open={showConfigModal}
                     onClose={handleCloseConfigModal}
-                    onSave={handleConfigSave}
+                    onSave={handleExportEditorCV}
                     initialTemplate={config.template}
                     initialSections={config.sections}
                     initialColors={config.colors}
