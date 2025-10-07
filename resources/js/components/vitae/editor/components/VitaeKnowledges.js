@@ -93,16 +93,16 @@ const safeString = (value, fallback = "") => {
 
 const getLocalizedText = (obj, field, lang, fallback = "") => {
     if (!obj || typeof obj !== 'object') return fallback;
-    
+
     const langField = `${field}_${lang}`;
     if (obj[langField] && typeof obj[langField] === 'string' && obj[langField].trim() !== "") {
         return obj[langField];
     }
-    
+
     if (obj[field] && typeof obj[field] === 'string' && obj[field].trim() !== "") {
         return obj[field];
     }
-    
+
     return fallback;
 };
 
@@ -121,7 +121,7 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
     const { enabled, actions } = useEditor((state) => ({
         enabled: state.options.enabled
     }));
-    
+
     // Redux Preview Mode
     const isPreviewMode = useSelector(getPreviewMode);
 
@@ -145,8 +145,8 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
     };
 
     const handleEdit = (item, index) => {
-        setEditingItem({ 
-            ...item, 
+        setEditingItem({
+            ...item,
             index,
             title: getLocalizedText(item, 'title', lang, "Conocimiento"),
             description: getLocalizedText(item, 'description', lang, "")
@@ -162,7 +162,7 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
                 const originalItem = newData[editingItem.index];
                 const titleField = `title_${lang}`;
                 const descField = `description_${lang}`;
-                
+
                 newData[editingItem.index] = {
                     ...originalItem,
                     [titleField]: editingItem.title,
@@ -197,20 +197,20 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
                 </Box>
 
                 {description && description !== 'Sin contenido' && (
-                    <Box 
+                    <Box
                         sx={{
                             mt: 1,
-                            '& p': { 
+                            '& p': {
                                 margin: '8px 0',
                                 lineHeight: 1.6,
                                 color: textFontColor
                             },
-                            '& ul, & ol': { 
-                                paddingLeft: '20px', 
+                            '& ul, & ol': {
+                                paddingLeft: '20px',
                                 margin: '8px 0',
                                 color: textFontColor
                             },
-                            '& li': { 
+                            '& li': {
                                 margin: '4px 0',
                                 lineHeight: 1.5
                             },
@@ -251,7 +251,7 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
             }}
         >
             {enabled && !isPreviewMode && (
-                <>  
+                <>
                     <ActionButtons>
                         <Tooltip title={lang === 'es' ? 'Eliminar Sección' : 'Delete Section'}>
                             <IconButton size="small" onClick={handleDelete} color="error">
@@ -278,8 +278,8 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
                 </DialogTitle>
                 <DialogContent>
                     <Typography>
-                        {lang === 'es' 
-                            ? '¿Estás seguro de que deseas eliminar esta sección de conocimientos?' 
+                        {lang === 'es'
+                            ? '¿Estás seguro de que deseas eliminar esta sección de conocimientos?'
                             : 'Are you sure you want to delete this knowledge section?'
                         }
                     </Typography>

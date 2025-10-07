@@ -364,7 +364,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
     }));
 
     const [templateData, setTemplateData] = useState(null);
-    
+
     // Function to check if a section is enabled
     const isSectionEnabled = (sectionId) => {
         if (enabledSections.length === 0) {
@@ -373,7 +373,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
         }
         return enabledSections.some(section => section.id === sectionId && section.enabled);
     };
-    
+
     // Create a mapping of section components
     const sectionComponents = {
         header: {
@@ -431,16 +431,16 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
             title: lang === 'es' ? 'Habilidades y Competencias' : 'Skills & Competencies'
         }
     };
-    
+
     // Function to render sections in the configured order
     const renderSectionsInOrder = () => {
         if (enabledSections.length === 0) {
             // If no configuration, render all sections in default order
-            return Object.keys(sectionComponents).map(sectionId => 
+            return Object.keys(sectionComponents).map(sectionId =>
                 renderSection(sectionId, sectionComponents[sectionId])
             ).filter(Boolean);
         }
-        
+
         // Render sections in the user-configured order
         return enabledSections
             .filter(section => section.enabled)
@@ -454,13 +454,13 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
             })
             .filter(Boolean);
     };
-    
+
     // Function to render a single section
     const renderSection = (sectionId, config) => {
         if (!config || config.isEmpty()) {
             return null;
         }
-        
+
         const Component = config.component;
         const props = {
             id: `${sectionId}-section`,
@@ -469,11 +469,11 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
             canvas: true,
             'data-section': sectionId
         };
-        
+
         if (config.title) {
             props.title = config.title;
         }
-        
+
         return (
             <Element
                 key={sectionId}
@@ -482,7 +482,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
             />
         );
     };
-    
+
 
 
     const [notification, setNotification] = useState({ open: false, message: '', severity: 'info' });
@@ -519,9 +519,9 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
 
         sections.forEach((section, index) => {
             const sectionHeight = section.offsetHeight || 0;
-            
 
-            
+
+
             // Verificar si la sección cabe en la página actual
             if (currentPageHeight + sectionHeight > EFFECTIVE_PAGE_HEIGHT && currentPageHeight > 0) {
                 // Nueva página necesaria
@@ -532,11 +532,11 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
             } else {
                 currentPageHeight += sectionHeight;
             }
-            
+
             // Marcar sección con página actual
             section.setAttribute('data-page', currentPage);
         });
-        
+
         setTotalPages(currentPage);
 
     }, [EFFECTIVE_PAGE_HEIGHT]);
@@ -545,7 +545,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
     const togglePagination = useCallback(() => {
         setPaginationEnabled(prev => {
             const newValue = !prev;
-            
+
             // Aplicar o remover clase CSS al contenedor usando querySelector
             const container = document.querySelector('#cv-container');
             if (container) {
@@ -566,7 +566,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
                     setTotalPages(1);
                 }
             }
-            
+
             return newValue;
         });
     }, [calculatePageBreaks]);
@@ -594,7 +594,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
         try {
             // Get the current editor state from Craft.js
             const editorState = query.serialize();
-            
+
             // Create the export object compatible with Craft.js
             const exportData = {
                 version: '1.0.0',
@@ -605,7 +605,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
                         // List of components that need to be available when importing
                         components: [
                             'Box',
-                            'Container', 
+                            'Container',
                             'CVHeader',
                             'CVSummary',
                             'CVContact',
@@ -631,13 +631,13 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
                     description: lang === 'es' ? 'Exportación de CV desde el editor' : 'CV export from editor'
                 }
             };
-            
+
             // Convert to JSON string
             const jsonString = JSON.stringify(exportData, null, 2);
-            
+
             // Create data URL (more reliable than blob for downloads)
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(jsonString);
-            
+
             // Create download link
             const link = document.createElement('a');
             link.href = dataStr;
@@ -646,16 +646,16 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
             link.setAttribute('download', filename);
             link.style.display = 'none';
             link.rel = 'noopener';
-            
+
             // Add to DOM and trigger download
             document.body.appendChild(link);
             link.click();
-            
+
             // Clean up after a short delay
             setTimeout(() => {
                 document.body.removeChild(link);
             }, 100);
-            
+
             return true;
         } catch (error) {
             console.error('Error exporting CV as JSON:', error);
@@ -726,8 +726,8 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
             // PASO 4: Configuración de alta calidad para PDF
             const opt = {
                 margin: [12, 0, 2, 0],
-                image: { 
-                    type: 'jpeg', 
+                image: {
+                    type: 'jpeg',
                     quality: 1.0 // Máxima calidad
                 },
                 html2canvas: {
@@ -830,7 +830,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
 
             // Crear un objeto File desde el blob
             const filename = `cv-${new Date().toISOString().split('T')[0]}.pdf`;
-            const pdfFile = new File([pdfBlob], filename, { 
+            const pdfFile = new File([pdfBlob], filename, {
                 type: 'application/pdf',
                 lastModified: Date.now()
             });
@@ -842,8 +842,8 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
             };
 
             // Make API call to save CV
-            const primary_url = window.url_api + "/admin/history-curriculum-vitae";
             const httpRequest = new DefaultHttpRequest();
+            const primary_url = window.url_api + "/admin/history-curriculum-vitae";
             const response = await httpRequest.create(primary_url, cvData);
 
             if(response.code != 200){
@@ -898,12 +898,12 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
         try {
             // First save to history
             const saveSuccess = await saveCVToHistory();
-            
+
             if (saveSuccess) {
                 // Then download PDF
                 await handleDownloadPDF();
                 setShowSaveOptionsModal(false);
-                
+
                 setNotification({
                     open: true,
                     message: lang === 'es' ? 'CV guardado en historial y descargado exitosamente' : 'CV saved to history and downloaded successfully',
@@ -1012,7 +1012,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
                         )}
 
                         <PreviewModeButton />
-                        
+
                         {/* Indicador de Páginas */}
                         {paginationEnabled && (
                             <Box sx={{
@@ -1032,7 +1032,7 @@ const VitaeEditorContent = ({ data, lang, onOpenConfiguration, enabledSections =
                             </Box>
                         )}
 
-                
+
                     </Box>
                 </Toolbar>
             </EditorToolbar>

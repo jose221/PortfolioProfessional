@@ -1,10 +1,10 @@
 // resources/js/components/HttpRequest.js
 
-import { DefaultService } from "../../services/DefaultService";
+import {DefaultService} from "../../services/DefaultService";
 
 export default class DefaultHttpRequest{
 
-   
+
     /**
      * Obtiene un único item del servidor
      * @param {string} url - URL del endpoint
@@ -48,6 +48,18 @@ export default class DefaultHttpRequest{
     async create(url, params) {
         let response = await DefaultService.create(url, params);
         return response;
+    }
+
+
+    /**
+     * Sends a POST request to the specified URL with the provided parameters.
+     *
+     * @param {string} url - The URL endpoint where the POST request is sent.
+     * @param {Object} params - The parameters to include in the POST request body.
+     * @return {Promise<any>} A promise that resolves to the response of the POST request.
+     */
+    async post(url, params) {
+        return await DefaultService.post(url, params);
     }
 
     /**

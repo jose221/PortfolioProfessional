@@ -81,6 +81,20 @@ export class DefaultService{
         }
         return items;
     }
+
+    static async post(url, params = {}, config = header){
+        let items = null;
+        try {
+            const data = await this.formData(params)
+            items = await axios.post(url, data, config);
+            items = items.data;
+        }
+        catch (e){
+            console.log(e);
+        }
+        return items;
+    }
+
     static async edit(url, params = {}, config = header){
         let items = null;
         if(params.id) delete params.id;

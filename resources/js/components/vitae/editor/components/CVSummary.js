@@ -1,8 +1,12 @@
 import React from 'react';
 import { useNode } from '@craftjs/core';
-import { Box, Typography, Paper } from '@mui/material';
+import {Box, Typography, Paper, IconButton} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { getVitaeTheme } from '../contexts/ThemeContext';
+import {useSelector} from "react-redux";
+import { getPreviewMode } from '../../../../redux/selectors/preview-mode-selectors';
+import EditIcon from "@mui/icons-material/Edit";
+import DefaultHttpRequest from "../../../request/DefaultHttpRequest";
 
 // Personalización del vitae
 const theme = getVitaeTheme();
@@ -13,6 +17,7 @@ const titleFontColor = theme.colors.sectionTitle;
 const textFontSize =  '12px';
 const titleFontSize = '15px';
 const subtitleFontSize = '13px';
+
 // Personalización del vitae
 const SummaryContainer = styled(Box)(({ theme }) => ({
     marginBottom: theme.spacing(1)
@@ -67,12 +72,30 @@ export const CVSummary = ({ title = "Resumen Profesional", data = {}, lang = 'es
         selected: state.events.selected
     }));
 
-    const { content = "" } = data;
-
+    let { content = "" } = data;
+    const isPreviewMode = useSelector(getPreviewMode);
     // Don't render if no content
     if (!content || content.trim() === "" || content === "Sin contenido") {
         return null;
     }
+
+    const handleEditAI = async () => {
+        const segment='myInformation'
+        const attribute=`description_${lang}`
+        const httpRequest = new DefaultHttpRequest();
+        const primary_url = window.url_api + `/admin/all-information/ai/recommendation`;
+        const response = await httpRequest.post(primary_url,{
+            lang: lang,
+            attribute: attribute,
+            content: content,
+            title: title,
+        })
+        if(response.code){
+            setProp((props) => {
+                props.data.content = response.data.current;
+            });
+        }
+    };
 
     // Function to strip HTML tags for editing but preserve for display
     const stripHtml = (html) => {
@@ -95,27 +118,35 @@ export const CVSummary = ({ title = "Resumen Profesional", data = {}, lang = 'es
                 cursor: selected ? 'move' : 'default'
             }}
         >
-            <SectionTitle
-                contentEditable
-                suppressContentEditableWarning
-                onBlur={(e) => {
-                    setProp((props) => {
-                        props.title = e.target.innerText;
-                    });
-                }}
-                sx={{
-                    '&:focus': {
-                        outline: '1px dashed #667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.05)',
-                        padding: '4px 8px',
-                        borderRadius: '4px'
-                    }
-                }}
-            >
-                {title}
-            </SectionTitle>
+            <div class='d-flex justify-content-between align-items-center'>
+                <SectionTitle
+                    contentEditable
+                    suppressContentEditableWarning
+                    onBlur={(e) => {
+                        setProp((props) => {
+                            props.title = e.target.innerText;
+                        });
+                    }}
+                    sx={{
+                        '&:focus': {
+                            outline: '1px dashed #667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.05)',
+                            padding: '4px 8px',
+                            borderRadius: '4px'
+                        }
+                    }}
+                >
+                    {title}
+                </SectionTitle>
+                {!isPreviewMode && (
+                    <IconButton size="small" onClick={() => handleEditAI()}>
+                        <EditIcon fontSize="small" />
+                    </IconButton>
+                )}
+            </div>
 
             <SummaryContent elevation={0}>
+
                 <SummaryText
                     component="div"
                     contentEditable
