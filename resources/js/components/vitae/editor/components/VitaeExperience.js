@@ -26,6 +26,7 @@ import {
 import { styled } from '@mui/material/styles';
 import SunEditor from 'suneditor-react';
 import { getVitaeTheme } from '../contexts/ThemeContext';
+import AIEditButton from "./common/AIEditButton";
 
 // Personalización del vitae
 const theme = getVitaeTheme();
@@ -91,16 +92,16 @@ const safeString = (value, fallback = "") => {
 
 const getLocalizedText = (obj, field, lang, fallback = "") => {
     if (!obj || typeof obj !== 'object') return fallback;
-    
+
     const langField = `${field}_${lang}`;
     if (obj[langField] && typeof obj[langField] === 'string' && obj[langField].trim() !== "") {
         return obj[langField];
     }
-    
+
     if (obj[field] && typeof obj[field] === 'string' && obj[field].trim() !== "") {
         return obj[field];
     }
-    
+
     return fallback;
 };
 
@@ -119,7 +120,7 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
     const { enabled, actions } = useEditor((state) => ({
         enabled: state.options.enabled
     }));
-    
+
     // Redux Preview Mode
     const isPreviewMode = useSelector(getPreviewMode);
 
@@ -142,8 +143,8 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
     };
 
     const handleEdit = (item, index) => {
-        setEditingItem({ 
-            ...item, 
+        setEditingItem({
+            ...item,
             index,
             technologiesText: Array.isArray(item.technologies) ? item.technologies.join(', ') : ''
         });
@@ -153,7 +154,7 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
     const handleSaveEdit = () => {
         if (editingItem) {
             const updatedItem = { ...editingItem };
-            
+
             // Convert technologies text back to array
             if (editingItem.technologiesText) {
                 updatedItem.technologies = editingItem.technologiesText
@@ -163,11 +164,11 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
             } else {
                 updatedItem.technologies = [];
             }
-            
+
             // Remove the temporary technologiesText field
             delete updatedItem.technologiesText;
             delete updatedItem.index;
-            
+
             setProp(props => {
                 const newData = [...props.data];
                 newData[editingItem.index] = updatedItem;
@@ -176,6 +177,15 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
         }
         setEditDialogOpen(false);
         setEditingItem(null);
+    };
+    const handleAIResponse = (response, itemIndex) => {
+        if (response.code && response.data) {
+            setProp((props) => {
+                if (props.data[itemIndex]) {
+                    props.data[itemIndex].description = response.data.current;
+                }
+            });
+        }
     };
 
     const renderExperienceItem = (item, index) => {
@@ -211,13 +221,22 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
                                 <EditIcon fontSize="small" />
                             </IconButton>
                         )}
+                        {!isPreviewMode && (
+                            <AIEditButton
+                                lang={lang}
+                                attribute={`description_${lang}`}
+                                content={description}
+                                title={title}
+                                onAIResponse={(response) => handleAIResponse(response, index)}
+                            />
+                        )}
                     </Box>
                 </Box>
 
                 {description && (
                     <Box sx={{ mt: 1, mb: 1 }}>
-                        <Typography 
-                            variant="body2" 
+                        <Typography
+                            variant="body2"
                             sx={{ color: textFontColor, lineHeight: 1.6, fontSize: textFontSize }}
                             dangerouslySetInnerHTML={{ __html: description }}
                         />
@@ -233,7 +252,7 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
                             {technologies.map((tech, techIndex) => {
                                 const techText = safeString(tech, "");
                                 if (!techText.trim()) return null;
-                                
+
                                 return (
                                     <Chip
                                         key={techIndex}
@@ -298,8 +317,8 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
                 </DialogTitle>
                 <DialogContent>
                     <Typography>
-                        {lang === 'es' 
-                            ? '¿Estás seguro de que deseas eliminar esta sección de experiencia?' 
+                        {lang === 'es'
+                            ? '¿Estás seguro de que deseas eliminar esta sección de experiencia?'
                             : 'Are you sure you want to delete this experience section?'
                         }
                     </Typography>
@@ -362,7 +381,7 @@ const VitaeExperience = ({ title, data, lang = 'es' }) => {
                                     height: 200,
                                 }}
                             />
-                            
+
                             <TextField
                                 label={lang === 'es' ? 'Tecnologías (separadas por comas)' : 'Technologies (comma separated)'}
                                 value={editingItem.technologiesText || ''}
