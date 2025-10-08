@@ -11,10 +11,19 @@ import {
     Divider,
     Stack,
     TextField,
-    Alert
+    Alert,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    CircularProgress,
+    Backdrop
 } from '@mui/material';
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import CloseIcon from "@mui/icons-material/Close";
+import RestoreIcon from "@mui/icons-material/Restore";
+import EditIcon from "@mui/icons-material/Edit";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
 import DefaultHttpRequest from "../../../../request/DefaultHttpRequest";
@@ -44,6 +53,9 @@ export const AIEditButton = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAdvancedMode, setIsAdvancedMode] = useState(false);
     const [customInstruction, setCustomInstruction] = useState('');
+    const [showResults, setShowResults] = useState(false);
+    const [aiResponse, setAiResponse] = useState(null);
+    const [originalContent, setOriginalContent] = useState('');
     const [currentProps, setCurrentProps] = useState({
         lang,
         attribute,
@@ -61,6 +73,7 @@ export const AIEditButton = ({
             title,
             segment
         });
+        setOriginalContent(content); // Guardar contenido original
     }, [lang, attribute, content, title, segment]);
 
     // Función para obtener textos según el idioma
@@ -76,7 +89,12 @@ export const AIEditButton = ({
                 instructionPlaceholder: 'Ej: Mejora la ortografía y gramática, hazlo más profesional y directo...',
                 cancel: 'Cancelar',
                 generate: 'Generar',
-                alertMessage: 'Los cambios generados por IA son temporales y no se guardará en ninguna base de datos.'
+                alertMessage: 'Los cambios generados por IA son temporales y no se guardará en ninguna base de datos.',
+                resultsTitle: 'Resultado generado por IA',
+                backToOriginal: 'Regresar original',
+                modifyResponse: 'Modificar actual',
+                keepResponse: 'Conservar',
+                generatingNew: 'Generando nueva versión...'
             },
             'en': {
                 tooltip: 'Improve segment with AI',
@@ -88,7 +106,12 @@ export const AIEditButton = ({
                 instructionPlaceholder: 'Ex: Improve spelling and grammar, make it more professional and direct...',
                 cancel: 'Cancel',
                 generate: 'Generate',
-                alertMessage: 'AI-generated changes are temporary and will not be saved to any database.'
+                alertMessage: 'AI-generated changes are temporary and will not be saved to any database.',
+                resultsTitle: 'AI-generated result',
+                backToOriginal: 'Back to original',
+                modifyResponse: 'Modify current',
+                keepResponse: 'Keep',
+                generatingNew: 'Generating new version...'
             },
             'fr': {
                 tooltip: 'Améliorer le segment avec IA',
@@ -100,7 +123,12 @@ export const AIEditButton = ({
                 instructionPlaceholder: 'Ex: Améliorer l\'orthographe et la grammaire, le rendre plus professionnel...',
                 cancel: 'Annuler',
                 generate: 'Générer',
-                alertMessage: 'Les modifications générées par IA sont temporaires et ne seront pas sauvegardées dans aucune base de données.'
+                alertMessage: 'Les modifications générées par IA sont temporaires et ne seront pas sauvegardées dans aucune base de données.',
+                resultsTitle: 'Résultat généré par IA',
+                backToOriginal: 'Retour à l\'original',
+                modifyResponse: 'Modifier actuel',
+                keepResponse: 'Conserver',
+                generatingNew: 'Génération nouvelle version...'
             },
             'de': {
                 tooltip: 'Segment mit KI verbessern',
@@ -112,7 +140,12 @@ export const AIEditButton = ({
                 instructionPlaceholder: 'Bsp: Rechtschreibung und Grammatik verbessern, professioneller machen...',
                 cancel: 'Abbrechen',
                 generate: 'Generieren',
-                alertMessage: 'KI-generierte Änderungen sind temporär und werden in keiner Datenbank gespeichert.'
+                alertMessage: 'KI-generierte Änderungen sind temporär und werden in keiner Datenbank gespeichert.',
+                resultsTitle: 'KI-generiertes Ergebnis',
+                backToOriginal: 'Zurück zum Original',
+                modifyResponse: 'Aktuell ändern',
+                keepResponse: 'Behalten',
+                generatingNew: 'Generiere neue Version...'
             },
             'it': {
                 tooltip: 'Migliorare segmento con IA',
@@ -124,7 +157,12 @@ export const AIEditButton = ({
                 instructionPlaceholder: 'Es: Migliora ortografia e grammatica, rendilo più professionale...',
                 cancel: 'Annulla',
                 generate: 'Genera',
-                alertMessage: 'Le modifiche generate dall\'IA sono temporanee e non verranno salvate in nessun database.'
+                alertMessage: 'Le modifiche generate dall\'IA sono temporanee e non verranno salvate in nessun database.',
+                resultsTitle: 'Risultato generato dall\'IA',
+                backToOriginal: 'Torna all\'originale',
+                modifyResponse: 'Modifica attuale',
+                keepResponse: 'Mantieni',
+                generatingNew: 'Generando nuova versione...'
             },
             'pt': {
                 tooltip: 'Melhorar segmento com IA',
@@ -136,7 +174,12 @@ export const AIEditButton = ({
                 instructionPlaceholder: 'Ex: Melhore ortografia e gramática, torne mais profissional...',
                 cancel: 'Cancelar',
                 generate: 'Gerar',
-                alertMessage: 'As alterações geradas por IA são temporárias e não serão salvas em nenhum banco de dados.'
+                alertMessage: 'As alterações geradas por IA são temporárias e não serão salvas em nenhum banco de dados.',
+                resultsTitle: 'Resultado gerado por IA',
+                backToOriginal: 'Voltar ao original',
+                modifyResponse: 'Modificar atual',
+                keepResponse: 'Manter',
+                generatingNew: 'Gerando nova versão...'
             }
         };
 
@@ -145,12 +188,47 @@ export const AIEditButton = ({
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
+        setShowResults(false);
+        setAiResponse(null);
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setIsAdvancedMode(false);
         setCustomInstruction('');
+        setShowResults(false);
+        setAiResponse(null);
+    };
+
+    const handleBackToOriginal = () => {
+        setShowResults(false);
+        setAiResponse(null);
+        setIsAdvancedMode(false);
+        setCustomInstruction('');
+        // Restaurar contenido original en currentProps
+        setCurrentProps(prev => ({
+            ...prev,
+            content: originalContent
+        }));
+    };
+
+    const handleModifyResponse = () => {
+        setShowResults(false);
+        setIsAdvancedMode(true);
+        // Mantener la respuesta actual como contenido base para modificar
+        if (aiResponse && aiResponse.data && aiResponse.data.current) {
+            setCurrentProps(prev => ({
+                ...prev,
+                content: aiResponse.data.current
+            }));
+        }
+    };
+
+    const handleKeepResponse = () => {
+        if (aiResponse && onAIResponse) {
+            onAIResponse(aiResponse);
+        }
+        handleCloseModal();
     };
 
     const handleEditAI = async () => {
@@ -186,10 +264,12 @@ export const AIEditButton = ({
 
             const response = await httpRequest.post(primary_url, requestData);
 
-            // Llamar al callback con la respuesta completa
-            if (response.code && onAIResponse) {
-                onAIResponse(response);
-                handleCloseModal(); // Cerrar modal después de generar
+            // Mostrar resultados en lugar de cerrar el modal
+            if (response.code) {
+                setAiResponse(response);
+                setShowResults(true);
+                setIsAdvancedMode(false);
+                setCustomInstruction('');
             } else {
                 console.error('AIEditButton: Error en la respuesta de la IA', response);
             }
@@ -200,6 +280,20 @@ export const AIEditButton = ({
             setIsLoading(false);
         }
     };
+
+    const handleLanguageChange = (event) => {
+        const newLang = event.target.value;
+        setCurrentProps(prev => ({
+            ...prev,
+            lang: newLang
+        }));
+    };
+
+    // Lista de idiomas disponibles
+    const availableLanguages = [
+        { code: 'es', name: 'Español' },
+        { code: 'en', name: 'English' },
+    ];
 
     const texts = getTexts();
 
@@ -226,8 +320,8 @@ export const AIEditButton = ({
                 onClose={handleCloseModal}
                 sx={{
                     '& .MuiDrawer-paper': {
-                        width: { xs: '100%', sm: '450px' },
-                        maxWidth: '30vw',
+                        width: { xs: '100%', sm: '550px' },
+                        maxWidth: '35vw',
                         minWidth: '400px'
                     }
                 }}
@@ -261,15 +355,24 @@ export const AIEditButton = ({
                     </Alert>
 
                     {/* Content */}
-                    <Stack spacing={3} sx={{ flex: 1, overflow: 'hidden' }}>
-                        {/* Idioma */}
-                        <TextField
-                            label={texts.language}
-                            value={currentProps.lang.toUpperCase()}
-                            disabled
-                            size="small"
-                            fullWidth
-                        />
+                    <Stack spacing={3} sx={{ flex: 1, overflow: 'auto', paddingRight: 1 }}>
+                        {/* Selector de idioma */}
+                        <FormControl size="small" fullWidth>
+                            <InputLabel id="language-select-label">{texts.language}</InputLabel>
+                            <Select
+                                labelId="language-select-label"
+                                value={currentProps.lang}
+                                label={texts.language}
+                                onChange={handleLanguageChange}
+                                disabled={isLoading}
+                            >
+                                {availableLanguages.map((language) => (
+                                    <MenuItem key={language.code} value={language.code}>
+                                        {language.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
 
                         {/* Contenido actual con SunEditor */}
                         <Box>
@@ -356,33 +459,159 @@ export const AIEditButton = ({
                                 </Box>
                             </Box>
                         )}
+
+                        {/* Resultados de IA */}
+                        {showResults && aiResponse && (
+                            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                                <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+                                    {texts.resultsTitle}
+                                </Typography>
+                                <Box sx={{
+                                    flex: 1,
+                                    border: '1px solid #e0e0e0',
+                                    borderRadius: 1,
+                                    p: 2,
+                                    overflowY: 'auto',
+                                    maxHeight: '300px',
+                                    '& .sun-editor': {
+                                        border: 'none !important'
+                                    }
+                                }}>
+                                    <SunEditor
+                                        lang={currentProps.lang}
+                                        setContents={aiResponse.data.current}
+                                        disable={true}
+                                        height="100%"
+                                        setOptions={{
+                                            buttonList: [],
+                                            resizingBar: false,
+                                            showPathLabel: false,
+                                            charCounter: false
+                                        }}
+                                    />
+                                </Box>
+                            </Box>
+                        )}
                     </Stack>
 
                     {/* Footer */}
                     <Box sx={{ mt: 3, pt: 2, borderTop: 1, borderColor: 'divider' }}>
-                        <Stack direction="row" spacing={2} justifyContent="flex-end">
-                            <Button
-                                variant="outlined"
-                                onClick={handleCloseModal}
-                                disabled={isLoading}
-                            >
-                                {texts.cancel}
-                            </Button>
-                            <Button
-                                variant="contained"
-                                onClick={handleEditAI}
-                                disabled={isLoading}
-                                sx={{
-                                    backgroundColor: '#667eea',
-                                    '&:hover': {
-                                        backgroundColor: '#5a6fd8'
-                                    }
-                                }}
-                            >
-                                {isLoading ? 'Generando...' : texts.generate}
-                            </Button>
-                        </Stack>
+                        {showResults ? (
+                            // Footer con iconos cuando se muestran resultados
+                            <Stack direction="row" spacing={3} justifyContent="center" alignItems="center">
+                                <Tooltip title={texts.backToOriginal} arrow placement="top">
+                                    <IconButton
+                                        onClick={handleBackToOriginal}
+                                        disabled={isLoading}
+                                        size="large"
+                                        sx={{
+                                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                                            border: '2px solid #667eea',
+                                            color: '#667eea',
+                                            '&:hover': {
+                                                backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                                                borderColor: '#5a6fd8',
+                                                color: '#5a6fd8'
+                                            }
+                                        }}
+                                    >
+                                        <RestoreIcon fontSize="medium" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title={texts.modifyResponse} arrow placement="top">
+                                    <IconButton
+                                        onClick={handleModifyResponse}
+                                        disabled={isLoading}
+                                        size="large"
+                                        sx={{
+                                            backgroundColor: '#667eea',
+                                            color: 'white',
+                                            '&:hover': {
+                                                backgroundColor: '#5a6fd8'
+                                            }
+                                        }}
+                                    >
+                                        <EditIcon fontSize="medium" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title={texts.keepResponse} arrow placement="top">
+                                    <IconButton
+                                        onClick={handleKeepResponse}
+                                        disabled={isLoading}
+                                        size="large"
+                                        sx={{
+                                            backgroundColor: '#28a745',
+                                            color: 'white',
+                                            '&:hover': {
+                                                backgroundColor: '#218838'
+                                            }
+                                        }}
+                                    >
+                                        <CheckCircleIcon fontSize="medium" />
+                                    </IconButton>
+                                </Tooltip>
+                            </Stack>
+                        ) : (
+                            // Footer normal con botones de cancelar/generar
+                            <Stack direction="row" spacing={2} justifyContent="flex-end">
+                                <Button
+                                    variant="outlined"
+                                    onClick={handleCloseModal}
+                                    disabled={isLoading}
+                                >
+                                    {texts.cancel}
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleEditAI}
+                                    disabled={isLoading}
+                                    sx={{
+                                        backgroundColor: '#667eea',
+                                        '&:hover': {
+                                            backgroundColor: '#5a6fd8'
+                                        }
+                                    }}
+                                >
+                                    {isLoading ? texts.generatingNew : texts.generate}
+                                </Button>
+                            </Stack>
+                        )}
                     </Box>
+
+                    {/* Loading overlay */}
+                    {isLoading && (
+                        <Backdrop
+                            open={isLoading}
+                            sx={{
+                                position: 'absolute',
+                                zIndex: 9999,
+                                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                backdropFilter: 'blur(2px)'
+                            }}
+                        >
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                gap: 2
+                            }}>
+                                <CircularProgress
+                                    size={60}
+                                    sx={{ color: '#667eea' }}
+                                />
+                                <Typography
+                                    variant="h6"
+                                    sx={{
+                                        color: '#667eea',
+                                        fontWeight: 600,
+                                        textAlign: 'center'
+                                    }}
+                                >
+                                    {texts.generatingNew}
+                                </Typography>
+                            </Box>
+                        </Backdrop>
+                    )}
                 </Box>
             </Drawer>
         </>
