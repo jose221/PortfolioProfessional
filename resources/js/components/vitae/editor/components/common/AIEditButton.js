@@ -355,7 +355,7 @@ export const AIEditButton = ({
                     </Alert>
 
                     {/* Content */}
-                    <Stack spacing={3} sx={{ flex: 1, overflow: 'auto', paddingRight: 1 }}>
+                    <Stack spacing={3} sx={{ flex: 1, overflow: 'auto', paddingRight: 1, paddingTop: '10px' }}>
                         {/* Selector de idioma */}
                         <FormControl size="small" fullWidth>
                             <InputLabel id="language-select-label">{texts.language}</InputLabel>
