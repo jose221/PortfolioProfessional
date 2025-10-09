@@ -17,7 +17,8 @@ import Button from "@mui/material/Button";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import SaveIcon from '@mui/icons-material/Save';
-
+import AIEditButton from "../vitae/editor/components/common/AIEditButton";
+import Box from "@mui/material/Box";
 
 let primary_url = window.url_api+"/admin/user";
 
@@ -56,6 +57,12 @@ class FormHomeComponent extends RComponent {
         this.state.isSuccess = false;
         this.dispatchStore(this.state);
     }
+    handleAIResponse = (response, key) => {
+        if (this.state.form[key]) {
+            const newDescription = response.data?.current ?? data[key] ?? '';
+            this.handleChangeForm({target:{name: key, value:newDescription}})
+        }
+    };
 
     render() {
         return (
@@ -152,53 +159,93 @@ class FormHomeComponent extends RComponent {
                                     helperText="Ciudad donde vives actualmente en inglés"
                                 />
 
-                                <div className={(!this.isValid(this.state.form.description_es, false)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error'}>
+                                <div className={(!this.isValid(this.state.form.description_es, false)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error position-relative'}>
                                     <label>Descripción en español</label>
                                     <SunEditor lang="es"
                                                id="outlined-error"
                                                placeholder="Descripción en español"
                                                name="description_es"
-                                               height="100%"
+                                               height="200px"
                                                onChange={(e)=>this.handleChangeForm({target:{name: 'description_es', value:e}})}
                                                setContents={this.state.form.description_es || ' '}
                                                helperText="Descripción de tu perfil en español"
                                     />
                                     <FormHelperText error={this.isValid(this.state.form.description_es, false)}>Descripción de tu perfil en español</FormHelperText>
+                                    <Box sx={{ position: 'absolute', bottom: 45, right: 8, zIndex: 10 }}>
+                                        <AIEditButton
+                                            lang={'es'}
+                                            attribute={`description_es`}
+                                            content={this.state.form.description_es || ''}
+                                            title={this.state.form.header_text_es || ''}
+                                            onAIResponse={(response) => this.handleAIResponse(response, 'description_es')}
+                                        />
+                                    </Box>
                                 </div>
                                 <div className={(!this.isValid(this.state.form.description_en, false)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error'}>
                                     <label>Descripción en inglés</label>
                                     <SunEditor lang="es"
-                                               id="outlined-error"
+                                               id="outlined-error-description_en"
                                                placeholder="Descripción en inglés"
                                                name="description_en"
-                                               height="100%"
+                                               height="200px"
                                                onChange={(e)=>this.handleChangeForm({target:{name: 'description_en', value:e}})}
                                                setContents={this.state.form.description_en || ' '}
                                                helperText="Descripción de tu perfil en inglés"
                                     />
                                     <FormHelperText error={this.isValid(this.state.form.description_en, false)}>Descripción de tu perfil en inglés</FormHelperText>
+                                    <Box sx={{ position: 'absolute', bottom: 45, right: 8, zIndex: 10 }}>
+                                        <AIEditButton
+                                            lang={'en'}
+                                            attribute={`description_en`}
+                                            content={this.state.form.description_en || ''}
+                                            title={this.state.form.header_text_en || ''}
+                                            onAIResponse={(response) => this.handleAIResponse(response, 'description_en')}
+                                        />
+                                    </Box>
                                 </div>
+                                <div className="col-md-6 mt-3 p-1 position-relative">
+                                    <TextField
+                                        className="w-100"
+                                        error={this.isValid(this.state.form.header_text_es, false)}
+                                        id="outlined-error"
+                                        label="Texto o descripción del header en Español"
+                                        name="header_text_es"
+                                        onChange={this.handleChangeForm}
+                                        value={this.state.form.header_text_es || ' '}
+                                        helperText="Texto o descripción del header en Español (ej: Desarrollador de aplicaciones multiplataforma)"
+                                    />
+                                    <Box sx={{ position: 'absolute', bottom: 60, right: 8, zIndex: 10 }}>
+                                        <AIEditButton
+                                            lang={'es'}
+                                            attribute={`header_text_es`}
+                                            content={this.state.form.header_text_es || ''}
 
-                                <TextField
-                                    className="col-md-6 mt-3 p-1"
-                                    error={this.isValid(this.state.form.header_text_es, false)}
-                                    id="outlined-error"
-                                    label="Texto o descripción del header en Español"
-                                    name="header_text_es"
-                                    onChange={this.handleChangeForm}
-                                    value={this.state.form.header_text_es || ' '}
-                                    helperText="Texto o descripción del header en Español"
-                                />
-                                <TextField
-                                    className="col-md-6 mt-3 p-1"
-                                    id="outlined-error"
-                                    label="Texto o descripción del header en Inglés"
-                                    name="header_text_en"
-                                    onChange={this.handleChangeForm}
-                                    error={this.isValid(this.state.form.header_text_en, false)}
-                                    value={this.state.form.header_text_en || ' '}
-                                    helperText="Texto o descripción del header en Inglés"
-                                />
+                                            title={"Cargo o título profesional(ej: Desarrollador de aplicaciones multiplataforma) en formato texto plano no html"}
+                                            onAIResponse={(response) => this.handleAIResponse(response, 'header_text_es')}
+                                        />
+                                    </Box>
+                                </div>
+                                <div className="col-md-6 mt-3 p-1 position-relative">
+                                    <TextField
+                                        className="w-100"
+                                        id="outlined-error"
+                                        label="Texto o descripción del header en Inglés"
+                                        name="header_text_en"
+                                        onChange={this.handleChangeForm}
+                                        error={this.isValid(this.state.form.header_text_en, false)}
+                                        value={this.state.form.header_text_en || ' '}
+                                        helperText="Texto o descripción del header en Inglés(e.g., Cross-platform Application Developer)"
+                                    />
+                                    <Box sx={{ position: 'absolute', bottom: 60, right: 8, zIndex: 10 }}>
+                                        <AIEditButton
+                                            lang={'en'}
+                                            attribute={`header_text_en`}
+                                            content={this.state.form.header_text_en || ''}
+                                            title={"professional title (e.g., Cross-platform Application Developer)  en formato texto plano no html"}
+                                            onAIResponse={(response) => this.handleAIResponse(response, 'header_text_en')}
+                                        />
+                                    </Box>
+                                </div>
 
                                 <Fab type="submit" color="primary" sx={{
                                     position: "fixed",
