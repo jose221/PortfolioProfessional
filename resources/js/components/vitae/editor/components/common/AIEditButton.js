@@ -289,6 +289,18 @@ export const AIEditButton = ({
         }));
     };
 
+    const handleContentChange = (newContent) => {
+        setCurrentProps(prev => ({
+            ...prev,
+            content: newContent
+        }));
+
+        // Llamar al callback onChange si está definido
+        if (onChange) {
+            onChange(newContent);
+        }
+    };
+
     // Lista de idiomas disponibles
     const availableLanguages = [
         { code: 'es', name: 'Español' },
@@ -319,10 +331,12 @@ export const AIEditButton = ({
                 open={isModalOpen}
                 onClose={handleCloseModal}
                 sx={{
+                    zIndex: 9999,
                     '& .MuiDrawer-paper': {
                         width: { xs: '100%', sm: '550px' },
                         maxWidth: '35vw',
-                        minWidth: '400px'
+                        minWidth: '400px',
+                        zIndex: 9999
                     }
                 }}
             >
@@ -375,30 +389,41 @@ export const AIEditButton = ({
                         </FormControl>
 
                         {/* Contenido actual con SunEditor */}
-                        <Box>
+                        <Box sx={{paddingTop: '30px'}}>
                             <Typography variant="body2" sx={{ mb: 1, fontWeight: 500 }}>
                                 {texts.content}
                             </Typography>
                             <Box sx={{
+                                flex: 1,
                                 border: '1px solid #e0e0e0',
                                 borderRadius: 1,
                                 '& .sun-editor': {
                                     border: 'none !important'
-                                },
-                                '& .se-toolbar': {
-                                    display: 'none !important'
                                 }
                             }}>
                                 <SunEditor
                                     lang={currentProps.lang}
                                     setContents={currentProps.content}
-                                    disable={true}
-                                    height="180px"
+                                    onChange={handleContentChange}
+                                    height="200px"
                                     setOptions={{
-                                        buttonList: [],
+                                        buttonList: [
+                                            ['undo', 'redo'],
+                                            ['bold', 'underline', 'italic'],
+                                            ['removeFormat'],
+                                            ['list', 'indent', 'outdent'],
+                                            ['paragraphStyle']
+                                        ],
                                         resizingBar: false,
                                         showPathLabel: false,
-                                        charCounter: false
+                                        charCounter: false,
+                                        defaultParagraphSeparator: 'div',
+                                        font: ['Arial', 'tahoma', 'Courier New'],
+                                        fontSize: [12, 14, 16, 18],
+                                        paragraphStyles: {
+                                            'Normal': 'font-size: 14px; line-height: 1.6;',
+                                            'Quote': 'font-style: italic; color: #666; border-left: 3px solid #ccc; padding-left: 10px;'
+                                        }
                                     }}
                                 />
                             </Box>
@@ -435,7 +460,7 @@ export const AIEditButton = ({
                                         placeholder={texts.instructionPlaceholder}
                                         setContents={customInstruction}
                                         onChange={setCustomInstruction}
-                                        height="150px"
+                                        height="200px"
                                         setOptions={{
                                             buttonList: [
                                                 ['undo', 'redo'],

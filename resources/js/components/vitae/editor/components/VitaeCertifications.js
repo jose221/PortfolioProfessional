@@ -25,6 +25,8 @@ import {
 import { styled } from '@mui/material/styles';
 import SunEditor from 'suneditor-react';
 import { getVitaeTheme } from '../contexts/ThemeContext';
+import AIEditButton from "./common/AIEditButton";
+
 
 // Personalización del vitae
 const theme = getVitaeTheme();
@@ -91,16 +93,16 @@ const safeString = (value, fallback = "") => {
 
 const getLocalizedText = (obj, field, lang, fallback = "") => {
     if (!obj || typeof obj !== 'object') return fallback;
-    
+
     const langField = `${field}_${lang}`;
     if (obj[langField] && typeof obj[langField] === 'string' && obj[langField].trim() !== "") {
         return obj[langField];
     }
-    
+
     if (obj[field] && typeof obj[field] === 'string' && obj[field].trim() !== "") {
         return obj[field];
     }
-    
+
     return fallback;
 };
 
@@ -119,7 +121,7 @@ const VitaeCertifications = ({ title, data, lang = 'es' }) => {
     const { enabled, actions } = useEditor((state) => ({
         enabled: state.options.enabled
     }));
-    
+
     // Redux Preview Mode
     const isPreviewMode = useSelector(getPreviewMode);
 
@@ -158,6 +160,12 @@ const VitaeCertifications = ({ title, data, lang = 'es' }) => {
         setEditingItem(null);
     };
 
+    const handleAIResponse = (response) => {
+        if (editingItem) {
+            setEditingItem({ ...editingItem, description: response });
+        }
+    };
+
     const renderCertificationItem = (item, index) => {
         if (!item || typeof item !== 'object') return null;
 
@@ -179,20 +187,20 @@ const VitaeCertifications = ({ title, data, lang = 'es' }) => {
                             </Typography>
                         )}
                         {certDescription && (
-                            <Box 
+                            <Box
                                 sx={{
                                     mt: 1,
-                                    '& p': { 
+                                    '& p': {
                                         margin: '8px 0',
                                         lineHeight: 1,
                                         color: textFontColor
                                     },
-                                    '& ul, & ol': { 
-                                        paddingLeft: '20px', 
+                                    '& ul, & ol': {
+                                        paddingLeft: '20px',
                                         margin: '8px 0',
                                         color: textFontColor
                                     },
-                                    '& li': { 
+                                    '& li': {
                                         margin: '4px 0',
                                         lineHeight: 1
                                     },
@@ -223,9 +231,9 @@ const VitaeCertifications = ({ title, data, lang = 'es' }) => {
                             </Typography>
                         )}
                         {enabled && !isPreviewMode && (
-                            <IconButton 
-                                size="small" 
-                                onClick={() => handleEdit(item, index)} 
+                            <IconButton
+                                size="small"
+                                onClick={() => handleEdit(item, index)}
                                 color="primary"
                                 sx={{ ml: 1 }}
                             >
@@ -253,7 +261,7 @@ const VitaeCertifications = ({ title, data, lang = 'es' }) => {
         >
             {enabled && !isPreviewMode && (
                 <>
-                    
+
                     <ActionButtons>
                         <Tooltip title={lang === 'es' ? 'Eliminar Sección' : 'Delete Section'}>
                             <IconButton size="small" onClick={handleDelete} color="error">
@@ -280,8 +288,8 @@ const VitaeCertifications = ({ title, data, lang = 'es' }) => {
                 </DialogTitle>
                 <DialogContent>
                     <Typography>
-                        {lang === 'es' 
-                            ? '¿Estás seguro de que deseas eliminar esta sección de certificaciones?' 
+                        {lang === 'es'
+                            ? '¿Estás seguro de que deseas eliminar esta sección de certificaciones?'
                             : 'Are you sure you want to delete this certifications section?'
                         }
                     </Typography>
@@ -322,14 +330,37 @@ const VitaeCertifications = ({ title, data, lang = 'es' }) => {
                                 onChange={(e) => setEditingItem({ ...editingItem, date: e.target.value })}
                                 fullWidth
                             />
-                            <SunEditor
-                                lang={lang}
-                                setContents={editingItem.description || ''}
-                                onChange={(e) => setEditingItem({ ...editingItem, description: e })}
-                                setOptions={{
-                                    height: 200,
-                                }}
-                            />
+                            <Box sx={{ position: 'relative' }}>
+                                <SunEditor
+                                    lang={lang}
+                                    setContents={editingItem.description || ''}
+                                    onChange={(e) => setEditingItem({ ...editingItem, description: e })}
+                                    setOptions={{
+                                        height: 200,
+                                        buttonList: [
+                                            ['undo', 'redo'],
+                                            ['font', 'fontSize', 'formatBlock'],
+                                            ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
+                                            ['fontColor', 'hiliteColor', 'textStyle'],
+                                            ['removeFormat'],
+                                            ['outdent', 'indent'],
+                                            ['align', 'horizontalRule', 'list', 'lineHeight'],
+                                            ['table', 'link', 'image'],
+                                            ['fullScreen', 'showBlocks', 'codeView'],
+                                            ['preview', 'print']
+                                        ]
+                                    }}
+                                />
+                                <Box sx={{ position: 'absolute', top: 8, right: 8, zIndex: 10 }}>
+                                    <AIEditButton
+                                        lang={lang}
+                                        attribute={`description_${lang}`}
+                                        content={editingItem.description || ''}
+                                        title={editingItem.title || ''}
+                                        onAIResponse={(response) => handleAIResponse(response)}
+                                    />
+                                </Box>
+                            </Box>
                         </Box>
                     )}
                 </DialogContent>
