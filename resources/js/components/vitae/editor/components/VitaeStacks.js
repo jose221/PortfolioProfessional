@@ -25,6 +25,7 @@ import {
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { getVitaeTheme } from '../contexts/ThemeContext';
+import AIEditButton from "./common/AIEditButton";
 
 // Personalización del vitae
 const theme = getVitaeTheme();
@@ -122,13 +123,11 @@ const SkillName = styled(Typography)(({ theme }) => ({
 const SkillDescription = styled(Typography)(({ theme }) => ({
     fontSize: textFontSize,
     color: textFontColor,
-    lineHeight: 1,
     marginBottom: theme.spacing(0.5),
     flex: 1,
     cursor: 'pointer',
     padding: theme.spacing(0.25),
     borderRadius: theme.spacing(0.5),
-    minHeight: '1.5rem',
     '&:hover': {
         backgroundColor: theme.palette.action.hover,
     },
@@ -179,21 +178,22 @@ const safeString = (value, fallback = "") => {
 
 const getLocalizedText = (obj, field, lang, fallback = "") => {
     if (!obj || typeof obj !== 'object') return fallback;
-    
+
     const langField = `${field}_${lang}`;
     if (obj[langField] && typeof obj[langField] === 'string' && obj[langField].trim() !== "") {
         return obj[langField].trim();
     }
-    
+
     if (obj[field] && typeof obj[field] === 'string' && obj[field].trim() !== "") {
         return obj[field].trim();
     }
-    
+
     return fallback;
 };
 
 // VitaeSkillItem Component
 const VitaeSkillItem = ({ item, lang, onUpdate, enabled }) => {
+    const isPreviewMode = useSelector(getPreviewMode);
     if (!item || typeof item !== 'object') return null;
 
     const [editing, setEditing] = useState({ field: null, value: '' });
@@ -244,8 +244,9 @@ const VitaeSkillItem = ({ item, lang, onUpdate, enabled }) => {
         setEditing({ field: null, value: '' });
     };
 
+
     return (
-        <SkillItem sx={{ paddingRight: titleFontSize }}>
+        <SkillItem sx={{ paddingRight: titleFontSize, width: '100%', paddingTop: isPreviewMode ? '12px' : '24px' }}>
             {editing.field === 'title' ? (
                 <InlineInput
                     value={editing.value}
@@ -258,14 +259,14 @@ const VitaeSkillItem = ({ item, lang, onUpdate, enabled }) => {
                     size="small"
                 />
             ) : (
-                <SkillName 
+                <SkillName
                     onClick={() => handleStartEdit('title', title)}
                     sx={{ cursor: enabled ? 'pointer' : 'default' }}
                 >
                     {title}
                 </SkillName>
             )}
-            
+
             {editing.field === 'description' ? (
                 <InlineInput
                     value={editing.value}
@@ -280,14 +281,14 @@ const VitaeSkillItem = ({ item, lang, onUpdate, enabled }) => {
                     size="small"
                 />
             ) : (
-                <SkillDescription 
+                <SkillDescription
                     onClick={() => handleStartEdit('description', description)}
                     sx={{ cursor: enabled ? 'pointer' : 'default' }}
                 >
                     {description ? description.replace(/<[^>]*>/g, '').trim() : ''}
                 </SkillDescription>
             )}
-            
+
             {editing.field === 'years' ? (
                 <InlineInput
                     type="number"
@@ -310,7 +311,7 @@ const VitaeSkillItem = ({ item, lang, onUpdate, enabled }) => {
                 />
             ) : (
                 years !== null && years !== undefined && (
-                    <YearsText 
+                    <YearsText
                         onClick={() => handleStartEdit('years', years.toString())}
                         sx={{ cursor: enabled ? 'pointer' : 'default' }}
                     >
@@ -336,10 +337,10 @@ const VitaeSkillCategory = ({ category, lang }) => {
             <CategoryTitle>{title}</CategoryTitle>
             <SkillsContainer>
                 {skills.map((skill, index) => (
-                    <VitaeSkillItem 
-                        key={skill.id || index} 
-                        item={skill} 
-                        lang={lang} 
+                    <VitaeSkillItem
+                        key={skill.id || index}
+                        item={skill}
+                        lang={lang}
                     />
                 ))}
             </SkillsContainer>
@@ -363,7 +364,7 @@ const VitaeStacks = ({ title, data, lang = 'es' }) => {
     const { enabled, actions } = useEditor((state) => ({
         enabled: state.options.enabled
     }));
-    
+
     // Redux Preview Mode
     const isPreviewMode = useSelector(getPreviewMode);
 
@@ -418,6 +419,14 @@ const VitaeStacks = ({ title, data, lang = 'es' }) => {
         setAddSkillDialogOpen(true);
     };
 
+    const handleAIResponse = (response, categoryIndex, skillIndex, attribute) => {
+        if (response.code && response.data) {
+            setProp(props => {
+                props.data[categoryIndex].Portfolios[skillIndex][attribute] = response.data.current;
+            });
+        }
+    };
+
     const handleSaveNewSkill = () => {
         if (editingCategory !== null && skillsData[editingCategory]) {
             setProp(props => {
@@ -429,7 +438,7 @@ const VitaeStacks = ({ title, data, lang = 'es' }) => {
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
                 };
-                
+
                 if (!props.data[editingCategory].Portfolios) {
                     props.data[editingCategory].Portfolios = [];
                 }
@@ -490,7 +499,7 @@ const VitaeStacks = ({ title, data, lang = 'es' }) => {
 
             <Box>
                 {skillsData.map((category, categoryIndex) => (
-                    <Box key={category.id || categoryIndex} sx={{ mb: 2 }}>
+                    <Box key={category.id || categoryIndex} sx={{ mb: 2, width: '100%' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
                             <CategoryTitle>{getLocalizedText(category, 'title', lang, 'Categoría')}</CategoryTitle>
                             {enabled && !isPreviewMode && (
@@ -503,10 +512,10 @@ const VitaeStacks = ({ title, data, lang = 'es' }) => {
                         </Box>
                         <SkillsContainer>
                             {(category.Portfolios || []).map((skill, skillIndex) => (
-                                <Box key={skill.id || skillIndex} sx={{ position: 'relative' }}>
-                                    <VitaeSkillItem 
-                                        item={skill} 
-                                        lang={lang} 
+                                <Box key={skill.id || skillIndex} sx={{ position: 'relative', width: '32%', height:'100%'  }}>
+                                    <VitaeSkillItem
+                                        item={skill}
+                                        lang={lang}
                                         enabled={enabled}
                                         onUpdate={(updatedSkill) => handleUpdateSkill(categoryIndex, skillIndex, updatedSkill)}
                                     />
@@ -518,7 +527,7 @@ const VitaeStacks = ({ title, data, lang = 'es' }) => {
                                                 sx={{
                                                     position: 'absolute',
                                                     top: 3,
-                                                    right: -1,
+                                                    right: 10,
                                                     width: 24,
                                                     height: 24,
                                                     minWidth: 'unset',
@@ -535,9 +544,24 @@ const VitaeStacks = ({ title, data, lang = 'es' }) => {
                                                     transition: 'all 0.2s ease',
                                                 }}
                                             >
-                                                <DeleteIcon sx={{ fontSize: '0.7rem' }} />
+                                                <DeleteIcon sx={{ fontSize: '1rem' }} />
                                             </IconButton>
                                         </Tooltip>
+                                    )}
+                                    {enabled && !isPreviewMode && (
+                                        <Box sx={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            right: 30,
+                                        }}>
+                                            <AIEditButton
+                                                lang={lang}
+                                                attribute={`description_${lang}`}
+                                                content={skill[`description_${lang}`]}
+                                                title={title}
+                                                onAIResponse={(response) => handleAIResponse(response, categoryIndex, skillIndex, `description_${lang}`)}
+                                            />
+                                        </Box>
                                     )}
                                 </Box>
                             ))}
@@ -553,8 +577,8 @@ const VitaeStacks = ({ title, data, lang = 'es' }) => {
                 </DialogTitle>
                 <DialogContent>
                     <Typography>
-                        {lang === 'es' 
-                            ? '¿Estás seguro de que deseas eliminar esta sección de habilidades?' 
+                        {lang === 'es'
+                            ? '¿Estás seguro de que deseas eliminar esta sección de habilidades?'
                             : 'Are you sure you want to delete this skills section?'
                         }
                     </Typography>
