@@ -258,6 +258,7 @@ export const AIEditButton = ({
             };
 
             // Agregar instrucción personalizada si está en modo avanzado
+
             if (isAdvancedMode && customInstruction.trim()) {
                 requestData.instruction = customInstruction.trim();
             }
@@ -453,8 +454,8 @@ export const AIEditButton = ({
                                     <SunEditor
                                         lang={currentProps.lang}
                                         placeholder={texts.instructionPlaceholder}
-                                        setContents={customInstruction}
-                                        onChange={setCustomInstruction}
+                                        defaultValue={customInstruction}
+                                        onChange={(content) => setCustomInstruction(content)}
                                         height="200px"
                                         setOptions={{
                                             buttonList: [
