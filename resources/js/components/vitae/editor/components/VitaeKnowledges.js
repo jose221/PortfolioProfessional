@@ -26,6 +26,7 @@ import {
 import { styled } from '@mui/material/styles';
 import SunEditor from 'suneditor-react';
 import { getVitaeTheme } from '../contexts/ThemeContext';
+import AIEditButton from "./common/AIEditButton";
 
 
 // Personalización del vitae
@@ -174,7 +175,12 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
         setEditDialogOpen(false);
         setEditingItem(null);
     };
-
+    const handleAIResponse = (response) => {
+        if (editingItem) {
+            const newDescription = response.data?.current ?? data?.description ?? '';
+            setEditingItem({ ...editingItem, description: newDescription });
+        }
+    };
     const renderKnowledgeItem = (item, index) => {
         if (!item || typeof item !== 'object') return null;
 
@@ -301,7 +307,7 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
                 </DialogTitle>
                 <DialogContent>
                     {editingItem && (
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
+                        <Box sx={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
                             <TextField
                                 label={lang === 'es' ? 'Nombre del Conocimiento' : 'Knowledge Name'}
                                 value={editingItem.title || ''}
@@ -310,12 +316,33 @@ const VitaeKnowledges = ({ title, data, lang = 'es' }) => {
                             />
                             <SunEditor
                                 lang={lang}
-                                setContents={editingItem.description || ''}
+                                setContents={editingItem?.description || ''}
                                 onChange={(e) => setEditingItem({ ...editingItem, description: e })}
                                 setOptions={{
                                     height: 200,
+                                    buttonList: [
+                                        ['undo', 'redo'],
+                                        ['font', 'fontSize', 'formatBlock'],
+                                        ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
+                                        ['fontColor', 'hiliteColor', 'textStyle'],
+                                        ['removeFormat'],
+                                        ['outdent', 'indent'],
+                                        ['align', 'horizontalRule', 'list', 'lineHeight'],
+                                        ['table', 'link', 'image'],
+                                        ['fullScreen', 'showBlocks', 'codeView'],
+                                        ['preview', 'print']
+                                    ]
                                 }}
                             />
+                            <Box sx={{ position: 'absolute', top: 78, right: 8, zIndex: 10 }}>
+                                <AIEditButton
+                                    lang={lang}
+                                    attribute={`description_${lang}`}
+                                    content={editingItem?.description || ''}
+                                    title={editingItem.title || ''}
+                                    onAIResponse={(response) => handleAIResponse(response)}
+                                />
+                            </Box>
                         </Box>
                     )}
                 </DialogContent>

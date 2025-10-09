@@ -294,11 +294,6 @@ export const AIEditButton = ({
             ...prev,
             content: newContent
         }));
-
-        // Llamar al callback onChange si está definido
-        if (onChange) {
-            onChange(newContent);
-        }
     };
 
     // Lista de idiomas disponibles

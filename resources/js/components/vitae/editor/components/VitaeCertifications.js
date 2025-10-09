@@ -162,7 +162,8 @@ const VitaeCertifications = ({ title, data, lang = 'es' }) => {
 
     const handleAIResponse = (response) => {
         if (editingItem) {
-            setEditingItem({ ...editingItem, description: response });
+            const newDescription = response.data?.current ?? data?.description ?? '';
+            setEditingItem({ ...editingItem, description: newDescription });
         }
     };
 
