@@ -89,10 +89,22 @@ use App\Helpers\ArrayHelper
                 <!-- sidebar-search  -->
                 <div class="sidebar-menu">
                     <ul>
-                        @if(!empty(session()->get('user')))
-                            @foreach (ArrayHelper::groupBy(ArrayHelper::filter(session()->get('user')->modules, function ($module){
-                                    return !empty($module->path) && $module->Permissions[0]->is_page && $module->Permissions[0]->can_read;
-                                }), 'tag') as $tag => $modules)
+                        @if(session()->has('user') && isset(session('user')->modules) && !empty(session('user')->modules))
+                            @php
+                                $userModules = session('user')->modules;
+                                $filteredModules = ArrayHelper::filter($userModules, function ($module){
+                                    return !empty($module->path)
+                                        && isset($module->Permissions)
+                                        && is_array($module->Permissions)
+                                        && !empty($module->Permissions)
+                                        && isset($module->Permissions[0]->is_page)
+                                        && isset($module->Permissions[0]->can_read)
+                                        && $module->Permissions[0]->is_page
+                                        && $module->Permissions[0]->can_read;
+                                });
+                                $groupedModules = ArrayHelper::groupBy($filteredModules, 'tag');
+                            @endphp
+                            @foreach ($groupedModules as $tag => $modules)
                                 <li class="header-menu">
                                     <span>{{ $tag }}</span>
                                 </li>
@@ -100,7 +112,7 @@ use App\Helpers\ArrayHelper
                                     <li class="">
                                         <a href="{{ $module->path }}">
                                             <i class="fa fa-chart-line"></i>
-                                            <span>{{ $module->name_es }}</span>
+                                            <span>{{ $module->name_es ?? 'Sin nombre' }}</span>
                                         </a>
                                     </li>
                                 @endforeach
