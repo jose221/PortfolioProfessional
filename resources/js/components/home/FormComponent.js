@@ -167,7 +167,21 @@ class FormHomeComponent extends RComponent {
                                                name="description_es"
                                                height="200px"
                                                onChange={(e)=>this.handleChangeForm({target:{name: 'description_es', value:e}})}
-                                               setContents={this.state.form.description_es || ' '}
+                                               setContents={this.state.form?.description_es || ''}
+                                               setDefaultStyle="font-family: Arial; font-size: 14px;"
+                                               setOptions={{
+                                                   buttonList: [
+                                                       ['undo', 'redo'],
+                                                       ['font', 'fontSize', 'formatBlock'],
+                                                       ['bold', 'underline', 'italic', 'strike'],
+                                                       ['fontColor', 'hiliteColor'],
+                                                       ['removeFormat'],
+                                                       ['outdent', 'indent'],
+                                                       ['align', 'horizontalRule', 'list'],
+                                                       ['table', 'link'],
+                                                       ['fullScreen', 'showBlocks', 'codeView']
+                                                   ]
+                                               }}
                                                helperText="Descripción de tu perfil en español"
                                     />
                                     <FormHelperText error={this.isValid(this.state.form.description_es, false)}>Descripción de tu perfil en español</FormHelperText>
@@ -183,14 +197,29 @@ class FormHomeComponent extends RComponent {
                                 </div>
                                 <div className={(!this.isValid(this.state.form.description_en, false)) ? 'col-md-6 mt-3 p-1 textarea-editor':'col-md-6 mt-3 p-1 textarea-editor error'}>
                                     <label>Descripción en inglés</label>
-                                    <SunEditor lang="es"
-                                               id="outlined-error-description_en"
-                                               placeholder="Descripción en inglés"
-                                               name="description_en"
-                                               height="200px"
-                                               onChange={(e)=>this.handleChangeForm({target:{name: 'description_en', value:e}})}
-                                               setContents={this.state.form.description_en || ' '}
-                                               helperText="Descripción de tu perfil en inglés"
+                                    <SunEditor
+                                        ref={this.editorRef}
+                                        lang="es"
+                                        id="outlined-error-description_en"
+                                        placeholder="Descripción en inglés"
+                                        name="description_en"
+                                        height="200px"
+                                        onChange={(content)=>this.handleChangeForm({target:{name: 'description_en', value:content}})}
+                                        setContents={this.state.form?.description_en || ''}
+                                        setDefaultStyle="font-family: Arial; font-size: 14px;"
+                                        setOptions={{
+                                            buttonList: [
+                                                ['undo', 'redo'],
+                                                ['font', 'fontSize', 'formatBlock'],
+                                                ['bold', 'underline', 'italic', 'strike'],
+                                                ['fontColor', 'hiliteColor'],
+                                                ['removeFormat'],
+                                                ['outdent', 'indent'],
+                                                ['align', 'horizontalRule', 'list'],
+                                                ['table', 'link'],
+                                                ['fullScreen', 'showBlocks', 'codeView']
+                                            ]
+                                        }}
                                     />
                                     <FormHelperText error={this.isValid(this.state.form.description_en, false)}>Descripción de tu perfil en inglés</FormHelperText>
                                     <Box sx={{ position: 'absolute', bottom: 45, right: 8, zIndex: 10 }}>
