@@ -66,11 +66,16 @@ use App\Helpers\ArrayHelper
           <span class="user-name">
             <strong>{{ Auth::user()->name }}</strong>
           </span>
+                        @if(session()->has('user')
+    && session('user')->Role
+    && isset(session('user')->Role->name_es)
+)
                         <span class="user-role">{{ session()->get('user')->Role->name_es }}</span>
                         <span class="user-status">
             <!--<i class="fa fa-circle"></i>
             <span>Online</span>-->
           </span>
+                        @endif
                     </div>
                 </div>
                 <!-- sidebar-header  -->
