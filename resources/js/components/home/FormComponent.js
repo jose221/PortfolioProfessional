@@ -243,7 +243,7 @@ class FormHomeComponent extends RComponent {
                                         value={this.state.form.header_text_es || ' '}
                                         helperText="Texto o descripción del header en Español (ej: Desarrollador de aplicaciones multiplataforma)"
                                     />
-                                    <Box sx={{ position: 'absolute', bottom: 60, right: 8, zIndex: 10 }}>
+                                    <Box sx={{ position: 'absolute', bottom: 40, right: 8, zIndex: 10 }}>
                                         <AIEditButton
                                             lang={'es'}
                                             attribute={`header_text_es`}
@@ -265,7 +265,7 @@ class FormHomeComponent extends RComponent {
                                         value={this.state.form.header_text_en || ' '}
                                         helperText="Texto o descripción del header en Inglés(e.g., Cross-platform Application Developer)"
                                     />
-                                    <Box sx={{ position: 'absolute', bottom: 60, right: 8, zIndex: 10 }}>
+                                    <Box sx={{ position: 'absolute', bottom: 40, right: 8, zIndex: 10 }}>
                                         <AIEditButton
                                             lang={'en'}
                                             attribute={`header_text_en`}

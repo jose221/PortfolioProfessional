@@ -14,6 +14,8 @@ import TextField from "@mui/material/TextField";
 import PortfolioCategory from "../../../models/PortfolioCategory";
 import SunEditor from "suneditor-react";
 import FormHelperText from "@mui/material/FormHelperText";
+import Box from "@mui/material/Box";
+import AIEditButton from "../../vitae/editor/components/common/AIEditButton";
 
 
 let primary_url = window.url_api+"/admin/portfolio-categories";
@@ -37,6 +39,12 @@ class FormPortfolioCategoriesComponent extends RComponent {
             this.dispatchStore(this.state)
         }
     }
+    handleAIResponse = (response, key) => {
+        if (this.state.form[key]) {
+            const newDescription = response.data?.current ?? data[key] ?? '';
+            this.handleChangeForm({target:{name: key, value:newDescription}})
+        }
+    };
     render() {
 
         const handleClose = () => {
@@ -83,29 +91,80 @@ class FormPortfolioCategoriesComponent extends RComponent {
                                     onChange={this.handleChangeForm}
                                     helperText={this.state.form.errorMessages?.title_en}
                                 />
-                                <div className={(this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_es')) ? 'col-md-6 mt-3 p-1 textarea-editor error':'col-md-6 mt-3 p-1 textarea-editor'}>
+                                <div className={(this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_es')) ? 'col-md-6 mt-3 p-1 textarea-editor error':'col-md-6 mt-3 p-1 textarea-editor position-relative'}>
                                     <label>Descripción en español</label>
                                     <SunEditor lang="es"
                                                id="outlined-error"
                                                placeholder="Descripción en español"
                                                name="description_es"
-                                               height="100%"
+                                               height="200px"
                                                onChange={(e)=>this.handleChangeForm({target:{name: 'description_es', value:e}})}
                                                setContents={this.state.form.description_es || ''}
+                                               setOptions={{
+                                                   buttonList: [
+                                                       ['undo', 'redo'],
+                                                       ['font', 'fontSize', 'formatBlock'],
+                                                       ['bold', 'underline', 'italic', 'strike'],
+                                                       ['fontColor', 'hiliteColor'],
+                                                       ['removeFormat'],
+                                                       ['outdent', 'indent'],
+                                                       ['align', 'horizontalRule', 'list'],
+                                                       ['table', 'link'],
+                                                       ['fullScreen', 'showBlocks', 'codeView']
+                                                   ]
+                                               }}
                                     />
                                     <FormHelperText error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_es') && this.state.form.errorMessages?.description_es}>{this.state.form.errorMessages?.description_es}</FormHelperText>
+                                    {(
+                                            this.state.form.validateRequiredAttribute && this.state.form?.validateRequiredAttribute('description_es')) &&
+                                        this.state.form?.validateRequiredAttribute('title_es') &&
+                                        (<Box sx={{ position: 'absolute', bottom: 35, right: 8, zIndex: 10 }}>
+                                            <AIEditButton
+                                                lang={'es'}
+                                                attribute={`description_es`}
+                                                content={this.state.form.description_es || ''}
+                                                title={this.state.form.header_text_es || ''}
+                                                onAIResponse={(response) => this.handleAIResponse(response, 'description_es')}
+                                            />
+                                        </Box>)}
                                 </div>
-                                <div className={(this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_en')) ? 'col-md-6 mt-3 p-1 textarea-editor error':'col-md-6 mt-3 p-1 textarea-editor'}>
+                                <div className={(this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_en')) ? 'col-md-6 mt-3 p-1 textarea-editor error':'col-md-6 mt-3 p-1 textarea-editor position-relative'}>
                                     <label>Descripción en inglés</label>
                                     <SunEditor lang="es"
                                                id="outlined-error"
                                                placeholder="Descripción en inglés"
                                                name="description_en"
-                                               height="100%"
+                                               height="200px"
                                                onChange={(e)=>this.handleChangeForm({target:{name: 'description_en', value:e}})}
                                                setContents={this.state.form.description_en || ''}
+                                               setOptions={{
+                                                   buttonList: [
+                                                       ['undo', 'redo'],
+                                                       ['font', 'fontSize', 'formatBlock'],
+                                                       ['bold', 'underline', 'italic', 'strike'],
+                                                       ['fontColor', 'hiliteColor'],
+                                                       ['removeFormat'],
+                                                       ['outdent', 'indent'],
+                                                       ['align', 'horizontalRule', 'list'],
+                                                       ['table', 'link'],
+                                                       ['fullScreen', 'showBlocks', 'codeView']
+                                                   ]
+                                               }}
                                     />
                                     <FormHelperText error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('description_en') && this.state.form.errorMessages?.description_en}>{this.state.form.errorMessages?.description_en}</FormHelperText>
+                                    {(
+                                            this.state.form.validateRequiredAttribute &&
+                                            this.state.form?.validateRequiredAttribute('description_en')) &&
+                                        this.state.form?.validateRequiredAttribute('title_en') &&
+                                        (<Box sx={{ position: 'absolute', bottom: 35, right: 8, zIndex: 10 }}>
+                                            <AIEditButton
+                                                lang={'en'}
+                                                attribute={`description_en`}
+                                                content={this.state.form.description_en || ''}
+                                                title={this.state.form.title_en || ''}
+                                                onAIResponse={(response) => this.handleAIResponse(response, 'description_en')}
+                                            />
+                                        </Box>)}
                                 </div>
                                 <TextField
                                     error={this.state.form.validateRequiredAttribute && !this.state.form?.validateRequiredAttribute('code')}
